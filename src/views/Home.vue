@@ -338,7 +338,7 @@ const pushDaZhouCityHallInfo = () => {
             </template>
             <el-scrollbar height="400px">
                 <el-table :data="leaveMessages" style="width: 100%;">
-                    <el-table-column label="留言人" width="100" prop="uname" />
+                    <el-table-column label="留言人" width="100" prop="username" />
                     <el-table-column label="烈士姓名" width="100" prop="name" />
                     <el-table-column label="留言内容" width="400" prop="message" />
                     <el-table-column label="留言时间" prop="time" />

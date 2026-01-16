@@ -35,8 +35,8 @@ const leaveMessage = ref({
 import { martyrLeaveMessage } from '@/api/martyrs'
 import { useTokenStore } from '@/stores/token'
 const martyrLeaveMessageAdd = async () => {
-    leaveMessage.value.userId = useTokenStore().userInfo.userId
-    leaveMessage.value.martyrId = +route.query.martyrId
+    leaveMessage.value.userId = useTokenStore().userInfo.id
+    leaveMessage.value.martyrId = +route.query.id
     leaveMessage.value.flower = flag.value
     leaveMessage.value.message = textarea.value
     martyrLeaveMessage(leaveMessage.value)

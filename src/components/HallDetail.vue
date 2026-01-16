@@ -82,7 +82,7 @@ const centerDialogVisible = ref(false)
                 <div class="box">
                     <div>
                         <div data-v-5d524d16="" class="guide">祭奠瞻仰指南</div>
-                        <el-scrollbar style="height: 25vh;width:40vh;background: '';">
+                        <el-scrollbar style="height: 28vh;width:40vh;background: '';">
                             <p>
                                 <span style="line-height: 1.75;font-size: small;">
                                     一、免费开放、文明祭扫（奠）、禁燃禁放；
@@ -123,7 +123,7 @@ const centerDialogVisible = ref(false)
         </div>
         <el-dialog v-model="centerDialogVisible" title="详细信息" width="500" center>
             <span>
-                {{ cityHallModel.intro }}
+                {{ cityHallModel.introduction }}
             </span>
             <template #footer>
                 <div class="dialog-footer">
@@ -147,13 +147,14 @@ const centerDialogVisible = ref(false)
     height: 30px;
     line-height: 30px;
     text-align: center;
+    padding-top: 6px;
     width: 40vh;
 }
 
 .box {
     display: flex;
     justify-content: center;
-    height: 200px;
+    height: 240px;
     width: 300px;
     background-image: url('../assets/declaration.png');
     margin: 10px;
