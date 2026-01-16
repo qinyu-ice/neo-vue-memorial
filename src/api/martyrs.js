@@ -22,8 +22,8 @@ export const martyrAdvancedSearch = (params) => {
     return requset.get(`martyr/smartSearch/${page}/${pageSize}`, { params: martyr })
 }
 // 烈士详情查询
-export const martyrsDetail = (mid) => {
-    return requset.get(`martyr/${mid}`);
+export const martyrsDetail = (id) => {
+    return requset.get(`martyr/${id}`);
 }
 
 // 添加烈士纪念留言

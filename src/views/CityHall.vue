@@ -12,7 +12,7 @@ import { useTokenStore } from '@/stores/token'
 const tokenStore = useTokenStore()
 const cityHalls = ref([
     {
-        "pid": "0",
+        "id": "0",
         "name": "达州市",
         "img": "#",
     },
@@ -46,15 +46,15 @@ tokenValue()
             </div>
         </template>
         <div style="display: flex;width: 100%;justify-content: space-around;flex-wrap: wrap;">
-            <div v-for="cityHall in cityHalls" :key="cityHall.pid"
+            <div v-for="cityHall in cityHalls" :key="cityHall.id"
                 style="margin-top: 20px;display: block;width: 250px;height: 200px;background-color: rgb(249, 249, 249);">
                 <span style="width: 100%;display: flex;justify-content: center;">
                     <img :src="cityHall.img" alt="图片走丢了" style="width:200px;height: 160px;">
                 </span>
                 <span style="width: 100%;display: flex;justify-content: center;font-size: small;">{{ cityHall.name
-                }}</span>
+                    }}</span>
                 <span style="width: 100%;display: flex;justify-content: center;">
-                    <router-link :to="{ path: '/memorial/hallDetail', query: { pid: cityHall.pid } }"
+                    <router-link :to="{ path: '/memorial/hallDetail', query: { id: cityHall.id } }"
                         style="text-decoration: none;font-size: small;color: #a11a1a;">进入纪念设施>></router-link>
                 </span>
             </div>

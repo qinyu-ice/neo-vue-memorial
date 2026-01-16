@@ -26,8 +26,8 @@ const martyrDetail = ref({
     deeds: ''
 });
 const leaveMessage = ref({
-    uid: '',
-    mid: '',
+    userId: '',
+    martyrId: '',
     flower: '',
     message: ''
 })
@@ -35,8 +35,8 @@ const leaveMessage = ref({
 import { martyrLeaveMessage } from '@/api/martyrs'
 import { useTokenStore } from '@/stores/token'
 const martyrLeaveMessageAdd = async () => {
-    leaveMessage.value.uid = useTokenStore().userInfo.uid
-    leaveMessage.value.mid = +route.query.mid
+    leaveMessage.value.userId = useTokenStore().userInfo.userId
+    leaveMessage.value.martyrId = +route.query.martyrId
     leaveMessage.value.flower = flag.value
     leaveMessage.value.message = textarea.value
     martyrLeaveMessage(leaveMessage.value)
@@ -84,9 +84,9 @@ const route = useRoute()
 // 获取烈士详情数据
 const loadMartyrDetail = async () => {
     try {
-        const martyrId = route.query.mid;
-        console.log(martyrId);
-        const res = await martyrsDetail(martyrId);
+        const id = route.query.id;
+        console.log(id);
+        const res = await martyrsDetail(id);
         if (res && res.data) {
             martyrDetail.value = res.data;
         } else {

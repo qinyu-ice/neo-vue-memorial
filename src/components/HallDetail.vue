@@ -3,7 +3,7 @@ import { ref } from 'vue'
 const cityHallModel = ref({
     name: '',
     img: '',
-    intro: '',
+    introduction: '',
     phone: '',
     address: '',
     hint: ''
@@ -17,7 +17,7 @@ const id = ref(0)
 const init = async () => {
     console.log(route.query)
     if (route.query) {
-        id.value = route.query.pid
+        id.value = route.query.id
         let result = await getCityHallInfoById(id.value)
         cityHallModel.value = result.data
         console.log(result)
@@ -52,7 +52,7 @@ const centerDialogVisible = ref(false)
                     <div>
                         <div class="two-line-ellipsis" style="width: 90vh;height:13vh;">
                             <p>
-                                {{ cityHallModel.intro }}
+                                {{ cityHallModel.introduction }}
                             </p>
                         </div>
                         <p style="width: 100%;">

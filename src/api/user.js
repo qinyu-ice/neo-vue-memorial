@@ -9,7 +9,7 @@ export const userLoginService = (registerData) => {
     // for(let key in loginData){
     //     params.append(key,loginData[key])
     // }
-    return request.post('user/login', { uname: registerData.username, passwd: registerData.password })
+    return request.post('user/login', { username: registerData.username, password: registerData.password })
 }
 
 export const userUpdataService = (registerData) => {
@@ -18,7 +18,7 @@ export const userUpdataService = (registerData) => {
     // for(let key in registerData){
     //     params.append(key,registerData[key])
     // }
-    return request.put('user/reset', { uname: registerData.username, passwd: registerData.password, passwd2: registerData.repassword })
+    return request.put('user/reset', { username: registerData.username, password: registerData.password, password2: registerData.repassword })
 }
 
 export const userRegisterService = (registerData) => {
@@ -27,6 +27,6 @@ export const userRegisterService = (registerData) => {
     // for(let key in registerData){
     //     params.append(key,registerData[key])
     // }
-    return request.post('user/register', { uname: registerData.username, passwd: registerData.password, passwd2: registerData.rePassword })
+    return request.post('user/register', { username: registerData.username, password: registerData.password, password2: registerData.rePassword })
 }
 

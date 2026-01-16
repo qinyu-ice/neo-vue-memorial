@@ -16,8 +16,8 @@ export const cityHallPage = (page, pageSize) => {
     return requset.get(`place/${page}/${pageSize}`)
 }
 
-export const getCityHallInfoById = (pid) => {
-    return requset.get(`place/${pid}`)
+export const getCityHallInfoById = (id) => {
+    return requset.get(`place/${id}`)
 }
 
 export const getMapByip = (ip) => {

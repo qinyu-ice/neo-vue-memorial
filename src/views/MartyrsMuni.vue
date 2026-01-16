@@ -7,12 +7,12 @@ const total = ref(70)//总条数
 const pageSize = ref(40)//每页条数
 const name = ref('')
 const heroList = ref([{
-    "mid": 0,
+    "id": 0,
     "name": '',
 }
 ])
 const heroList2 = ref([{
-    "mid": 0,
+    "id": 0,
     "name": '',
 }
 ])
@@ -95,10 +95,10 @@ const getMartyrsScore = (score) => {
 
 import { useRouter } from 'vue-router'
 const router = useRouter()
-const detail_btn = (mid) => {
+const detail_btn = (id) => {
     router.push({
         path: '/memorial/martyrDetail',
-        query: { mid: mid }
+        query: { id: id }
     })
 }
 
@@ -175,13 +175,13 @@ const onRadioChange = () => {
         <div style="display: flex;justify-content: center;width: 100%;">
             <el-card style="margin: 20px;width: 100%;">
                 <div style="display: flex;width: 100%;justify-content: left;flex-wrap: wrap;height: 200px;">
-                    <div v-if="search" v-for="hero in heroList2" @click="detail_btn(hero.mid)"
+                    <div v-if="search" v-for="hero in heroList2" @click="detail_btn(hero.id)"
                         style="display: block;width: 145px;height:40px;">
                         <el-button text type="primary" plain
                             style="width: 100%;display: flex;justify-content: center;font-size: small;font-weight: bold;line-height: 40px;">{{
                                 hero.name }} {{ getMartyrsScore(hero.score) }}%</el-button>
                     </div>
-                    <div v-else v-for="hero in heroList" @click="detail_btn(hero.mid)"
+                    <div v-else v-for="hero in heroList" @click="detail_btn(hero.id)"
                         style="display: block;width: 145px;height:40px;">
                         <el-button text type="primary" plain
                             style="width: 100%;display: flex;justify-content: center;font-size: small;font-weight: bold;line-height: 40px;">{{
