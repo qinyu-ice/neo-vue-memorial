@@ -21,7 +21,7 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api/req/user': {
-        // 前缀替换成代理地址： 5173 -> 8080 后端tomcat服务器端口号
+        // 前缀替换成代理地址： 5173 -> 8101 后端tomcat服务器端口号
         // target: 'http://192.168.16.211:8101',
         target: 'http://localhost:8101',
         ws: false,
@@ -31,7 +31,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/req\/user/, '/api/user')
       },
       '/api/req/martyr': {
-        // 前缀替换成代理地址： 5173 -> 8080 后端tomcat服务器端口号
+        // 前缀替换成代理地址： 5173 -> 8201 后端tomcat服务器端口号
         // target: 'http://192.168.16.211:8201',
         target: 'http://localhost:8201',
         ws: false,
@@ -41,7 +41,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/req\/martyr/, '/api/martyr')
       },
       '/api/req/record': {
-        // 前缀替换成代理地址： 5173 -> 8080 后端tomcat服务器端口号
+        // 前缀替换成代理地址： 5173 -> 8301 后端tomcat服务器端口号
         // target: 'http://192.168.16.211:8301',
         target: 'http://localhost:8301',
         ws: false,
@@ -51,7 +51,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/req\/record/, '/api/record')
       },
       '/api/req/place': {
-        // 前缀替换成代理地址： 5173 -> 8080 后端tomcat服务器端口号
+        // 前缀替换成代理地址： 5173 -> 8401 后端tomcat服务器端口号
         // target: 'http://192.168.16.211:8401',
         target: 'http://localhost:8401',
         ws: false,
@@ -61,7 +61,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/req\/place/, '/api/place')
       },
       '/api/req/story': {
-        // 前缀替换成代理地址： 5173 -> 8080 后端tomcat服务器端口号
+        // 前缀替换成代理地址： 5173 -> 8601 后端tomcat服务器端口号
         // target: 'http://192.168.16.211:8601',
         target: 'http://localhost:8601',
         ws: false,
@@ -69,6 +69,26 @@ export default defineConfig({
         changeOrigin: true,
         // /api去掉，变成空串，因为它只是一个标识而已，并不是路径
         rewrite: (path) => path.replace(/^\/api\/req\/story/, '/api/story')
+      },
+      '/api/req/back-end': {
+        // 前缀替换成代理地址： 5173 -> 8701 后端tomcat服务器端口号
+        // target: 'http://192.168.16.211:8701',
+        target: 'http://localhost:8701',
+        ws: false,
+        secure: false,
+        changeOrigin: true,
+        // /api去掉，变成空串，因为它只是一个标识而已，并不是路径
+        rewrite: (path) => path.replace(/^\/api\/req\/back-end/, '/api/back-end')
+      },
+      '/api/req/email': {
+        // 前缀替换成代理地址： 5173 -> 8801 后端tomcat服务器端口号
+        // target: 'http://192.168.16.211:8801',
+        target: 'http://localhost:8801',
+        ws: false,
+        secure: false,
+        changeOrigin: true,
+        // /api去掉，变成空串，因为它只是一个标识而已，并不是路径
+        rewrite: (path) => path.replace(/^\/api\/req\/email/, '/api/email')
       }
     }
   }

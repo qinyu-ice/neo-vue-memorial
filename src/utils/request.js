@@ -8,7 +8,7 @@ import { useTokenStore } from '@/stores/token'
 const baseUrl = '/api/req' //没有指定源 会在axios所在源（页面源）进行拼接
 const instance = axios.create({
     baseURL: baseUrl,
-    timeout: 5000
+    timeout: 20000
 })
 import router from '@/router'
 const success = ['SUCCESS', 'REGISTER_SUCCESS', 'LOGIN_SUCCESS', 'GET_ALL_CITIES_SUCCESS',
@@ -18,6 +18,9 @@ instance.interceptors.request.use(config => {
     //在发送请求之前做些什么
     //在请求头中添加token
     // config.headers.Authorization = window.sessionStorage.getItem('Authorization')
+    if (config.url?.includes('email')) {
+        return config
+    }
     const tokenStore = useTokenStore()
     config.headers.Authorization = 'Bearer ' + tokenStore.token
     return config
@@ -41,8 +44,9 @@ instance.interceptors.response.use(response => {
     //对响应错误做些什么
     if (error.response.status === 401) {
         // alert('请先登录')
-        ElMessage.error('请先登录')
+        ElMessage.error(error.response.data.message)
         router.push('/login')
+        return error.response.data
     } else {
         ElMessage.error('服务异常')
     }
