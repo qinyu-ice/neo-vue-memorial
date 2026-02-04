@@ -5,6 +5,7 @@ import { ref } from 'vue'
 const show1 = ref(false)
 const show2 = ref(false)
 const show3 = ref(false)
+const showBigImage = ref(false);
 const flag = ref(0)
 const textarea = ref('')
 //控制抽屉是否显示
@@ -252,7 +253,12 @@ loadMartyrDetail();
                 </div>
                 <div style="width: 30%;">
                     <div style="width: 100%;display: flex;justify-content: center;margin-bottom: 10px;">
-                        <img style="width: 60%;height: 250px;" :src="martyrDetail.photo" alt="">
+                        <img style="width: 60%;height: 250px; cursor: pointer;" :src="martyrDetail.photo" alt="烈士照片"
+                            @click="showBigImage = true; bigImageUrl = martyrDetail.photo">
+                    </div>
+                    <!-- 图片放大弹窗（遮罩层） -->
+                    <div v-if="showBigImage" class="image-preview-mask" @click="showBigImage = false">
+                        <img class="big-image" :src="bigImageUrl" alt="放大的烈士照片" @click.stop>
                     </div>
                     <span
                         style="color: #ffffff;font-weight: bold;font-size: x-large;margin-right: 10px;display: flex;justify-content: center;">
@@ -385,6 +391,31 @@ loadMartyrDetail();
     color: #fff;
 }
 
+/* 全屏遮罩层样式 */
+.image-preview-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    /* 半透明黑色背景 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    /* 确保遮罩层在最上层 */
+}
+
+/* 放大后的图片样式（保持比例，不超出屏幕） */
+.big-image {
+    max-width: 90vw;
+    /* 最大宽度为视口90% */
+    max-height: 90vh;
+    /* 最大高度为视口90% */
+    object-fit: contain;
+    /* 保持图片比例，不拉伸变形 */
+}
 
 .bouquetMain img[data-v-112d36e2]:last-child {
     left: 250px;
