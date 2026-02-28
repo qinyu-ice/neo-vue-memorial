@@ -54,6 +54,10 @@ const router = createRouter({
         {
           path: '/memorial/updataUser',
           component: () => import('../views/Updata.vue')
+        },
+        {
+          path: '/memorial/completeInfo',
+          component: () => import('../components/CompleteInfo.vue')
         }
       ]
     },

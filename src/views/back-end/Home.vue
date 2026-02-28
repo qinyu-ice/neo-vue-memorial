@@ -1,9 +1,63 @@
 <script setup>
+import { ref } from 'vue'
+import UserManage from '@/components/UserManage.vue'
 
+const activeName = ref('place')
+
+const handleClick = (tab, event) => {
+    console.log(tab, event);
+}
 </script>
 <template>
-    <div>后端管理页面</div>
-    
+    <div class="back-end">
+        <h1 class="title">后端管理页面</h1>
+        <div class="middle">
+            <div class="middle-top">
+                <el-tabs v-model="activeName" type="card" class="demo-tabs" @tab-click="handleClick">
+                    <el-tab-pane label="烈士纪念设施管理" name="place"></el-tab-pane>
+                    <el-tab-pane label="烈士管理" name="martyr"></el-tab-pane>
+                    <el-tab-pane label="寻亲故事管理" name="story"></el-tab-pane>
+                    <el-tab-pane label="用户管理" name="user"></el-tab-pane>
+                </el-tabs>
+            </div>
+            <div class="user-manage" v-if="activeName === 'user'">
+                <user-manage></user-manage>
+            </div>
+        </div>
+    </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+// .back-end {
+// background: url('@/assets/declaration.png');
+// background-size: cover;
+// }
+
+.title {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.middle {
+    margin-top: 20px;
+}
+
+.middle-top {
+    display: flex;
+    justify-content: center;
+}
+
+.demo-tabs>.el-tabs__content {
+    padding: 32px;
+    color: #6b778c;
+    font-size: 32px;
+    font-weight: 600;
+    width: 100%;
+}
+
+.user-manage {
+    display: flex;
+    justify-content: center;
+}
+</style>

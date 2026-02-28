@@ -27,6 +27,21 @@ export const userRegisterService = (registerData) => {
     // for(let key in registerData){
     //     params.append(key,registerData[key])
     // }
-    return request.post('user/register', { username: registerData.username, password: registerData.password, password2: registerData.rePassword })
+    return request.post('user/register', { username: registerData.username, password: registerData.password, password2: registerData.rePassword, email: registerData.email })
 }
 
+export const userAllService = () => {
+    return request.get('user/all')
+}
+
+export const userAddService = (addData) => {
+    return request.post('user/add', addData)
+}
+
+export const userDeleteService = (id) => {
+    return request.delete(`user/delete/${id}`)
+}
+
+export const userInfoUpdateService = (updateData) => {
+    return request.post('user/update', updateData)
+}

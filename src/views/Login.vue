@@ -16,7 +16,8 @@ const emailLoginMethod = ref(false)
 const registerData = ref({
     username: '',
     password: '',
-    rePassword: ''
+    rePassword: '',
+    email: ''
 })
 
 const emailData = ref({
@@ -95,19 +96,11 @@ const tokenStore = useTokenStore()
 const userInfoStore = useUserInfoStore()
 const login = async () => {
     let result = await userLoginService(registerData.value)
-    // if(result.code===1){
-    //     //登录成功
-    //     alert(result.msg ? result.msg: '登录成功')
-    // }else{
-    //     //登录失败
-    //     alert('登录失败')
-    // }
-    // alert(result.msg ? result.msg: '登录成功')
     ElMessage.success(result.msg ? result.msg : '登录成功')
     // 将token保存到pinia中
     tokenStore.setToken(result.data.token)
     tokenStore.setUserInfo(result.data)
-    userInfoStore.setUserInfo(registerData.value)
+    userInfoStore.setUserInfo(result.data)
     // 跳转到首页 借助路由完成跳转
     if (result.data.permission == 1) {
         router.push('/back-end')
@@ -123,37 +116,43 @@ const emailLoginService = async () => {
         // 将token保存到pinia中
         tokenStore.setToken(result.data.token)
         tokenStore.setUserInfo(result.data)
-        userInfoStore.setUserInfo(registerData.value)
-        router.push('/memorial/home')
+        userInfoStore.setUserInfo(result.data)
+        // 跳转到首页 借助路由完成跳转
+        if (result.data.permission == 1) {
+            router.push('/back-end')
+        } else {
+            router.push('/memorial/home')
+        }
     } else {
         let result = await passwordLogin(emailData.value)
+        ElMessage.success('邮箱密码登录成功')
         // 将token保存到pinia中
         tokenStore.setToken(result.data.token)
         tokenStore.setUserInfo(result.data)
-        userInfoStore.setUserInfo(registerData.value)
-        ElMessage.success('邮箱密码登录成功')
-        router.push('/memorial/home')
+        userInfoStore.setUserInfo(result.data)
+        // 跳转到首页 借助路由完成跳转
+        if (result.data.permission == 1) {
+            router.push('/back-end')
+        } else {
+            router.push('/memorial/home')
+        }
     }
 }
 
 const register = async () => {
     await userRegisterService(registerData.value)
-    // if(result.code===1){
-    //     //登录成功
-    //     alert(result.msg ? result.msg: '登录成功')
-    // }else{
-    //     //登录失败
-    //     alert('登录失败')
-    // }
-    // alert(result.msg ? result.msg: '登录成功')
     ElMessage.success('注册成功')
     // 跳转到首页 借助路由完成跳转
     isRegister.value = false
+    isLogin.value = true
     router.push('/login')
 }
 
 const emailRegisterService = async () => {
     await emailRegister(emailData.value)
+    isEmailRegister.value = false
+    isEmailLogin.value = true
+    emailData.value.code = ''
     ElMessage.success('邮箱注册成功')
 }
 
@@ -201,7 +200,8 @@ const resetForm = () => {
     registerData.value = {
         username: '',
         password: '',
-        rePassword: ''
+        rePassword: '',
+        email: ''
     }
 }
 const resetEmailForm = () => {
@@ -236,13 +236,16 @@ const resetEmailForm = () => {
                     <el-input :prefix-icon="Lock" type="password" placeholder="请输入再次密码"
                         v-model="registerData.rePassword"></el-input>
                 </el-form-item>
+                <el-form-item prop="email">
+                    <el-input :prefix-icon="Message" placeholder="请输入邮箱" v-model="registerData.email"></el-input>
+                </el-form-item>
                 <el-link type="info" :underline="false" style="padding-bottom: 15px;"
                     @click="isEmailRegister = true; isRegister = false; resetForm();">
                     邮箱注册
                 </el-link>
                 <!-- 注册按钮 -->
                 <el-form-item>
-                    <el-button class="button" type="primary" auto-insert-space @click="register">
+                    <el-button class="button" type="primary" auto-insert-space @click="register(registerData)">
                         注册
                     </el-button>
                 </el-form-item>
@@ -262,7 +265,7 @@ const resetEmailForm = () => {
                     <h2>邮箱注册</h2>
                 </el-form-item>
                 <el-form-item prop="email">
-                    <el-input :prefix-icon="User" placeholder="请输入邮箱" v-model="emailData.email"></el-input>
+                    <el-input :prefix-icon="Message" placeholder="请输入邮箱" v-model="emailData.email"></el-input>
                 </el-form-item>
                 <el-form-item prop="emailPassword">
                     <el-input :prefix-icon="Lock" type="password" placeholder="请输入密码"

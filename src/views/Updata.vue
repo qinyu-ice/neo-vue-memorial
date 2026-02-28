@@ -17,16 +17,12 @@ form.value.username = userInfoStore.info.username
 const loginRef = ref()
 
 const rules = {
-  username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { pattern: /^[a-zA-Z0-9]{1,20}$/, message: '用户名必须是1-10的字母数字', trigger: 'blur' }
-  ],
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
+    { required: true, message: '请输入原密码', trigger: 'blur' },
     { pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur' }
   ],
   repassword: [
-    { required: true, message: '请再次输入密码', trigger: 'blur' },
+    { required: true, message: '请输入新密码', trigger: 'blur' },
     { pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur' }
   ]
 }
@@ -35,19 +31,25 @@ const router = useRouter()
 
 import { userUpdataService } from '@/api/user'
 const updataFn = async () => {
-  console.log('updataFn')
   // 先校验输入格式是否合法
   const valid = await loginRef.value.validate()
   if (valid) {
     // 调用登录接口
-    const { data: res } = await userUpdataService(form.value)
-    console.log(res)
+    await userUpdataService(form.value)
     ElMessage.success('修改成功')
     // 跳转到登录页
     router.push('/login')
   } else {
     ElMessage.success('密码或用户名不合法')
     return false
+  }
+}
+
+const completeInfo = () => {
+  if (userInfoStore.info.realName == null || userInfoStore.info.phone == null) {
+    router.push('/memorial/completeInfo')
+  } else {
+    ElMessage.success('个人信息完整，不需要补全')
   }
 }
 
@@ -126,18 +128,19 @@ const loginOut = () => {
         <el-input v-model="form.username" placeholder="" disabled></el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input type="password" v-model="form.password" placeholder="请输入密码"></el-input>
+        <el-input type="password" v-model="form.password" placeholder="请输入原密码"></el-input>
       </el-form-item>
       <el-form-item prop="repassword">
-        <el-input type="password" v-model="form.repassword" placeholder="请再次输入密码"></el-input>
+        <el-input type="password" v-model="form.repassword" placeholder="请输入新密码"></el-input>
       </el-form-item>
       <el-form-item class="my-el-form-item">
         <el-button type="primary" class="btn-login" @click="updataFn">修改</el-button>
-        <!-- <el-link type="info" @click="$router.push('/reg')">去注册</el-link> -->
+      </el-form-item>
+      <el-form-item class="my-el-form-item">
+        <el-button type="primary" class="btn-login" @click="completeInfo">补全个人信息</el-button>
       </el-form-item>
       <el-form-item class="my-el-form-item">
         <el-button type="primary" style="width: 100%;" @click="loginOut">退出</el-button>
-        <!-- <el-link type="info" @click="$router.push('/reg')">去注册</el-link> -->
       </el-form-item>
     </el-form>
   </div>
@@ -223,7 +226,7 @@ body {
   margin-top: 60vh;
   z-index: 10;
   width: 400px;
-  height: 360px;
+  height: 420px;
   position: absolute;
   left: 50%;
   top: 50%;
