@@ -38,7 +38,10 @@ instance.interceptors.response.use(response => {
         //对响应数据做些什么
         return response.data
     }
-    alert(response.data.msg ? response.data.msg : '未知错误')
+    ElMessage.error(response.data.msg ? response.data.msg : '未知错误')
+    if (response.data.msg.includes('token')) {
+        router.push('/login')
+    }
     return Promise.reject(response.data)
 }, error => {
     //对响应错误做些什么

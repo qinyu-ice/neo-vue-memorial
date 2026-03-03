@@ -84,8 +84,8 @@ const getMartyrsByAdvancedSearch = async () => {
     })
     heroList2.value = result.data.data
     total.value = result.data.total
-    console.log("aaaaaaaaaaaaaaaa", total.value)
-    console.log("bbbbbbbbbbbbbbbb", heroList2.value)
+    // console.log("aaaaaaaaaaaaaaaa", total.value)
+    // console.log("bbbbbbbbbbbbbbbb", heroList2.value)
 }
 
 const getMartyrsScore = (score) => {

@@ -14,7 +14,8 @@ const tableData = ref([
     }
 ])
 const userAddData = reactive({})
-const userEditData = reactive({})
+const initEditData = () => ({})
+const userEditData = reactive(initEditData)
 const userResetPasswordData = reactive({})
 const currentId = ref()
 const showDeleteDialog = ref(false)
@@ -81,7 +82,7 @@ const add = () => {
 }
 const edit = (row) => {
     showEditDialog.value = true
-    userEditData.value = row
+    userEditData.value = { ...row }
 }
 const remove = (row) => {
     showDeleteDialog.value = true
@@ -125,6 +126,7 @@ const editUser = async () => {
         showEditDialog.value = false
         // 重置表单
         editFormRef.value.resetFields()
+        userEditData.value = initEditData()
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')
@@ -153,6 +155,7 @@ const resetPassword = async () => {
         showResetPasswordDialog.value = false
         // 重置表单
         resetPasswordFormRef.value.resetFields()
+        userResetPasswordData.username = ''
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')
@@ -175,7 +178,9 @@ const handleClose = (done) => {
     addFormRef.value?.resetFields()
     editFormRef.value?.resetFields()
     resetPasswordFormRef.value?.resetFields()
-    done()
+    userEditData.value = initEditData()
+    userResetPasswordData.username = ''
+    done && done()
     // })
     // .catch(() => {
     // })

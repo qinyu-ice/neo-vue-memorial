@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import UserManage from '@/components/UserManage.vue'
+import PlaceManage from '@/components/PlaceManage.vue'
 
 const activeName = ref('place')
 
@@ -20,7 +21,10 @@ const handleClick = (tab, event) => {
                     <el-tab-pane label="用户管理" name="user"></el-tab-pane>
                 </el-tabs>
             </div>
-            <div class="user-manage" v-if="activeName === 'user'">
+            <div class="manage" v-if="activeName === 'place'">
+                <place-manage></place-manage>
+            </div>
+            <div class="manage" v-if="activeName === 'user'">
                 <user-manage></user-manage>
             </div>
         </div>
@@ -56,7 +60,7 @@ const handleClick = (tab, event) => {
     width: 100%;
 }
 
-.user-manage {
+.manage {
     display: flex;
     justify-content: center;
 }

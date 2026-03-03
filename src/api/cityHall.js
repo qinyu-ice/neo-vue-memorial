@@ -1,25 +1,34 @@
-import requset from "@/utils/request";
-import { useTokenStore } from "@/stores/token";
+import request from "@/utils/request";
 
-
-//分类列表查询
-// export const articleCategoryList = () =>{
-//     const tokenStore = useTokenStore()
-//     //在pinia中定义的响应式对象不需要.value可以直接访问
-//     return requset.get('/article/category',{headers:{'Authorization':tokenStore.token}})
-// }
 export const cityHallList = () => {
-    return requset.get('/place')
+    return request.get('/place')
     // return requset.get('/admin/category/page')
 }
-export const cityHallPage = (page, pageSize) => {
-    return requset.get(`place/${page}/${pageSize}`)
+
+export const cityHallPage = (page, pageSize, name) => {
+    return request.get(`place/${page}/${pageSize}?name=${name}`)
 }
 
 export const getCityHallInfoById = (id) => {
-    return requset.get(`place/${id}`)
+    return request.get(`place/${id}`)
 }
 
 export const getMapByip = (ip) => {
-    return requset.get(`place/ip?ip=${ip}`)
+    return request.get(`place/ip?ip=${ip}`)
+}
+
+export const uploadCityHallImage = (file) => {
+    return request.post('place/upload', file)
+}
+
+export const addCityHall = (addData) => {
+    return request.post('place/add', addData)
+}
+
+export const updateCityHall = (editData) => {
+    return request.post('/place/update', editData)
+}
+
+export const deleteCityHall = (id) => {
+    return request.delete(`/place/delete/${id}`)
 }

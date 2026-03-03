@@ -72,18 +72,6 @@ const rules = {
 //调用后台接口 完成注册
 import { userLoginService, userRegisterService } from '@/api/user'
 import { sendCode, emailRegister, codeLogin, passwordLogin } from '@/api/email'
-// const register=async()=>{
-//     let result=await userRegisterService(registerData.value)
-//     // if(result.code===0){
-//     //     //注册成功
-//     //     alert(result.msg ? result.msg: '注册成功')
-//     // }else{
-//     //     //注册失败
-//     //     alert('注册失败')
-//     // }
-//     // alert(result.msg ? result.msg: '注册成功')
-//     ElMessage.success(result.msg ? result.msg: '注册成功')
-// }
 
 //绑定数据,复用注册表单的数据模型
 //表单数据校验
@@ -375,7 +363,6 @@ const resetEmailForm = () => {
 </template>
 
 <style lang="scss" scoped>
-/* 样式 */
 .login-page {
     height: 100vh;
     background-color: #fff;
