@@ -9,9 +9,8 @@ const cityHallModel = ref({
     hint: ''
 })
 
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { getCityHallInfoById } from '@/api/cityHall'
-const router = useRouter()
 const route = useRoute()
 const id = ref(0)
 const init = async () => {

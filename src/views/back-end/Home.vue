@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import UserManage from '@/components/UserManage.vue'
 import PlaceManage from '@/components/PlaceManage.vue'
+import MartyrManage from '@/components/MartyrManage.vue'
 
 const activeName = ref('place')
 
@@ -23,6 +24,12 @@ const handleClick = (tab, event) => {
             </div>
             <div class="manage" v-if="activeName === 'place'">
                 <place-manage></place-manage>
+            </div>
+            <div class="manage" v-if="activeName === 'martyr'">
+                <martyr-manage></martyr-manage>
+            </div>
+            <div class="manage" v-if="activeName === 'story'">
+
             </div>
             <div class="manage" v-if="activeName === 'user'">
                 <user-manage></user-manage>

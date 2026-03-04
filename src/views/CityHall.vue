@@ -19,7 +19,7 @@ const cityHalls = ref([
 ])
 const getCityHallPage = async (page, pageSize) => {
     //获取分类列表
-    const res = await cityHallPage(page, pageSize)
+    const res = await cityHallPage(page, pageSize, '')
     console.log(res)
     cityHalls.value = res.data.data
     total.value = res.data.total
@@ -52,7 +52,7 @@ tokenValue()
                     <img :src="cityHall.img" alt="图片走丢了" style="width:200px;height: 160px;">
                 </span>
                 <span style="width: 100%;display: flex;justify-content: center;font-size: small;">{{ cityHall.name
-                    }}</span>
+                }}</span>
                 <span style="width: 100%;display: flex;justify-content: center;">
                     <router-link :to="{ path: '/memorial/hallDetail', query: { id: cityHall.id } }"
                         style="text-decoration: none;font-size: small;color: #a11a1a;">进入纪念设施>></router-link>

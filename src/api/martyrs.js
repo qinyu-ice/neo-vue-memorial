@@ -1,16 +1,12 @@
 import request from "@/utils/request";
 
-
-//分类列表查询
-// export const articleCategoryList = () =>{
-//     const tokenStore = useTokenStore()
-//     //在pinia中定义的响应式对象不需要.value可以直接访问
-//     return requset.get('/article/category',{headers:{'Authorization':tokenStore.token}})
-// }
 export const heroPage = (params) => {
     const { page, pageSize, name } = params;
     return request.get(`martyr/${page}/${pageSize}?name=${name}`)
-    // return requset.get('/admin/category/page')
+}
+
+export const allHeroPage = (page, pageSize, name) => {
+    return request.get(`martyr/all/${page}/${pageSize}?name=${name}`)
 }
 
 // 高级搜索查询
@@ -31,4 +27,20 @@ export const martyrLeaveMessage = (leaveMessage) => {
 // 获取所有烈士纪念留言
 export const martyrAllLeaveMessage = () => {
     return request.get(`record/1/10`)
+}
+
+export const martyrAdd = (addData) => {
+    return request.post('martyr/add', addData)
+}
+
+export const uploadMartyrPhoto = (file) => {
+    return request.post('/martyr/upload', file)
+}
+
+export const deleteMartyr = (id) => {
+    return request.delete(`/martyr/delete/${id}`)
+}
+
+export const updateMartyr = (editData) => {
+    return request.post('/martyr/update', editData)
 }

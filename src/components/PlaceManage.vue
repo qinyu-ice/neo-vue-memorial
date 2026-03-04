@@ -177,7 +177,6 @@ const handleFileChange = async (e) => {
 
     const result = await uploadCityHallImage(formData)
     uploadUrl.value = result.data
-    console.log(uploadUrl.value)
 
     // 清空文件选择框的值，确保同一文件可以重复选择
     e.target.value = ''
@@ -229,7 +228,7 @@ const handleClose = (done) => {
             <div class="table-top">
                 <el-button type="primary" @click="add">新增</el-button>
                 <div>
-                    <input v-if="showSearchBox" v-model="placeName" style="width: 150px; margin-right: 10px;"
+                    <el-input v-if="showSearchBox" v-model="placeName" style="width: 150px; margin-right: 10px"
                         placeholder="请输入设施名称" />
                     <el-icon @click="searchCityHall">
                         <Search />
