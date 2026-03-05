@@ -68,6 +68,7 @@ const addFormRef = ref()
 const editFormRef = ref()
 const uploadUrl = ref()
 const fileInput = ref(null)
+const tableLoading = ref(true)
 const showSearchBox = ref(false)
 const showAddDialog = ref(false)
 const showEditDialog = ref(false)
@@ -125,7 +126,13 @@ const getAllHeroPage = async (page, pageSize, name = '') => {
     const searchName = name || currentSearchKeyword.value
     //获取分类列表
     const res = await allHeroPage(page, pageSize, searchName)
+    if (res.code === 200 && res.data.data != null) {
+        tableLoading.value = false
+    }
     tableData.value = res.data.data
+    if (tableData.value == null) {
+        ElMessage.error('暂无烈士数据')
+    }
     total.value = res.data.total
 }
 getAllHeroPage(1, 5)
@@ -135,7 +142,7 @@ const onCurrentChange = (num) => {
     getAllHeroPage(pageNum.value, pageSize.value)
 }
 
-const searchCityHall = async () => {
+const searchMartyr = async () => {
     showSearchBox.value = true
     // 将搜索关键词持久化
     currentSearchKeyword.value = name.value
@@ -275,13 +282,13 @@ const handleClose = (done) => {
 </script>
 <template>
     <div class="martyr-manage">
-        <div class="table">
+        <div v-loading="tableLoading" class="table">
             <div class="table-top">
                 <el-button type="primary" @click="add">新增</el-button>
                 <div>
                     <el-input v-if="showSearchBox" v-model="name" style="width: 150px; margin-right: 10px"
-                        placeholder="请输入设施名称" />
-                    <el-icon @click="searchCityHall">
+                        placeholder="请输入烈士姓名" />
+                    <el-icon @click="searchMartyr">
                         <Search />
                     </el-icon>
                 </div>
@@ -375,7 +382,7 @@ const handleClose = (done) => {
                         <el-input v-model="addData.buryPoint" />
                     </el-form-item>
                     <el-form-item label="烈士事迹" prop="deeds">
-                        <el-input type="textarea" v-model="addData.deeds" />
+                        <el-input type="textarea" autosize v-model="addData.deeds" />
                     </el-form-item>
                 </el-form>
                 <template #footer>
@@ -390,7 +397,7 @@ const handleClose = (done) => {
         </div>
         <!-- 编辑弹窗 -->
         <div>
-            <el-dialog v-model="showEditDialog" title="新增" width="500" :before-close="handleClose">
+            <el-dialog v-model="showEditDialog" title="编辑" width="500" :before-close="handleClose">
                 <el-form :model="editData" :rules="formRules" ref="editFormRef" label-width="auto"
                     style="max-width: 600px">
                     <el-form-item label="烈士碑像" prop="photo">
@@ -439,7 +446,7 @@ const handleClose = (done) => {
                         <el-input v-model="editData.buryPoint" />
                     </el-form-item>
                     <el-form-item label="烈士事迹" prop="deeds">
-                        <el-input type="textarea" v-model="editData.deeds" />
+                        <el-input type="textarea" autosize v-model="editData.deeds" />
                     </el-form-item>
                 </el-form>
                 <template #footer>

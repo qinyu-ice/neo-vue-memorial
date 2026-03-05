@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import UserManage from '@/components/UserManage.vue'
 import PlaceManage from '@/components/PlaceManage.vue'
 import MartyrManage from '@/components/MartyrManage.vue'
+import StoryManage from '@/components/StoryManage.vue'
 
 const activeName = ref('place')
 
@@ -18,6 +19,7 @@ const handleClick = (tab, event) => {
                 <el-tabs v-model="activeName" type="card" class="demo-tabs" @tab-click="handleClick">
                     <el-tab-pane label="烈士纪念设施管理" name="place"></el-tab-pane>
                     <el-tab-pane label="烈士管理" name="martyr"></el-tab-pane>
+                    <el-tab-pane label="寻亲信息管理" name="info"></el-tab-pane>
                     <el-tab-pane label="寻亲故事管理" name="story"></el-tab-pane>
                     <el-tab-pane label="用户管理" name="user"></el-tab-pane>
                 </el-tabs>
@@ -28,8 +30,11 @@ const handleClick = (tab, event) => {
             <div class="manage" v-if="activeName === 'martyr'">
                 <martyr-manage></martyr-manage>
             </div>
-            <div class="manage" v-if="activeName === 'story'">
+            <div class="manage" v-if="activeName === 'info'">
 
+            </div>
+            <div class="manage" v-if="activeName === 'story'">
+                <story-manage></story-manage>
             </div>
             <div class="manage" v-if="activeName === 'user'">
                 <user-manage></user-manage>

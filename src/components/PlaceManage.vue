@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
-import { Edit, Delete, View as IconView, UploadFilled } from '@element-plus/icons-vue'
+import { Edit, Delete, UploadFilled } from '@element-plus/icons-vue'
 import { cityHallPage, uploadCityHallImage, addCityHall, updateCityHall, deleteCityHall } from '@/api/cityHall'
 import { Search } from '@element-plus/icons-vue'
 
@@ -38,6 +38,7 @@ const pageNum = ref(1)//当前页
 const total = ref()//总条数
 const pageSize = ref(5)//每页条数
 
+const tableLoading = ref(true)
 const showEditDialog = ref(false)
 const showAddDialog = ref(false)
 const showDeleteDialog = ref(false)
@@ -77,7 +78,13 @@ const getCityHallPage = async (page, pageSize, name = '') => {
     //获取分类列表
     const searchName = name || currentSearchKeyword.value
     const res = await cityHallPage(page, pageSize, searchName)
+    if (res.code === 200 && res.data.data != null) {
+        tableLoading.value = false
+    }
     tableData.value = res.data.data
+    if (tableData.value == null) {
+        ElMessage.error('暂无烈士纪念设施数据')
+    }
     total.value = res.data.total
 }
 getCityHallPage(1, 5)
@@ -224,7 +231,7 @@ const handleClose = (done) => {
 </script>
 <template>
     <div class="place-manage">
-        <div class="table">
+        <div v-loading="tableLoading" class="table">
             <div class="table-top">
                 <el-button type="primary" @click="add">新增</el-button>
                 <div>
@@ -280,7 +287,7 @@ const handleClose = (done) => {
                             style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" @click="upload">
                     </el-form-item>
                     <el-form-item label="介绍" prop="introduction">
-                        <el-input v-model="addData.introduction" />
+                        <el-input type="textarea" autosize v-model="addData.introduction" />
                     </el-form-item>
                     <el-form-item label="电话" prop="phone">
                         <el-input v-model="addData.phone" />
@@ -289,7 +296,7 @@ const handleClose = (done) => {
                         <el-input v-model="addData.address" />
                     </el-form-item>
                     <el-form-item label="乘车提示" prop="hint">
-                        <el-input v-model="addData.hint" />
+                        <el-input type="textarea" autosize v-model="addData.hint" />
                     </el-form-item>
                 </el-form>
                 <template #footer>
@@ -317,7 +324,7 @@ const handleClose = (done) => {
                             style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" @click="upload">
                     </el-form-item>
                     <el-form-item label="介绍" prop="introduction">
-                        <el-input v-model="editData.introduction" />
+                        <el-input type="textarea" autosize v-model="editData.introduction" />
                     </el-form-item>
                     <el-form-item label="电话" prop="phone">
                         <el-input v-model="editData.phone" />
@@ -326,7 +333,7 @@ const handleClose = (done) => {
                         <el-input v-model="editData.address" />
                     </el-form-item>
                     <el-form-item label="乘车提示" prop="hint">
-                        <el-input v-model="editData.hint" />
+                        <el-input type="textarea" autosize v-model="editData.hint" />
                     </el-form-item>
                 </el-form>
                 <template #footer>

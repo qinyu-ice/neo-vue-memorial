@@ -1,8 +1,8 @@
 <script setup>
 import { onMounted, ref, reactive } from 'vue'
 import { userAllService, userAddService, userDeleteService, userInfoUpdateService, userUpdataService } from '@/api/user'
-import { ElMessageBox, ElMessage } from 'element-plus'
-import { Edit, Delete, View as IconView, Lock } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { Edit, Delete, Lock } from '@element-plus/icons-vue'
 
 const tableData = ref([
     {
@@ -18,6 +18,7 @@ const initEditData = () => ({})
 const userEditData = reactive(initEditData)
 const userResetPasswordData = reactive({})
 const currentId = ref()
+const tableLoading = ref(true)
 const showDeleteDialog = ref(false)
 const showAddDialog = ref(false)
 const showEditDialog = ref(false)
@@ -63,9 +64,12 @@ const passwordRules = reactive({
 
 const getTableData = async () => {
     const result = await userAllService()
+    if (result.code === 200 && result.data != null) {
+        tableLoading.value = false
+    }
     tableData.value = result.data
     if (tableData.value == null) {
-        ElMessage.error('暂无用户')
+        ElMessage.error('暂无用户数据')
     }
 }
 
@@ -192,7 +196,7 @@ onMounted(() => {
 </script>
 <template>
     <div class="user-manage">
-        <div class="table">
+        <div v-loadling="tableLoading" class="table">
             <el-button type="primary" @click="add()">新增</el-button>
             <el-table :data="tableData" border>
                 <el-table-column prop="id" label="序号" width="80">
