@@ -30,8 +30,8 @@ export const userRegisterService = (registerData) => {
     return request.post('user/register', { username: registerData.username, password: registerData.password, password2: registerData.rePassword, email: registerData.email })
 }
 
-export const userAllService = () => {
-    return request.get('user/all')
+export const userAllService = (page, pageSize, username) => {
+    return request.get(`user/${page}/${pageSize}?username=${username}`)
 }
 
 export const userAddService = (addData) => {

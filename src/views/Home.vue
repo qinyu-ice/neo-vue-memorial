@@ -160,7 +160,13 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus';
 import { cityList } from '@/api/city';
 import { cityHallList, getMapByip } from '@/api/cityHall';
-import { martyrAllLeaveMessage } from '@/api/martyrs'
+import { allMessageList } from '@/api/martyrs'
+
+//分页条数据模型
+const pageNum = ref(1)//当前页
+const total = ref()//总条数
+const pageSize = ref(5)//每页条数
+
 const router = useRouter()
 const tokenStore = useTokenStore()
 // 四川文理学院（莲湖小区）IP
@@ -170,13 +176,13 @@ const addressA = ref("107.484767,31.211277")
 const getCityHallList = async () => {
     //获取分类列表
     const res = await cityHallList()
-    console.log(res)
     cityHalls.value = res.data
 }
 
 const getAllLeaveMessage = async () => {
     // 获取留言列表
-    const res = await martyrAllLeaveMessage()
+    const res = await allMessageList()
+    console.log(res)
     res.data.forEach((item, index) => {
         item.time = item.time.substring(0, 10)
     })
@@ -339,8 +345,8 @@ const pushDaZhouCityHallInfo = () => {
             <el-scrollbar height="400px">
                 <el-table :data="leaveMessages" style="width: 100%;">
                     <el-table-column label="留言人" width="100" prop="username" />
-                    <el-table-column label="烈士姓名" width="100" prop="name" />
-                    <el-table-column label="留言内容" width="400" prop="message" />
+                    <el-table-column label="烈士姓名" width="100" prop="martyrName" />
+                    <el-table-column label="留言内容" width="400" prop="message" show-overflow-tooltip />
                     <el-table-column label="留言时间" prop="time" />
                 </el-table>
             </el-scrollbar>

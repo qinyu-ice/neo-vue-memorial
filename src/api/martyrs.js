@@ -25,8 +25,12 @@ export const martyrLeaveMessage = (leaveMessage) => {
 }
 
 // 获取所有烈士纪念留言
-export const martyrAllLeaveMessage = () => {
-    return request.get(`record/1/10`)
+export const allMessageList = () => {
+    return request.get('record/all')
+}
+
+export const getRecordPage = (page, pageSize, searchKeyWord) => {
+    return request.get(`record/${page}/${pageSize}?searchKeyWord=${searchKeyWord}`)
 }
 
 export const martyrAdd = (addData) => {

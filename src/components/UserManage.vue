@@ -1,8 +1,13 @@
 <script setup>
-import { onMounted, ref, reactive } from 'vue'
+import { ref, reactive } from 'vue'
 import { userAllService, userAddService, userDeleteService, userInfoUpdateService, userUpdataService } from '@/api/user'
 import { ElMessage } from 'element-plus'
-import { Edit, Delete, Lock } from '@element-plus/icons-vue'
+import { Edit, Delete, Lock, Search } from '@element-plus/icons-vue'
+
+//分页条数据模型
+const pageNum = ref(1)//当前页
+const total = ref()//总条数
+const pageSize = ref(5)//每页条数
 
 const tableData = ref([
     {
@@ -23,6 +28,9 @@ const showDeleteDialog = ref(false)
 const showAddDialog = ref(false)
 const showEditDialog = ref(false)
 const showResetPasswordDialog = ref(false)
+const showSearchBox = ref(false)
+const username = ref('')
+const currentSearchKeyword = ref('')
 // 表单引用（用于手动触发校验）
 const addFormRef = ref(null)
 const editFormRef = ref(null)
@@ -62,15 +70,39 @@ const passwordRules = reactive({
     ]
 })
 
-const getTableData = async () => {
-    const result = await userAllService()
-    if (result.code === 200 && result.data != null) {
+const getAllUserList = async (page, pageSize, username = '') => {
+    const searchUsername = username || currentSearchKeyword.value
+    //获取分类列表
+    const res = await userAllService(page, pageSize, searchUsername)
+    if (res.code === 200 && res.data.data != null) {
         tableLoading.value = false
     }
-    tableData.value = result.data
+    tableData.value = res.data.data
     if (tableData.value == null) {
-        ElMessage.error('暂无用户数据')
+        ElMessage.error('暂无寻亲故事数据')
     }
+    total.value = res.data.total
+}
+getAllUserList(1, 5)
+//当前页码发生变化，调用此函数
+const onCurrentChange = (num) => {
+    pageNum.value = num
+    getAllUserList(pageNum.value, pageSize.value)
+}
+
+const searchUser = async () => {
+    showSearchBox.value = true
+    // 将搜索关键词持久化
+    currentSearchKeyword.value = username.value
+    await getAllUserList(1, 5, currentSearchKeyword.value)
+
+    if (currentSearchKeyword.value) {
+        showSearchBox.value = false
+        ElMessage.success(`搜索到${total.value}条符合条件`)
+    }
+    // 只清空输入框，保留持久化的关键词
+    username.value = ''
+    pageNum.value = 1
 }
 
 const addUserService = async (data) => {
@@ -109,7 +141,7 @@ const addUser = async () => {
         }
         await addUserService(addData)
         ElMessage.success('新增用户成功')
-        await getTableData()
+        await getAllUserList()
         showAddDialog.value = false
         // 重置表单
         addFormRef.value.resetFields()
@@ -126,7 +158,7 @@ const editUser = async () => {
         // 新增接口调用逻辑
         await userInfoUpdateService(userEditData.value)
         ElMessage.success('更新用户成功')
-        await getTableData()
+        await getAllUserList()
         showEditDialog.value = false
         // 重置表单
         editFormRef.value.resetFields()
@@ -142,7 +174,7 @@ const deleteUser = async () => {
     try {
         await deleteUserService(currentId.value)
         ElMessage.success('删除用户成功')
-        await getTableData()
+        await getAllUserList()
         showDeleteDialog.value = false
     } catch (error) {
         ElMessage.error('删除用户失败')
@@ -189,15 +221,20 @@ const handleClose = (done) => {
     // .catch(() => {
     // })
 }
-
-onMounted(() => {
-    getTableData()
-})
 </script>
 <template>
     <div class="user-manage">
-        <div v-loadling="tableLoading" class="table">
-            <el-button type="primary" @click="add()">新增</el-button>
+        <div v-loading="tableLoading" class="table">
+            <div class="table-top">
+                <el-button type="primary" @click="add">新增</el-button>
+                <div>
+                    <el-input v-if="showSearchBox" v-model="username" style="width: 150px; margin-right: 10px"
+                        placeholder="请输入用户名" />
+                    <el-icon @click="searchUser">
+                        <Search />
+                    </el-icon>
+                </div>
+            </div>
             <el-table :data="tableData" border>
                 <el-table-column prop="id" label="序号" width="80">
                     <template #default="scope">
@@ -223,6 +260,9 @@ onMounted(() => {
                     </template>
                 </el-table-column>
             </el-table>
+            <el-pagination v-model:current-page="pageNum" v-model:page-size="pageSize"
+                layout="jumper, total, prev, pager, next" background :total="total" @current-change="onCurrentChange"
+                style="margin-top: 50px; justify-content:center; margin-bottom: 50px;" />
         </div>
         <!-- 删除弹窗 -->
         <div>
@@ -330,6 +370,12 @@ onMounted(() => {
 }
 
 .table>.el-button {
+    margin-bottom: 10px;
+}
+
+.table-top {
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
 
