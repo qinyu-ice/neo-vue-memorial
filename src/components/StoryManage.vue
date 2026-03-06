@@ -186,7 +186,7 @@ const handleClose = (done) => {
                 <el-button type="primary" @click="add">新增</el-button>
                 <div>
                     <el-input v-if="showSearchBox" v-model="title" style="width: 150px; margin-right: 10px"
-                        placeholder="请输入故事标题" />
+                        placeholder="请输入寻亲故事标题" />
                     <el-icon @click="searchStory">
                         <Search />
                     </el-icon>

@@ -33,6 +33,10 @@ export const getRecordPage = (page, pageSize, searchKeyWord) => {
     return request.get(`record/${page}/${pageSize}?searchKeyWord=${searchKeyWord}`)
 }
 
+export const deleteRecord = (id) => {
+    return request.delete(`record/delete/${id}`)
+}
+
 export const martyrAdd = (addData) => {
     return request.post('martyr/add', addData)
 }

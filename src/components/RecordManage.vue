@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue';
-import { Edit, Delete, Search } from '@element-plus/icons-vue'
+import { Delete, Search } from '@element-plus/icons-vue'
 import { getRecordPage } from '@/api/martyrs'
 import { ElMessage } from 'element-plus';
+import { deleteRecord } from '@/api/martyrs';
 
 //分页条数据模型
 const pageNum = ref(1)//当前页
@@ -24,7 +25,9 @@ const tableData = ref([
 const searchKeyWord = ref('')
 const tableLoading = ref(true)
 const showSearchBox = ref(false)
+const showDeleteDialog = ref(false)
 const currentSearchKeyword = ref('')
+const deleteId = ref('')
 
 const formatTime = (row, column) => {
     const timeStr = row[column.prop] || row.time;
@@ -66,23 +69,44 @@ const searchRecord = async () => {
     pageNum.value = 1
 }
 
-// const add = () => {
-//     ElMessage.success('点击了新增按钮')
-// }
-
-const edit = (row) => {
-    ElMessage.success(`点击了序号${row.id}的编辑按钮`)
+const remove = (row) => {
+    deleteId.value = row.id
+    showDeleteDialog.value = true
 }
 
-const remove = (row) => {
-    ElMessage.error(`点击了序号${row.id}删除按钮`)
+const removeRecord = async () => {
+    try {
+        const result = await deleteRecord(deleteId.value)
+        showDeleteDialog.value = false
+        ElMessage.success(result.msg)
+        pageNum.value = 1
+        pageSize.value = 5
+        await getAllRecordList(pageNum.value, pageSize.value)
+    } catch (error) {
+        ElMessage.error('删除失败')
+        console.log('error：', error)
+    }
+}
+
+const cancel = () => {
+    showDeleteDialog.value = false
+    handleClose()
+}
+
+const handleClose = (done) => {
+    // ElMessageBox.confirm('确认关闭？')
+    // .then(() => {
+    // 关闭前重置表单
+    done && done()
+    // })
+    // .catch(() => {
+    // })
 }
 </script>
 <template>
     <div class="record-manage">
         <div v-loading="tableLoading" class="table">
             <div class="table-top">
-                <!-- <el-button type="primary" @click="add">新增</el-button> -->
                 <div>
                     <el-input v-if="showSearchBox" v-model="searchKeyWord" style="width: 150px; margin-right: 10px"
                         placeholder="请输入用户名" />
@@ -96,13 +120,11 @@ const remove = (row) => {
                 <el-table-column prop="username" label="用户名" width="120" />
                 <el-table-column prop="martyrName" label="烈士姓名" width="120" />
                 <el-table-column prop="ignite" label="点燃蜡烛数量" width="120" show-overflow-tooltip />
-                <el-table-column prop="flower" label="献花数量" width="120" :formatter="formatTime" />
+                <el-table-column prop="flower" label="献花数量" width="120" />
                 <el-table-column prop="message" label="留言内容" width="120" show-overflow-tooltip />
                 <el-table-column prop="time" label="纪念时间" width="120" :formatter="formatTime" />
-                <el-table-column class="operation" label="操作" width="130">
+                <el-table-column class="operation" label="操作" width="70">
                     <template #default="scope">
-                        <el-link type="primary" :icon="Edit" @click="edit(scope.row)"
-                            class="operation-link">修改</el-link>
                         <el-link type="danger" :icon="Delete" @click="remove(scope.row)">删除</el-link>
                     </template>
                 </el-table-column>
@@ -110,6 +132,20 @@ const remove = (row) => {
             <el-pagination v-model:current-page="pageNum" v-model:page-size="pageSize"
                 layout="jumper, total, prev, pager, next" background :total="total" @current-change="onCurrentChange"
                 style="margin-top: 50px; justify-content:center; margin-bottom: 50px;" />
+        </div>
+        <!-- 删除弹窗 -->
+        <div>
+            <el-dialog v-model="showDeleteDialog" title="删除" width="500">
+                <span>是否删除</span>
+                <template #footer>
+                    <div class="dialog-footer">
+                        <el-button @click="cancel">取消</el-button>
+                        <el-button type="primary" @click="removeRecord">
+                            确认
+                        </el-button>
+                    </div>
+                </template>
+            </el-dialog>
         </div>
     </div>
 </template>
