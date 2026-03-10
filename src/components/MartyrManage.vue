@@ -63,7 +63,7 @@ const initEditData = () => ({
 const editData = ref(initEditData()) // 初始化编辑数据
 const name = ref('')
 const currentSearchKeyword = ref('')
-const deleteId = ref()
+const deleteData = ref()
 const addFormRef = ref()
 const editFormRef = ref()
 const uploadUrl = ref()
@@ -241,13 +241,13 @@ const editMartyr = async () => {
 }
 
 const remove = (row) => {
-    deleteId.value = row.id
+    deleteData.value = { ...row }
     showDeleteDialog.value = true
 }
 
 const removeMartyr = async () => {
     try {
-        const result = await deleteMartyr(deleteId.value)
+        const result = await deleteMartyr(deleteData.value.id)
         showDeleteDialog.value = false
         ElMessage.success(result.msg)
         pageNum.value = 1
@@ -462,7 +462,7 @@ const handleClose = (done) => {
         <!-- 删除弹窗 -->
         <div>
             <el-dialog v-model="showDeleteDialog" title="删除" width="500">
-                <span>是否删除</span>
+                <span>是否删除{{ deleteData.name }}？</span>
                 <template #footer>
                     <div class="dialog-footer">
                         <el-button @click="cancel">取消</el-button>

@@ -22,7 +22,7 @@ const userAddData = reactive({})
 const initEditData = () => ({})
 const userEditData = reactive(initEditData)
 const userResetPasswordData = reactive({})
-const currentId = ref()
+const currentData = ref()
 const tableLoading = ref(true)
 const showDeleteDialog = ref(false)
 const showAddDialog = ref(false)
@@ -122,7 +122,7 @@ const edit = (row) => {
 }
 const remove = (row) => {
     showDeleteDialog.value = true
-    currentId.value = row.id
+    currentData.value = { ...row }
 }
 const reset = (row) => {
     showResetPasswordDialog.value = true
@@ -172,7 +172,7 @@ const editUser = async () => {
 
 const deleteUser = async () => {
     try {
-        await deleteUserService(currentId.value)
+        await deleteUserService(currentData.value.id)
         ElMessage.success('删除用户成功')
         await getAllUserList()
         showDeleteDialog.value = false
@@ -267,7 +267,7 @@ const handleClose = (done) => {
         <!-- 删除弹窗 -->
         <div>
             <el-dialog v-model="showDeleteDialog" title="删除" width="500">
-                <span>是否删除</span>
+                <span>是否删除用户名为{{ currentData.username }}的账号？</span>
                 <template #footer>
                     <div class="dialog-footer">
                         <el-button @click="cancel">取消</el-button>

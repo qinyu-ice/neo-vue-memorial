@@ -49,7 +49,7 @@ const centerDialogVisible = ref(false)
                         <img :src=cityHallModel.img alt="" style="width: 35vh;height: 35vh;">
                     </div>
                     <div>
-                        <div class="two-line-ellipsis" style="width: 90vh;height:13vh;">
+                        <div class="two-line-ellipsis" style="width: 90vh;height:11vh;">
                             <p>
                                 {{ cityHallModel.introduction }}
                             </p>
@@ -167,6 +167,7 @@ const centerDialogVisible = ref(false)
     -webkit-box-orient: vertical;
     /* 垂直排列 */
     -webkit-line-clamp: 4;
+    line-clamp: 4;
     /* 限制显示两行 */
     overflow: hidden;
     /* 隐藏超出范围的内容 */

@@ -62,7 +62,7 @@ const fileInput = ref(null)
 const uploadUrl = ref()
 const addFormRef = ref()
 const editFormRef = ref()
-const deleteId = ref()
+const deleteData = ref()
 const placeName = ref('')
 const currentSearchKeyword = ref('')
 
@@ -211,13 +211,14 @@ const handleFileChange = async (e) => {
 }
 
 const remove = (row) => {
-    deleteId.value = row.id
+    deleteData.value = { ...row }
+    console.log(deleteData.value.id)
     showDeleteDialog.value = true
 }
 
 const removeCityHall = async () => {
     try {
-        const result = await deleteCityHall(deleteId.value)
+        const result = await deleteCityHall(deleteData.value.id)
         showDeleteDialog.value = false
         ElMessage.success(result.msg)
         pageNum.value = 1
@@ -604,7 +605,7 @@ const handleCloseMap = (done) => {
         <!-- 删除弹窗 -->
         <div>
             <el-dialog v-model="showDeleteDialog" title="删除" width="500">
-                <span>是否删除</span>
+                <span>是否删除{{ deleteData.name }}？</span>
                 <template #footer>
                     <div class="dialog-footer">
                         <el-button @click="cancel">取消</el-button>

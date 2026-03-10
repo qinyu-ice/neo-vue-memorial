@@ -24,11 +24,7 @@ const searchRelativesStoreData = ref([{
 }])
 
 const searchRelativesInfoDetail = () => {
-    router.push('/memorial/RelativesInfoDetail')
-}
-
-const searchRelativesStoryDetail = () => {
-    router.push('/memorial/RelativesStoryDetail')
+    router.push('/memorial/relativesInfoDetail')
 }
 
 const pushSearch = () => {
@@ -106,7 +102,7 @@ getRealtivesStoryList()
                 <div style="height: 300px;">
                     <ul class="list">
                         <li v-for="item in searchRelativesStoreData" :key="item.id">
-                            <router-link :to="{ path: '/memorial/RelativesStoryDetail', query: { id: item.id } }"
+                            <router-link :to="{ path: '/memorial/relativesStoryDetail', query: { id: item.id } }"
                                 style="text-decoration: none;font-size: large;color: #303133;margin-top: 5px;">{{
                                     item.title
                                 }}</router-link>

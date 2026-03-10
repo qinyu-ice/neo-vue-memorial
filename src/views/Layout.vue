@@ -22,7 +22,7 @@ watch(
       '/memorial/cityHall': 'cityHall',
       '/memorial/martyrsMuni': 'martyrsMuni',
       '/memorial/martyrsSearchRelatives': 'martyrsSearchRelatives',
-      '/memorial/memorialHall': 'memorialHall',
+      '/memorial/hallMap': 'hallMap',
       '/memorial/updataUser': 'updataUser'
     }
     // 更新activeIndex
@@ -42,7 +42,7 @@ watch(
           <el-menu-item index="cityHall">烈士纪念设施</el-menu-item>
           <el-menu-item index="martyrsMuni">烈士英名录</el-menu-item>
           <el-menu-item index="martyrsSearchRelatives">烈士寻亲</el-menu-item>
-          <el-menu-item index="memorialHall">地图全览</el-menu-item>
+          <el-menu-item index="hallMap">地图全览</el-menu-item>
           <el-menu-item index="updataUser">用户</el-menu-item>
         </el-menu>
       </el-header>

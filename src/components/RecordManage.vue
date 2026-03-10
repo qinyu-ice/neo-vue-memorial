@@ -27,7 +27,7 @@ const tableLoading = ref(true)
 const showSearchBox = ref(false)
 const showDeleteDialog = ref(false)
 const currentSearchKeyword = ref('')
-const deleteId = ref('')
+const deleteData = ref()
 
 const formatTime = (row, column) => {
     const timeStr = row[column.prop] || row.time;
@@ -70,13 +70,13 @@ const searchRecord = async () => {
 }
 
 const remove = (row) => {
-    deleteId.value = row.id
+    deleteData.value = { ...row }
     showDeleteDialog.value = true
 }
 
 const removeRecord = async () => {
     try {
-        const result = await deleteRecord(deleteId.value)
+        const result = await deleteRecord(deleteData.value.id)
         showDeleteDialog.value = false
         ElMessage.success(result.msg)
         pageNum.value = 1
@@ -136,7 +136,7 @@ const handleClose = (done) => {
         <!-- 删除弹窗 -->
         <div>
             <el-dialog v-model="showDeleteDialog" title="删除" width="500">
-                <span>是否删除</span>
+                <span>是否删除{{ deleteData.username }}给{{ deleteData.martyrName }}烈士的留言？</span>
                 <template #footer>
                     <div class="dialog-footer">
                         <el-button @click="cancel">取消</el-button>

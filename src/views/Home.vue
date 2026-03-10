@@ -154,6 +154,51 @@ const cityHalls = ref([
 ])
 const leaveMessages = ref([])
 
+const hotNewsData = ref([
+    {
+        id: 1,
+        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
+        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
+        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
+        time: '2026-03-05'
+    },
+    {
+        id: 2,
+        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
+        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
+        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
+        time: '2026-03-05'
+    },
+    {
+        id: 3,
+        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
+        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
+        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
+        time: '2026-03-05'
+    },
+    {
+        id: 4,
+        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
+        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
+        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
+        time: '2026-03-05'
+    },
+    {
+        id: 5,
+        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
+        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
+        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
+        time: '2026-03-05'
+    },
+    {
+        id: 6,
+        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
+        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
+        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
+        time: '2026-03-05'
+    }
+])
+
 //分页条数据模型
 const pageNum = ref(1)//当前页
 const total = ref()//总条数
@@ -211,6 +256,10 @@ const pushDaZhouCityHallInfo = () => {
     router.push('/memorial/martyrsMuni')
 }
 
+const goToHotNews = () => {
+    router.push('/memorial/hotNews')
+}
+
 </script>
 <template>
     <div>
@@ -246,7 +295,7 @@ const pushDaZhouCityHallInfo = () => {
                     </div>
                 </div>
             </template>
-            <div style="height: 70vh;background-image: url('https://www.scmartyrs.cn/static/img/bg03.0c252411.png');">
+            <div style="height: 65vh;background-image: url('https://www.scmartyrs.cn/static/img/bg03.0c252411.png');">
                 <div style="padding-left:90vh;height: 100%;padding-top:20px;">
                     <div style="display: flex;justify-content: space-around;flex-wrap: wrap;">
                         <el-col :span="8" v-for="city in cities" :key="city.id" style="margin-top: 20px;">
@@ -268,60 +317,26 @@ const pushDaZhouCityHallInfo = () => {
                 <div class="header">
                     <span style="color: red;font-weight: bolder;">热点资讯</span>
                     <div class="extra">
-                        <el-button type="primary">查看更多>></el-button>
+                        <el-button type="primary" @click="goToHotNews">查看更多>></el-button>
                     </div>
                 </div>
             </template>
             <div style="display:flex;justify-content: space-around;">
                 <img src="http://www.dzhjlsly.com/tupmulu/image/20241009/20241009113245_65596.jpg" class="img2">
                 <div style="width: 50%;">
-                    <el-row class="row-bg" justify="space-around"
-                        style="border-bottom:1px solid #ccc;margin-bottom: 25px;">
-                        <el-tag type="danger">动态</el-tag>
-                        <div data-v-4a24b1d2="" class="title">
-                            归期已定！志愿军烈士们，祖国接您回家
+                    <el-row v-for="(item, index) in hotNewsData" :key="index" class="row-bg" justify="space-around"
+                        style="border-bottom: 1px solid #ccc; margin-bottom: 25px;">
+                        <div class="dynamic-tag">
+                            <el-tag type="danger">动态</el-tag>
                         </div>
-                        <el-tag type="danger">2024-11-27</el-tag>
-                    </el-row>
-                    <el-row class="row-bg" justify="space-around"
-                        style="border-bottom:1px solid #ccc;margin-bottom: 25px;">
-                        <el-tag type="danger">动态</el-tag>
-                        <div data-v-4a24b1d2="" class="title">
-                            四川省烈士纪念设施中心举办全省英烈讲解员培训班
+                        <div class="title" data-v-4a24b1d2="">
+                            <router-link class="news-title"
+                                :to="{ path: '/memorial/hotNewsDetail', query: { id: item.id } }">{{
+                                    item.title }}</router-link>
                         </div>
-                        <el-tag type="danger">2024-11-26</el-tag>
-                    </el-row>
-                    <el-row class="row-bg" justify="space-around"
-                        style="border-bottom:1px solid #ccc;margin-bottom: 25px;">
-                        <el-tag type="danger">动态</el-tag>
-                        <div data-v-4a24b1d2="" class="title">
-                            我省隆重举行向人民英雄敬献花篮仪式
+                        <div class="time-tag">
+                            <el-tag type="danger">{{ item.time }}</el-tag>
                         </div>
-                        <el-tag type="danger">2024-11-21</el-tag>
-                    </el-row>
-                    <el-row class="row-bg" justify="space-around"
-                        style="border-bottom:1px solid #ccc;margin-bottom: 25px;">
-                        <el-tag type="danger">动态</el-tag>
-                        <div data-v-4a24b1d2="" class="title">
-                            达州市举行向人民英雄敬献花篮仪式
-                        </div>
-                        <el-tag type="danger">2024-09-30</el-tag>
-                    </el-row>
-                    <el-row class="row-bg" justify="space-around"
-                        style="border-bottom:1px solid #ccc;margin-bottom: 10px;">
-                        <el-tag type="danger">动态</el-tag>
-                        <div data-v-4a24b1d2="" class="title">
-                            市退役军人局传达学习市委五届八次全会精神
-                        </div>
-                        <el-tag type="danger">2024-06-14</el-tag>
-                    </el-row>
-                    <el-row class="row-bg" justify="space-around"
-                        style="border-bottom:1px solid #ccc;margin-bottom: 25px;">
-                        <el-tag type="danger">动态</el-tag>
-                        <div data-v-4a24b1d2="" class="title">
-                            事务厅副厅长陈发清来达调研指导烈士褒扬工作
-                        </div>
-                        <el-tag type="danger">2024-06-02</el-tag>
                     </el-row>
                 </div>
             </div>
@@ -414,6 +429,41 @@ const pushDaZhouCityHallInfo = () => {
 .img2 {
     width: 40%;
     height: 50vh;
+}
+
+.dynamic-tag {
+    width: 10%;
+    margin-left: 10px;
+}
+
+.title {
+    width: 60%;
+
+    // 标题样式（包含hover效果）
+    .news-title {
+        font-size: medium;
+        text-decoration: none;
+        color: #333;
+        line-height: 1.4;
+        margin-bottom: 10px;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        cursor: pointer; // 鼠标移上去显示手型，提示可点击
+        transition: color 0.2s ease; // 颜色过渡动画，更丝滑
+
+        // 鼠标悬浮时颜色变红
+        &:hover {
+            color: #f00; // 红色
+        }
+    }
+}
+
+.time-tag {
+    width: 10%;
+    margin-right: 40px;
 }
 
 .el-row {

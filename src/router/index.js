@@ -24,6 +24,14 @@ const router = createRouter({
           component: () => import('../views/CityHall.vue')
         },
         {
+          path: '/memorial/hotNews',
+          component: () => import('../components/HotNews.vue')
+        },
+        {
+          path: '/memorial/hotNewsDetail',
+          component: () => import('../components/HotNewsDetail.vue')
+        },
+        {
           path: '/memorial/hallDetail',
           component: () => import('../components/HallDetail.vue')
         },
@@ -40,16 +48,16 @@ const router = createRouter({
           component: () => import('../views/MartyrsSearchRelatives.vue')
         },
         {
-          path: '/memorial/RelativesInfoDetail',
+          path: '/memorial/relativesInfoDetail',
           component: () => import('../components/RelativesInfoDetail.vue')
         },
         {
-          path: '/memorial/RelativesStoryDetail',
+          path: '/memorial/relativesStoryDetail',
           component: () => import('../components/RelativesStoryDetail.vue')
         },
         {
-          path: '/memorial/MemorialHall',
-          component: () => import('../views/MemorialHall.vue')
+          path: '/memorial/hallMap',
+          component: () => import('../views/HallMap.vue')
         },
         {
           path: '/memorial/updataUser',
