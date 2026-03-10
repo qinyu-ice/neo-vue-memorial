@@ -1,13 +1,12 @@
 <script setup>
 import { ref } from 'vue'
+import { cityHallPage } from '@/api/cityHall'
+import { useTokenStore } from '@/stores/token'
+
 //分页条数据模型
 const pageNum = ref(1)//当前页
 const total = ref(64)//总条数
 const pageSize = ref(16)//每页条数
-
-
-import { cityHallPage } from '@/api/cityHall'
-import { useTokenStore } from '@/stores/token'
 
 const tokenStore = useTokenStore()
 const cityHalls = ref([

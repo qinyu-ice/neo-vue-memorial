@@ -11,6 +11,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
+import { useTokenStore } from '@/stores/token'
+import { useRouter } from 'vue-router'
+import { cityHallList, getMapByip } from '@/api/cityHall';
+import { allMessageList } from '@/api/martyrs'
 
 const img = ref('https://www.scmartyrs.cn/static/img/bg03.0c252411.png')
 const imgIndex = ref(0)
@@ -22,11 +26,6 @@ const titles = [
     //    '胡桃🍑🍑🍑🍑🍑🍑', '启动⚪⚪⚪⚪⚪⚪', '撒花❀❀❀❀❀❀'
 ]
 
-//  var currentImg: HTMLImageElement | null = null
-
-//  onMounted(() => {
-//    currentImg = document.querySelector('.img') as HTMLImageElement
-//  })
 var currentImg = null
 
 onMounted(() => {
@@ -155,13 +154,6 @@ const cityHalls = ref([
 ])
 const leaveMessages = ref([])
 
-import { useTokenStore } from '@/stores/token'
-import { useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus';
-import { cityList } from '@/api/city';
-import { cityHallList, getMapByip } from '@/api/cityHall';
-import { allMessageList } from '@/api/martyrs'
-
 //分页条数据模型
 const pageNum = ref(1)//当前页
 const total = ref()//总条数
@@ -169,7 +161,7 @@ const pageSize = ref(5)//每页条数
 
 const router = useRouter()
 const tokenStore = useTokenStore()
-// 四川文理学院（莲湖小区）IP
+// 四川文理学院（莲湖校区）IP
 const ip = ref("14.19.23.128")
 const addressA = ref("107.484767,31.211277")
 

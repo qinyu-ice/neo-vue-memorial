@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue'
-import { useTokenStore } from '@/stores/token'
+import { useRouter } from 'vue-router'
+import { martyrAdvancedSearch } from '@/api/martyrs';
+import { heroPage } from '@/api/martyrs'
+
 //分页条数据模型
 const pageNum = ref(1)//当前页
 const total = ref(70)//总条数
@@ -17,20 +20,11 @@ const heroList2 = ref([{
 }
 ])
 // 响应式变量存储详情数据
-
 const dept = ref('')
 const position = ref('')
 const campaign = ref('')
 const deeds = ref('')
-const tokenStore = useTokenStore()
 
-const tokenValue = () => {
-    tokenStore.tokenIsExist()
-}
-
-tokenValue()
-
-import { heroPage } from '@/api/martyrs'
 const getHeroList = async () => {
     // console.log("bbb", dept.value)
     //获取英雄列表
@@ -41,7 +35,6 @@ const getHeroList = async () => {
     })
     heroList.value = result.data.data
     total.value = result.data.total
-
 }
 getHeroList()
 
@@ -71,8 +64,6 @@ const onCurrentChange = (num) => {
     }
 }
 
-
-import { martyrAdvancedSearch } from '@/api/martyrs';
 const getMartyrsByAdvancedSearch = async () => {
     const result = await martyrAdvancedSearch({
         page: pageNum.value,
@@ -93,7 +84,6 @@ const getMartyrsScore = (score) => {
     return `${score}`.substring(0, 5)
 }
 
-import { useRouter } from 'vue-router'
 const router = useRouter()
 const detail_btn = (id) => {
     router.push({
@@ -116,7 +106,7 @@ const showAdvancedSearch = () => {
     }
 }
 
-// 新增方法，用于在单选框值改变时调用
+// 用于在单选框值改变时调用
 const onRadioChange = () => {
     // console.log("aaa", dept.value)
     getMartyrsByAdvancedSearch()

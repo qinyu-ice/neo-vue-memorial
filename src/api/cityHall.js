@@ -2,7 +2,6 @@ import request from "@/utils/request";
 
 export const cityHallList = () => {
     return request.get('/place')
-    // return requset.get('/admin/category/page')
 }
 
 export const cityHallPage = (page, pageSize, name) => {

@@ -3,7 +3,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { getRealtivesStoryById } from '@/api/relativesSearch';
 import { onBeforeMount, onMounted } from 'vue';
 import { ref } from 'vue'
-const RelativesStoryDetail = ref({
+const relativesStoryDetail = ref({
     id: '',
     title: '',
     source: '',
@@ -16,7 +16,8 @@ const route = useRoute()
 
 const getRealtivesStoryDetail = async () => {
     const res = await getRealtivesStoryById(route.query.id)
-    RelativesStoryDetail.value = res.data
+    relativesStoryDetail.value = res.data
+    relativesStoryDetail.value.time = relativesStoryDetail.value?.time?.replace('T', ' ')
 }
 getRealtivesStoryDetail()
 
@@ -25,22 +26,22 @@ getRealtivesStoryDetail()
     <div style="width: 100%;">
         <div style="margin: 20px;">
             <span>
-                当前位置：寻亲故事 >{{ RelativesStoryDetail.title }}
+                当前位置：寻亲故事 >{{ relativesStoryDetail.title }}
             </span>
         </div>
         <div style="font-size: 24px; text-align: center;font-weight: bold;">{{
-            RelativesStoryDetail.title }}</div>
+            relativesStoryDetail.title }}</div>
         <div style="text-align: center;margin-top: 10px;">
-            信息来源：{{ RelativesStoryDetail.source }} 时间：{{ RelativesStoryDetail.time }}
+            <div>时间：{{ relativesStoryDetail.time }}</div>
+            <div>信息来源：{{ relativesStoryDetail.source }}</div>
         </div>
         <div style="display: flex;justify-content: center;">
             <div
                 style="border-style: none; border-bottom: 1px solid #666;height: 1px;width: 90%;background-color: #dcdfe6;margin-top: 20px;margin-bottom: 20px;">
             </div>
         </div>
-        <div style="text-align: center;">{{ RelativesStoryDetail.content }}</div>
+        <div style="width: 90%; margin: 0 auto; display: flex; justify-content: center;">{{
+            relativesStoryDetail.content }}</div>
     </div>
 </template>
-<script scoped>
-
-</script>
+<style lang="scss" scoped></style>

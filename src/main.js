@@ -6,7 +6,12 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'// 引入element-plus中文�
 import App from './App.vue'
 import router from '@/router'
 import { createPinia } from 'pinia'
-import {createPersistedState} from 'pinia-persistedstate-plugin'
+import { createPersistedState } from 'pinia-persistedstate-plugin'
+
+// 初始化高德地图
+window._AMapSecurityConfig = {
+  securityJsCode: "f27caa65d8aa7dd7ec207568e99fb7e9",
+}
 
 const app = createApp(App)// 创建vue实例
 const pinia = createPinia()

@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 import router from '@/router'
-import { useRouter } from 'vue-router'
 import { useTokenStore } from '@/stores/token'
 //分页条数据模型
 const pageNum = ref(1)//当前页

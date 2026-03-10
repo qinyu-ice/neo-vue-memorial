@@ -1,14 +1,36 @@
 <script setup>
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+
+const activeIndex = ref('home')
 const src = '/src/assets/layout_top.png'
-import { ref } from 'vue'
-
-const activeIndex = ref('1')
-const activeIndex2 = ref('1')
+const route = useRoute()
 const handleSelect = (key, keyPath) => {
+  activeIndex.value = key
   console.log(key, keyPath)
+  console.log(activeIndex.value)
 }
-</script>
 
+// 监听路由变化，同步activeIndex
+watch(
+  () => route.path, // 监听路由path的变化
+  (newPath) => {
+    // 映射路由path到菜单index
+    // 如果路由path是/home，对应index是home
+    const pathToIndexMap = {
+      '/memorial/home': 'home',
+      '/memorial/cityHall': 'cityHall',
+      '/memorial/martyrsMuni': 'martyrsMuni',
+      '/memorial/martyrsSearchRelatives': 'martyrsSearchRelatives',
+      '/memorial/memorialHall': 'memorialHall',
+      '/memorial/updataUser': 'updataUser'
+    }
+    // 更新activeIndex
+    activeIndex.value = pathToIndexMap[newPath]
+  },
+  { immediate: true } // 立即执行一次，确保初始路由也能同步
+)
+</script>
 <template>
   <el-image :src="src" style="margin: 0px;" />
   <div class="common-layout">
@@ -20,7 +42,7 @@ const handleSelect = (key, keyPath) => {
           <el-menu-item index="cityHall">烈士纪念设施</el-menu-item>
           <el-menu-item index="martyrsMuni">烈士英名录</el-menu-item>
           <el-menu-item index="martyrsSearchRelatives">烈士寻亲</el-menu-item>
-          <el-menu-item index="memorialHall">公益募捐</el-menu-item>
+          <el-menu-item index="memorialHall">地图全览</el-menu-item>
           <el-menu-item index="updataUser">用户</el-menu-item>
         </el-menu>
       </el-header>

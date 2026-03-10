@@ -1,15 +1,18 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, shallowRef, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
-import { Edit, Delete, UploadFilled } from '@element-plus/icons-vue'
+import { Edit, Delete, UploadFilled, Location } from '@element-plus/icons-vue'
 import { cityHallPage, uploadCityHallImage, addCityHall, updateCityHall, deleteCityHall } from '@/api/cityHall'
 import { Search } from '@element-plus/icons-vue'
+import AMap from './AMap.vue'
 
 const tableData = ref([
     {
         id: '',
         name: '',
         img: '',
+        longitude: '',
+        latitude: '',
         introduction: '',
         phone: '',
         address: '',
@@ -19,6 +22,8 @@ const tableData = ref([
 const initEditData = () => ({
     name: '',
     img: '',
+    longitude: '',
+    latitude: '',
     introduction: '',
     phone: '',
     address: '',
@@ -28,6 +33,8 @@ const editData = ref(initEditData()) // 初始化编辑数据
 const addData = ref({
     name: '',
     img: '',
+    longitude: '',
+    latitude: '',
     introduction: '',
     phone: '',
     address: '',
@@ -43,6 +50,14 @@ const showEditDialog = ref(false)
 const showAddDialog = ref(false)
 const showDeleteDialog = ref(false)
 const showSearchBox = ref(false)
+const showAddLocation = ref(false)
+const showEditLocation = ref(false)
+const searchAddress = ref()
+const mapCenter = ref([107.484767, 31.211277]);
+const mapZoom = ref(13);
+const mapInstance = shallowRef(null);
+const geocoder = shallowRef(null);
+const isAddMode = ref(true)
 const fileInput = ref(null)
 const uploadUrl = ref()
 const addFormRef = ref()
@@ -54,6 +69,12 @@ const currentSearchKeyword = ref('')
 const formRules = reactive({
     name: [
         { required: true, message: '请输入名称', trigger: 'blur' }
+    ],
+    longitude: [
+        { required: true, message: '请输入经度', trigger: 'blur' }
+    ],
+    latitude: [
+        { required: true, message: '请输入纬度', trigger: 'blur' }
     ],
     introduction: [
         { required: true, message: '请输入介绍', trigger: 'blur' }
@@ -208,6 +229,187 @@ const removeCityHall = async () => {
     }
 }
 
+// 打开新增地址弹窗时标记为新增模式
+const getAddLocation = () => {
+    showAddLocation.value = true
+    isAddMode.value = true
+    // 重置地图中心点为默认值
+    mapCenter.value = [107.484767, 31.211277]
+    mapZoom.value = 16
+}
+
+// 打开编辑地址弹窗时标记为编辑模式，并初始化地图中心点
+const getEditLocation = () => {
+    showEditLocation.value = true
+    isAddMode.value = false
+    // 用编辑数据初始化地图中心点
+    if (editData.value.longitude && editData.value.latitude) {
+        mapCenter.value = [Number(editData.value.longitude), Number(editData.value.latitude)]
+        mapZoom.value = 16
+    } else {
+        mapCenter.value = [107.484767, 31.211277]
+        mapZoom.value = 16
+    }
+}
+
+// 地图初始化完成：创建地理编码实例 + 编辑模式标记点
+const onMapInit = (map) => {
+    mapInstance.value = map;
+
+    // 1. 初始化地理编码插件
+    geocoder.value = new window.AMap.Geocoder({
+        city: '511700', // 达州市行政区划代码，更精准
+        radius: 2000,
+        extensions: 'all'
+    });
+
+    // 2. 编辑模式下：如果有经纬度，添加标记点
+    if (!isAddMode.value && editData.value.longitude && editData.value.latitude) {
+        const lng = Number(editData.value.longitude);
+        const lat = Number(editData.value.latitude);
+
+        // 校验经纬度有效性
+        if (!isNaN(lng) && !isNaN(lat)) {
+            // 创建标记点
+            const marker = new window.AMap.Marker({
+                position: [lng, lat],
+                map: map, // 绑定到当前地图实例
+                title: editData.value.name || '当前位置', // 标记点标题（可选）
+                icon: new window.AMap.Icon({ // 自定义标记图标（可选）
+                    size: new window.AMap.Size(25, 34),
+                    image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+                    imageSize: new window.AMap.Size(25, 34)
+                })
+            });
+
+            // 地图聚焦到标记点
+            map.setCenter([lng, lat]);
+            map.setZoom(15);
+        }
+    }
+
+    // 3. 保留手动选点功能
+    map.on('click', (e) => {
+        const lng = e.lnglat.getLng().toFixed(6);
+        const lat = e.lnglat.getLat().toFixed(6);
+        mapCenter.value = [lng, lat];
+        ElMessage.info(`已选中该位置：经度 ${lng}，纬度 ${lat}（点击「获取经纬度」即可填充）`);
+
+        // 清除旧标记 + 添加新标记
+        map.clearMap();
+        new window.AMap.Marker({
+            position: [lng, lat],
+            map: map
+        });
+    });
+};
+
+const searchAddressToMap = async () => {
+    if (!searchAddress.value) {
+        ElMessage.warning('请输入具体地址');
+        return;
+    }
+    if (!window.AMap) {
+        ElMessage.error('高德地图未加载完成，请刷新页面重试');
+        return;
+    }
+
+    // 精准配置：限定到达州市，提高解析精度
+    const geocoder = new window.AMap.Geocoder({
+        city: '511700', // 达州市行政区划代码
+        radius: 2000,   // 搜索半径
+        extensions: 'all' // 返回完整解析结果
+    });
+
+    geocoder.getLocation(searchAddress.value, (status, result) => {
+        // 基础状态校验
+        if (status !== 'complete' || result.info !== 'OK') {
+            ElMessage.error(`地址解析失败：${result?.info || '地址不存在或格式错误'}`);
+            return;
+        }
+
+        // 兼容两种返回格式
+        let lng, lat;
+        // 格式1：直接返回 position
+        if (result.position) {
+            lng = result.position.lng;
+            lat = result.position.lat;
+        }
+        // 格式2：返回 geocodes 数组
+        else if (result.geocodes && result.geocodes.length > 0) {
+            const firstResult = result.geocodes[0];
+            if (firstResult.location) {
+                lng = firstResult.location.lng;
+                lat = firstResult.location.lat;
+            }
+            console.log(result)
+        }
+
+        // 最终经纬度校验
+        if (!lng || !lat || isNaN(lng) || isNaN(lat)) {
+            ElMessage.error(`地址解析失败：未获取到有效经纬度，请尝试更具体的地址（如：达州市通川区XX路XX号）`);
+            // 兜底：定位到达州市中心
+            mapCenter.value = [107.484767, 31.211277];
+            mapZoom.value = 12;
+            return;
+        }
+
+        // 地图定位 + 标记
+        try {
+            mapCenter.value = [lng, lat];
+            mapZoom.value = 15;
+
+            if (mapInstance.value) {
+                mapInstance.value.clearMap(); // 清除旧标记
+                // 添加标记点并自定义样式
+                const marker = new window.AMap.Marker({
+                    position: [lng, lat],
+                    map: mapInstance.value,
+                    title: searchAddress.value,
+                    icon: new window.AMap.Icon({
+                        size: new window.AMap.Size(25, 34),
+                        image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+                        imageSize: new window.AMap.Size(25, 34)
+                    })
+                });
+                // 自动聚焦到标记点
+                mapInstance.value.setCenter([lng, lat]);
+            }
+            ElMessage.success(`定位成功：经度 ${lng.toFixed(6)}，纬度 ${lat.toFixed(6)}`);
+        } catch (err) {
+            ElMessage.error(`定位失败：${err.message}`);
+            console.error('定位失败详情：', err);
+        }
+    });
+};
+
+// 获取经纬度并自动填充到表单
+const getLngAndLat = () => {
+    if (!mapInstance.value) {
+        ElMessage.error('地图未初始化完成');
+        return;
+    }
+    const center = mapInstance.value.getCenter();
+    const lng = center.getLng().toFixed(6);
+    const lat = center.getLat().toFixed(6);
+
+    // 根据模式填充到新增/编辑表单
+    if (isAddMode.value) {
+        addData.value.longitude = lng
+        addData.value.latitude = lat
+        showAddLocation.value = false
+        searchAddress.value = ''
+    } else {
+        editData.value.longitude = lng
+        editData.value.latitude = lat
+        showEditLocation.value = false
+        searchAddress.value = ''
+    }
+
+    ElMessage.success(`经纬度已填充：经度${lng}，纬度${lat}`);
+    console.log('最终获取的经纬度：', { lng, lat });
+};
+
 const cancel = () => {
     showAddDialog.value = false
     showEditDialog.value = false
@@ -227,6 +429,11 @@ const handleClose = (done) => {
     // })
     // .catch(() => {
     // })
+}
+
+const handleCloseMap = (done) => {
+    searchAddress.value = ''
+    done && done()
 }
 </script>
 <template>
@@ -286,6 +493,30 @@ const handleClose = (done) => {
                         <img v-if="uploadUrl" :src="uploadUrl"
                             style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" @click="upload">
                     </el-form-item>
+                    <div class="location">
+                        <div>
+                            <el-form-item label="经度" prop="longitude">
+                                <el-input style="width: 360px" v-model="addData.longitude" />
+                            </el-form-item>
+                            <el-form-item label="纬度" prop="latitude">
+                                <el-input style="width: 360px" v-model="addData.latitude" />
+                            </el-form-item>
+                        </div>
+                        <el-form-item>
+                            <el-icon :size="20" style="margin-left: 20px;" @click="getAddLocation">
+                                <Location />
+                            </el-icon>
+                            <el-dialog title="获取经纬度" v-model="showAddLocation" :before-close="handleCloseMap">
+                                <el-input style="margin-bottom: 10px;" v-model="searchAddress" placeholder="请输入搜索地址"
+                                    @keyup.enter="searchAddressToMap"></el-input>
+                                <AMap :center="mapCenter" :zoom="mapZoom" :visible="showAddLocation"
+                                    @init="onMapInit" />
+                                <div class="button">
+                                    <el-button type="primary" @click="getLngAndLat">获取经纬度</el-button>
+                                </div>
+                            </el-dialog>
+                        </el-form-item>
+                    </div>
                     <el-form-item label="介绍" prop="introduction">
                         <el-input type="textarea" autosize v-model="addData.introduction" />
                     </el-form-item>
@@ -323,6 +554,30 @@ const handleClose = (done) => {
                         <img :src="uploadUrl ? uploadUrl : editData.img" alt="展示图片"
                             style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" @click="upload">
                     </el-form-item>
+                    <div class="location">
+                        <div>
+                            <el-form-item label="经度" prop="longitude">
+                                <el-input style="width: 360px" v-model="editData.longitude" />
+                            </el-form-item>
+                            <el-form-item label="纬度" prop="latitude">
+                                <el-input style="width: 360px" v-model="editData.latitude" />
+                            </el-form-item>
+                        </div>
+                        <el-form-item>
+                            <el-icon :size="20" style="margin-left: 20px;" @click="getEditLocation">
+                                <Location />
+                            </el-icon>
+                            <el-dialog title="获取经纬度" v-model="showEditLocation" :before-close="handleCloseMap">
+                                <el-input style="margin-bottom: 10px;" v-model="searchAddress" placeholder="请输入搜索地址"
+                                    @keyup.enter="searchAddressToMap"></el-input>
+                                <AMap :center="mapCenter" :zoom="mapZoom" :visible="showEditLocation"
+                                    @init="onMapInit" />
+                                <div class="button">
+                                    <el-button type="primary" @click="getLngAndLat">获取经纬度</el-button>
+                                </div>
+                            </el-dialog>
+                        </el-form-item>
+                    </div>
                     <el-form-item label="介绍" prop="introduction">
                         <el-input type="textarea" autosize v-model="editData.introduction" />
                     </el-form-item>
@@ -375,5 +630,15 @@ const handleClose = (done) => {
 
 .operation-link {
     margin-right: 15px;
+}
+
+.location {
+    display: flex;
+}
+
+.button {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
 }
 </style>
