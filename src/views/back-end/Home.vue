@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import NewsManage from '@/components/NewsManage.vue'
 import PlaceManage from '@/components/PlaceManage.vue'
 import MartyrManage from '@/components/MartyrManage.vue'
 import InfoManage from '@/components/InfoManage.vue'
@@ -7,7 +8,7 @@ import StoryManage from '@/components/StoryManage.vue'
 import RecordManage from '@/components/RecordManage.vue'
 import UserManage from '@/components/UserManage.vue'
 
-const activeName = ref('place')
+const activeName = ref('news')
 
 const handleClick = (tab, event) => {
     console.log(tab, event);
@@ -19,6 +20,7 @@ const handleClick = (tab, event) => {
         <div class="middle">
             <div class="middle-top">
                 <el-tabs v-model="activeName" type="card" class="demo-tabs" @tab-click="handleClick">
+                    <el-tab-pane label="热点资讯管理" name="news"></el-tab-pane>
                     <el-tab-pane label="烈士纪念设施管理" name="place"></el-tab-pane>
                     <el-tab-pane label="烈士信息管理" name="martyr"></el-tab-pane>
                     <el-tab-pane label="寻亲信息管理" name="info"></el-tab-pane>
@@ -26,6 +28,9 @@ const handleClick = (tab, event) => {
                     <el-tab-pane label="留言管理" name="record"></el-tab-pane>
                     <el-tab-pane label="用户管理" name="user"></el-tab-pane>
                 </el-tabs>
+            </div>
+            <div class="manage" v-if="activeName === 'news'">
+                <news-manage></news-manage>
             </div>
             <div class="manage" v-if="activeName === 'place'">
                 <place-manage></place-manage>
@@ -50,15 +55,17 @@ const handleClick = (tab, event) => {
 </template>
 
 <style scoped lang="scss">
-// .back-end {
-// background: url('@/assets/declaration.png');
-// background-size: cover;
-// }
+.back-end {
+    background: url('@/assets/back_end_bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+}
 
 .title {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    padding-top: 20px;
+    color: red;
 }
 
 .middle {
@@ -70,12 +77,33 @@ const handleClick = (tab, event) => {
     justify-content: center;
 }
 
-.demo-tabs>.el-tabs__content {
-    padding: 32px;
-    color: #6b778c;
-    font-size: 32px;
-    font-weight: 600;
-    width: 100%;
+:deep(.demo-tabs.el-tabs--card>.el-tabs__header .el-tabs__nav) {
+    border: none;
+}
+
+:deep(.el-tabs--card>.el-tabs__header .el-tabs__item) {
+    border-left: none;
+}
+
+:deep(.el-tabs__item) {
+    color: white;
+    background-color: rgb(255, 90, 90);
+    font-size: large;
+    font-weight: bold;
+}
+
+:deep(.el-tabs__item:hover) {
+    color: red;
+    background-color: rgb(255, 200, 200);
+}
+
+:deep(.el-tabs__item.is-active) {
+    color: red;
+    background-color: transparent;
+}
+
+:deep(.el-tabs--card>.el-tabs__header .el-tabs__item.is-active) {
+    border-bottom: 2px solid red;
 }
 
 .manage {

@@ -48,7 +48,7 @@ const searchInfo = () => {
                 <el-button type="danger" @click="add">新增</el-button>
                 <div>
                     <el-input class="info-input" v-if="showSearchBox" v-model="title"
-                        style="width: 150px; margin-right: 10px" placeholder="请输入寻亲信息标题" />
+                        style="width: 150px; margin-right: 10px" placeholder="请输入热点资讯标题" />
                     <el-icon @click="searchInfo">
                         <Search style="color: red;" />
                     </el-icon>

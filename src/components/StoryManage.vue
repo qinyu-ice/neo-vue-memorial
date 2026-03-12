@@ -183,16 +183,16 @@ const handleClose = (done) => {
     <div class="story-manage">
         <div v-loading="tableLoading" class="table">
             <div class="table-top">
-                <el-button type="primary" @click="add">新增</el-button>
+                <el-button type="danger" @click="add">新增</el-button>
                 <div>
-                    <el-input v-if="showSearchBox" v-model="title" style="width: 150px; margin-right: 10px"
-                        placeholder="请输入寻亲故事标题" />
+                    <el-input class="story-input" v-if="showSearchBox" v-model="title"
+                        style="width: 150px; margin-right: 10px" placeholder="请输入寻亲故事标题" />
                     <el-icon @click="searchStory">
-                        <Search />
+                        <Search style="color: red;" />
                     </el-icon>
                 </div>
             </div>
-            <el-table :data="tableData" border>
+            <el-table class="story-table" :data="tableData" border>
                 <el-table-column prop="id" label="序号" width="80" />
                 <el-table-column prop="title" label="标题" width="300" />
                 <el-table-column prop="source" label="来源" width="250" />
@@ -200,13 +200,12 @@ const handleClose = (done) => {
                 <el-table-column prop="time" label="发布时间" width="120" :formatter="formatTime" />
                 <el-table-column class="operation" label="操作" width="130">
                     <template #default="scope">
-                        <el-link type="primary" :icon="Edit" @click="edit(scope.row)"
-                            class="operation-link">修改</el-link>
+                        <el-link type="danger" :icon="Edit" @click="edit(scope.row)" class="operation-link">修改</el-link>
                         <el-link type="danger" :icon="Delete" @click="remove(scope.row)">删除</el-link>
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination v-model:current-page="pageNum" v-model:page-size="pageSize"
+            <el-pagination class="story-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
                 layout="jumper, total, prev, pager, next" background :total="total" @current-change="onCurrentChange"
                 style="margin-top: 50px; justify-content:center; margin-bottom: 50px;" />
         </div>
@@ -287,7 +286,83 @@ const handleClose = (done) => {
 .table-top {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    height: 50px;
+}
+
+:deep(.story-input) {
+    --el-input-bg-color: rgb(255, 240, 240);
+    --el-input-text-color: red;
+    --el-input-border-color: rgb(255, 200, 200);
+    --el-input-hover-border-color: rgb(255, 150, 150);
+    --el-input-focus-border-color: red;
+}
+
+:deep(.story-input) ::-webkit-input-placeholder {
+    color: rgb(255, 140, 140) !important;
+}
+
+:deep(.story-input) :-moz-placeholder {
+    color: rgb(255, 140, 140) !important;
+    opacity: 1 !important;
+}
+
+:deep(.story-input) ::-moz-placeholder {
+    color: rgb(255, 140, 140) !important;
+    opacity: 1 !important;
+}
+
+:deep(.story-input) :-ms-input-placeholder {
+    color: rgb(255, 140, 140) !important;
+}
+
+:deep(.story-table) {
+    --el-table-header-text-color: red;
+    color: red;
+
+    &:hover {
+        --el-table-row-hover-bg-color: rgb(255, 240, 240);
+    }
+}
+
+:deep(.story-pagination) {
+    color: red;
+    --el-pagination-hover-color: red;
+    --el-pagination-text-color: red;
+    --el-pagination-button-bg-color: rgb(255, 230, 230);
+    --el-pagination-button-color: red;
+    --el-pagination-button-disabled-color: red;
+    --el-pagination-button-disabled-bg-color: red;
+
+    .el-input {
+        --el-input-text-color: red;
+
+        .el-input__wrapper {
+            background-color: transparent;
+            box-shadow: 0 0 0 1px red;
+        }
+    }
+}
+
+:deep(.el-pagination.is-background .el-pager li.is-active) {
+    background-color: red;
+}
+
+:deep(.el-pagination__jump) {
+    color: red;
+}
+
+:deep(.el-pagination__total) {
+    color: red;
+}
+
+:deep(.el-pagination.is-background .btn-prev:disabled) {
+    color: red;
+    background-color: rgb(255, 245, 245);
+}
+
+:deep(.el-pagination.is-background .btn-next:disabled) {
+    color: red;
+    background-color: rgb(255, 245, 245);
 }
 
 .operation-link {

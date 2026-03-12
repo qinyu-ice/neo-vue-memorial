@@ -16,6 +16,8 @@ const userInfo = ref({
 const userInfoStore = useUserInfoStore()
 userInfo.value.username = userInfoStore.info.username
 userInfo.value.id = userInfoStore.info.id
+userInfo.value.realName = userInfoStore.info.realName
+userInfo.value.phone = userInfoStore.info.phone
 
 // 表单校验的ref
 const formRef = ref()

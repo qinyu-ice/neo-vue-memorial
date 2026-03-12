@@ -21,6 +21,15 @@ export const userUpdataService = (registerData) => {
     return request.put('user/reset', { username: registerData.username, password: registerData.password, password2: registerData.repassword })
 }
 
+export const userUpdataAdminService = (data) => {
+    //借助于UrlSearchParams完成传递(x-www-form-urlencoded)
+    // const params = new URLSearchParams()
+    // for(let key in registerData){
+    //     params.append(key,registerData[key])
+    // }
+    return request.put('user/resetAdmin', { username: data.username, newPassword: data.newPassword, newEmailPassword: data.newEmailPassword })
+}
+
 export const userRegisterService = (registerData) => {
     //借助于UrlSearchParams完成传递(x-www-form-urlencoded)
     // const params = new URLSearchParams()

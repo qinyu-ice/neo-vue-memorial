@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue'
-import { userAllService, userAddService, userDeleteService, userInfoUpdateService, userUpdataService } from '@/api/user'
+import { userAllService, userAddService, userDeleteService, userInfoUpdateService, userUpdataAdminService } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { Edit, Delete, Lock, Search } from '@element-plus/icons-vue'
 
@@ -59,14 +59,26 @@ const formRules = reactive({
     ]
 })
 
+const checkAtLeastOnePassword = (rule, value, callback) => {
+    // 同时校验 newPassword 和 newEmailPassword
+    const { newPassword, newEmailPassword } = userResetPasswordData
+    if (!newPassword && !newEmailPassword) {
+        callback(new Error('新密码和新邮箱密码至少填写一个'))
+    } else {
+        callback() // 校验通过
+    }
+}
+
 const passwordRules = reactive({
-    password: [
-        { required: true, message: '请输入原密码', trigger: 'blur' },
-        { pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur' }
+    newPassword: [
+        { required: false, message: '请输入新密码', trigger: 'blur' },
+        { pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur' },
+        { validator: checkAtLeastOnePassword, trigger: 'submit' }
     ],
-    repassword: [
-        { required: true, message: '请输入新密码', trigger: 'blur' },
-        { pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur' }
+    newEmailPassword: [
+        { required: false, message: '请输入新邮箱密码', trigger: 'blur' },
+        { pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur' },
+        { validator: checkAtLeastOnePassword, trigger: 'submit' }
     ]
 })
 
@@ -186,7 +198,7 @@ const resetPassword = async () => {
     try {
         await resetPasswordFormRef.value.validate()
         // 新增接口调用逻辑
-        await userUpdataService(userResetPasswordData)
+        await userUpdataAdminService(userResetPasswordData)
         ElMessage.success('重置密码成功')
         showResetPasswordDialog.value = false
         // 重置表单
@@ -226,16 +238,16 @@ const handleClose = (done) => {
     <div class="user-manage">
         <div v-loading="tableLoading" class="table">
             <div class="table-top">
-                <el-button type="primary" @click="add">新增</el-button>
+                <el-button type="danger" @click="add">新增</el-button>
                 <div>
-                    <el-input v-if="showSearchBox" v-model="username" style="width: 150px; margin-right: 10px"
-                        placeholder="请输入用户名" />
+                    <el-input class="user-input" v-if="showSearchBox" v-model="username"
+                        style="width: 150px; margin-right: 10px" placeholder="请输入用户名" />
                     <el-icon @click="searchUser">
-                        <Search />
+                        <Search style="color: red;" />
                     </el-icon>
                 </div>
             </div>
-            <el-table :data="tableData" border>
+            <el-table class="user-table" :data="tableData" border>
                 <el-table-column prop="id" label="序号" width="80">
                     <template #default="scope">
                         {{ scope.$index + 1 }}
@@ -252,15 +264,14 @@ const handleClose = (done) => {
                 </el-table-column>
                 <el-table-column class="operation" label="操作" width="210">
                     <template #default="scope">
-                        <el-link type="primary" :icon="Edit" @click="edit(scope.row)"
-                            class="operation-link">修改</el-link>
+                        <el-link type="danger" :icon="Edit" @click="edit(scope.row)" class="operation-link">修改</el-link>
                         <el-link type="danger" :icon="Delete" @click="remove(scope.row)"
                             class="operation-link">删除</el-link>
                         <el-link type="danger" :icon="Lock" @click="reset(scope.row)">重置密码</el-link>
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination v-model:current-page="pageNum" v-model:page-size="pageSize"
+            <el-pagination class="user-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
                 layout="jumper, total, prev, pager, next" background :total="total" @current-change="onCurrentChange"
                 style="margin-top: 50px; justify-content:center; margin-bottom: 50px;" />
         </div>
@@ -342,13 +353,13 @@ const handleClose = (done) => {
                     <el-form-item prop="username">
                         <el-input v-model="userResetPasswordData.username" disabled />
                     </el-form-item>
-                    <el-form-item prop="password">
-                        <el-input v-model="userResetPasswordData.password" placeholder="请输入原密码" type="password"
+                    <el-form-item prop="newPassword">
+                        <el-input v-model="userResetPasswordData.newPassword" placeholder="请输入新密码" type="password"
                             show-password />
                     </el-form-item>
-                    <el-form-item prop="repassword">
-                        <el-input v-model="userResetPasswordData.repassword" placeholder="请输入新密码" type="password"
-                            show-password />
+                    <el-form-item prop="newEmailPassword">
+                        <el-input v-model="userResetPasswordData.newEmailPassword" placeholder="请输入新邮箱密码"
+                            type="password" show-password />
                     </el-form-item>
                 </el-form>
                 <template #footer>
@@ -376,7 +387,83 @@ const handleClose = (done) => {
 .table-top {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    height: 50px;
+}
+
+:deep(.user-input) {
+    --el-input-bg-color: rgb(255, 240, 240);
+    --el-input-text-color: red;
+    --el-input-border-color: rgb(255, 200, 200);
+    --el-input-hover-border-color: rgb(255, 150, 150);
+    --el-input-focus-border-color: red;
+}
+
+:deep(.user-input) ::-webkit-input-placeholder {
+    color: rgb(255, 140, 140) !important;
+}
+
+:deep(.user-input) :-moz-placeholder {
+    color: rgb(255, 140, 140) !important;
+    opacity: 1 !important;
+}
+
+:deep(.user-input) ::-moz-placeholder {
+    color: rgb(255, 140, 140) !important;
+    opacity: 1 !important;
+}
+
+:deep(.user-input) :-ms-input-placeholder {
+    color: rgb(255, 140, 140) !important;
+}
+
+:deep(.user-table) {
+    --el-table-header-text-color: red;
+    color: red;
+
+    &:hover {
+        --el-table-row-hover-bg-color: rgb(255, 240, 240);
+    }
+}
+
+:deep(.user-pagination) {
+    color: red;
+    --el-pagination-hover-color: red;
+    --el-pagination-text-color: red;
+    --el-pagination-button-bg-color: rgb(255, 230, 230);
+    --el-pagination-button-color: red;
+    --el-pagination-button-disabled-color: red;
+    --el-pagination-button-disabled-bg-color: red;
+
+    .el-input {
+        --el-input-text-color: red;
+
+        .el-input__wrapper {
+            background-color: transparent;
+            box-shadow: 0 0 0 1px red;
+        }
+    }
+}
+
+:deep(.el-pagination.is-background .el-pager li.is-active) {
+    background-color: red;
+}
+
+:deep(.el-pagination__jump) {
+    color: red;
+}
+
+:deep(.el-pagination__total) {
+    color: red;
+}
+
+:deep(.el-pagination.is-background .btn-prev:disabled) {
+    color: red;
+    background-color: rgb(255, 245, 245);
+}
+
+:deep(.el-pagination.is-background .btn-next:disabled) {
+    color: red;
+    background-color: rgb(255, 245, 245);
 }
 
 .operation-link {

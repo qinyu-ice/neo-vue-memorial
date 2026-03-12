@@ -46,7 +46,8 @@ const updataFn = async () => {
 }
 
 const completeInfo = () => {
-  if (userInfoStore.info.realName == null || userInfoStore.info.phone == null) {
+  console.log(userInfoStore.info)
+  if (userInfoStore.info.realName == null || userInfoStore.info.realName == "" || userInfoStore.info.phone == null || userInfoStore.info.phone == "") {
     router.push('/memorial/completeInfo')
   } else {
     ElMessage.success('个人信息完整，不需要补全')

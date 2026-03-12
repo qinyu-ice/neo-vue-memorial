@@ -12,7 +12,7 @@ const pageSize1 = ref(6)//每页条数
 const tokenStore = useTokenStore()
 
 // 模拟数据
-const searchRelativesInfoData = Array(15).fill({
+const searchRelativesInfoData = Array(6).fill({
     title: '为xxx寻找亲人',
     time: '2025-04-05',
 })
@@ -23,18 +23,8 @@ const searchRelativesStoreData = ref([{
     time: '',
 }])
 
-const searchRelativesInfoDetail = () => {
-    router.push('/memorial/relativesInfoDetail')
-}
-
 const pushSearch = () => {
     router.push('/memorial/martyrsSearchRelatives')
-}
-
-const info = (currentPage) => {
-    const begin = (currentPage - 1) * 6;
-    const end = begin + 6;
-    return searchRelativesInfoData.slice(begin, end)
 }
 
 const tokenValue = () => {
@@ -80,11 +70,13 @@ getRealtivesStoryList()
                 </div>
                 <div style="height: 300px;">
                     <ul class="list">
-                        <li v-for="item in info(pageNum)" :key="item.title">
-                            <el-button @click="searchRelativesInfoDetail"
-                                style="border: none; font-size: 16px; color: #303133;">{{
-                                    item.title }}</el-button>
-                            <span>{{ item.time }}</span>
+                        <li v-for="item in searchRelativesInfoData" :key="item.id">
+                            <router-link class="title-link"
+                                :to="{ path: '/memorial/relativesInfoDetail', query: { id: item.id } }"
+                                style="text-decoration: none;font-size: large;color: #303133;margin-top: 5px;">{{
+                                    item.title
+                                }}</router-link>
+                            <span>{{ item.time.substring(0, 10) }}</span>
                         </li>
                     </ul>
                 </div>
@@ -102,7 +94,8 @@ getRealtivesStoryList()
                 <div style="height: 300px;">
                     <ul class="list">
                         <li v-for="item in searchRelativesStoreData" :key="item.id">
-                            <router-link :to="{ path: '/memorial/relativesStoryDetail', query: { id: item.id } }"
+                            <router-link class="title-link"
+                                :to="{ path: '/memorial/relativesStoryDetail', query: { id: item.id } }"
                                 style="text-decoration: none;font-size: large;color: #303133;margin-top: 5px;">{{
                                     item.title
                                 }}</router-link>
@@ -244,5 +237,9 @@ getRealtivesStoryList()
     padding: 8px 0;
     border-bottom: 1px dashed #ccc;
     /* 添加底部虚线边框 */
+}
+
+.title-link:hover {
+    color: red !important;
 }
 </style>
