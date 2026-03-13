@@ -71,7 +71,7 @@ const initMap = () => {
         emit('init', map.value)
 
     }).catch(e => {
-        console.log('高德地图加载失败：', e)
+        console.error('高德地图加载失败：', e)
     })
 }
 

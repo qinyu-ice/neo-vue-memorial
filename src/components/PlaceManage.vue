@@ -135,7 +135,7 @@ const addPlace = async () => {
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')
-        console.log('表单校验失败：', error)
+        console.error('表单校验失败：', error)
     }
 }
 
@@ -181,7 +181,7 @@ const editPlace = async () => {
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')
-        console.log('表单校验失败：', error)
+        console.error('表单校验失败：', error)
     }
 }
 
@@ -212,7 +212,6 @@ const handleFileChange = async (e) => {
 
 const remove = (row) => {
     deleteData.value = { ...row }
-    console.log(deleteData.value.id)
     showDeleteDialog.value = true
 }
 
@@ -226,7 +225,7 @@ const removeCityHall = async () => {
         await getCityHallPage(pageNum.value, pageSize.value)
     } catch (error) {
         ElMessage.error('删除失败')
-        console.log('error：', error)
+        console.error('error：', error)
     }
 }
 
@@ -343,7 +342,6 @@ const searchAddressToMap = async () => {
                 lng = firstResult.location.lng;
                 lat = firstResult.location.lat;
             }
-            console.log(result)
         }
 
         // 最终经纬度校验
@@ -408,7 +406,6 @@ const getLngAndLat = () => {
     }
 
     ElMessage.success(`经纬度已填充：经度${lng}，纬度${lat}`);
-    console.log('最终获取的经纬度：', { lng, lat });
 };
 
 const cancel = () => {

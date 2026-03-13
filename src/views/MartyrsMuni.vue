@@ -26,7 +26,6 @@ const campaign = ref('')
 const deeds = ref('')
 
 const getHeroList = async () => {
-    // console.log("bbb", dept.value)
     //获取英雄列表
     const result = await heroPage({
         page: pageNum.value,
@@ -75,8 +74,6 @@ const getMartyrsByAdvancedSearch = async () => {
     })
     heroList2.value = result.data.data
     total.value = result.data.total
-    // console.log("aaaaaaaaaaaaaaaa", total.value)
-    // console.log("bbbbbbbbbbbbbbbb", heroList2.value)
 }
 
 const getMartyrsScore = (score) => {
@@ -108,23 +105,22 @@ const showAdvancedSearch = () => {
 
 // 用于在单选框值改变时调用
 const onRadioChange = () => {
-    // console.log("aaa", dept.value)
     getMartyrsByAdvancedSearch()
 }
 </script>
 
 <template>
     <div style="width: 100%;">
-        <div style="margin: 20px;">
-            <span>
-                当前位置：达州烈士英名录
-            </span>
+        <div style="margin: 20px; color: red;">
+            <span style="color: red; font-weight: bolder; font-size: x-large;">当前位置：烈士英名录</span>
+            <span style="margin-left: 5px; font-size: smaller; color: red;">（排名不分先后）</span>
         </div>
-        <div class="horizontal" style="display: flex;justify-content: center;">
-            <el-input v-model="name" style="width: 200px;" size="default" class="input" placeholder="请输入想查询的烈士名" />
-            <el-button @click="searchHeroList" size="default" class="btn" type="success" plain
+        <div class="horizontal" style="display: flex; justify-content: center;">
+            <el-input v-model="name" style="width: 200px; height: 36px; margin-top: 8px;" class="input"
+                placeholder="请输入想查询的烈士名" clearable />
+            <el-button @click="searchHeroList" size="default" class="btn" type="danger" plain
                 style="margin: 10px;">查询烈士</el-button>
-            <el-button @click="showAdvancedSearch" size="default" class="btn" type="success" plain
+            <el-button @click="showAdvancedSearch" size="default" class="btn" type="danger" plain
                 style="margin: 10px;">{{ buttonValue }}</el-button>
         </div>
 
@@ -157,29 +153,24 @@ const onRadioChange = () => {
                 <el-radio-button value="宣汉县双河作战" size="medium">宣汉县双河作战</el-radio-button>
             </el-radio-group>
         </div>
-
-        <div style="margin-left:20px; margin-top: 20px;">
-            <span style="color: red;font-weight: bolder;font-size: medium;">烈士英名录</span>
-            <span style="margin-left: 5px;font-size: smaller;">排名不分先后</span>
-        </div>
-        <div style="display: flex;justify-content: center;width: 100%;">
-            <el-card style="margin: 20px;width: 100%;">
-                <div style="display: flex;width: 100%;justify-content: left;flex-wrap: wrap;height: 200px;">
+        <div style="display: flex; justify-content: center; width: 100%; margin-top: 20px;">
+            <el-card style="margin-top: 10px; width: 100%;">
+                <div style="display: flex; width: 100%; justify-content: left; flex-wrap: wrap; height: 200px;">
                     <div v-if="search" v-for="hero in heroList2" @click="detail_btn(hero.id)"
-                        style="display: block;width: 145px;height:40px;">
+                        style="display: block; width: 145px; height:40px;">
                         <el-button text type="primary" plain
-                            style="width: 100%;display: flex;justify-content: center;font-size: small;font-weight: bold;line-height: 40px;">{{
+                            style="width: 100%; color: red; display: flex; justify-content: center; font-size: small; font-weight: bold; line-height: 40px;">{{
                                 hero.name }} {{ getMartyrsScore(hero.score) }}%</el-button>
                     </div>
                     <div v-else v-for="hero in heroList" @click="detail_btn(hero.id)"
                         style="display: block;width: 145px;height:40px;">
                         <el-button text type="primary" plain
-                            style="width: 100%;display: flex;justify-content: center;font-size: small;font-weight: bold;line-height: 40px;">{{
+                            style="width: 100%; color: red; display: flex; justify-content: center; font-size: small; font-weight: bold; line-height: 40px;">{{
                                 hero.name }}</el-button>
                     </div>
 
                 </div>
-                <el-pagination v-model:current-page="pageNum" v-model:page-size="pageSize"
+                <el-pagination class="martyr-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
                     layout="jumper, total, prev, pager, next" background :total="total" @size-change="onSizeChange"
                     @current-change="onCurrentChange" style="margin-top: 10px; justify-content:center" />
             </el-card>
@@ -187,7 +178,6 @@ const onRadioChange = () => {
     </div>
 
 </template>
-
 <style scoped>
 .el-radio-group {
     margin-top: 10px;
@@ -196,6 +186,83 @@ const onRadioChange = () => {
 
 .el-radio-button {
     margin-left: 20px;
-    border-left: 1px solid #dcdfe6;
+    --el-radio-button-checked-bg-color: red;
+    --el-radio-button-checked-border-color: red;
+    --el-radio-button-disabled-checked-fill: red;
+}
+
+:deep(.el-radio-button__inner) {
+    color: red;
+    border-color: rgb(255, 230, 230);
+    background-color: rgb(255, 230, 230);
+}
+
+:deep(.martyr-pagination) {
+    color: red;
+    --el-pagination-hover-color: red;
+    --el-pagination-text-color: red;
+    --el-pagination-button-bg-color: rgb(255, 230, 230);
+    --el-pagination-button-color: red;
+    --el-pagination-button-disabled-color: red;
+    --el-pagination-button-disabled-bg-color: red;
+
+    .el-input {
+        --el-input-text-color: red;
+
+        .el-input__wrapper {
+            background-color: transparent;
+            box-shadow: 0 0 0 1px red;
+        }
+    }
+}
+
+:deep(.el-pagination.is-background .el-pager li.is-active) {
+    background-color: red;
+}
+
+:deep(.el-pagination__jump) {
+    color: red;
+}
+
+:deep(.el-pagination__total) {
+    color: red;
+}
+
+:deep(.el-pagination.is-background .btn-prev:disabled) {
+    color: red;
+    background-color: rgb(255, 245, 245);
+}
+
+:deep(.el-pagination.is-background .btn-next:disabled) {
+    color: red;
+    background-color: rgb(255, 245, 245);
+}
+
+:deep(.el-input) {
+    --el-input-bg-color: rgb(255, 240, 240);
+    --el-input-text-color: red;
+    --el-input-border-color: rgb(255, 200, 200);
+    --el-input-hover-border-color: rgb(255, 150, 150);
+    --el-input-focus-border-color: red;
+    --el-disabled-text-color: red;
+    --el-disabled-bg-color: rgb(255, 240, 240);
+}
+
+:deep(.el-input) ::-webkit-input-placeholder {
+    color: rgb(255, 140, 140) !important;
+}
+
+:deep(.el-input) :-moz-placeholder {
+    color: rgb(255, 140, 140) !important;
+    opacity: 1 !important;
+}
+
+:deep(.el-input) ::-moz-placeholder {
+    color: rgb(255, 140, 140) !important;
+    opacity: 1 !important;
+}
+
+:deep(.el-input) :-ms-input-placeholder {
+    color: rgb(255, 140, 140) !important;
 }
 </style>

@@ -180,7 +180,7 @@ const addMartyr = async () => {
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')
-        console.log('表单校验失败：', error)
+        console.error('表单校验失败：', error)
     }
 }
 
@@ -236,7 +236,7 @@ const editMartyr = async () => {
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')
-        console.log('表单校验失败：', error)
+        console.error('表单校验失败：', error)
     }
 }
 
@@ -255,7 +255,7 @@ const removeMartyr = async () => {
         await getAllHeroPage(pageNum.value, pageSize.value)
     } catch (error) {
         ElMessage.error('删除失败')
-        console.log('error：', error)
+        console.error('error：', error)
     }
 }
 

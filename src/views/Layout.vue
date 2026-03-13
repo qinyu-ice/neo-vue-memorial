@@ -7,8 +7,6 @@ const src = '/src/assets/layout_top.png'
 const route = useRoute()
 const handleSelect = (key, keyPath) => {
   activeIndex.value = key
-  console.log(key, keyPath)
-  console.log(activeIndex.value)
 }
 
 // 监听路由变化，同步activeIndex
@@ -35,9 +33,9 @@ watch(
   <el-image :src="src" style="margin: 0px;" />
   <div class="common-layout">
     <el-container>
-      <el-header style="padding: 0px;margin-top: -5px;">
+      <el-header style="padding: 0px; margin-top: -5px;">
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect"
-          background-color="#bd0010" active-text-color="#ffffff" router>
+          background-color="#d30101" active-text-color="#ffffff" router>
           <el-menu-item index="home">首页</el-menu-item>
           <el-menu-item index="cityHall">烈士纪念设施</el-menu-item>
           <el-menu-item index="martyrsMuni">烈士英名录</el-menu-item>
@@ -49,12 +47,18 @@ watch(
       <el-main>
         <router-view></router-view>
       </el-main>
-      <el-footer>
-        <div style="height: 100%;margin-top: 50px;">
-          <div class="footer-div">主办单位：省退役军人事务厅承办单位：省烈士纪念设施保护中心（省烈士遗骸搜寻鉴定中心）</div><br>
-          <div class="footer-div">ICP备案编号：蜀ICP备19003563号</div><br>
-          <div class="footer-div">友情链接：中华英烈网|省退役军人事务厅官网|广西英烈网上祭扫|浙江英烈网|山东英烈网</div><br>
-          <div class="footer-div"> © 2024.5.21 SiChuanHero Tech and Fun. All rights reserved.</div><br>
+      <el-footer class="footer-div">
+        <div style="height: 100%;margin-top: 20px; margin-bottom: 20px;">
+          <div>主办单位：xxxxxxxxxxxxxxxxxxxx</div><br>
+          <div>承办单位：xxxxxxxxxxxxxxxxxxxx</div><br>
+          <div>ICP备案编号：xxxxxxxxxxxxxxxxxxxx</div><br>
+          <div class="footer-link">友情链接：
+            <div><a href="https://www.chinamartyrs.gov.cn/" target="_blank">中华英烈网</a>|</div>
+            <div><a href="https://yinglie.chinamartyrs.gov.cn/25qm/" target="_blank">中国人民革命烈士纪念网</a>|</div>
+            <div><a href="https://dva.sc.gov.cn/" target="_blank">省退役军人事务厅官网</a>|</div>
+            <div><a href="https://www.zjgmls.net/" target="_blank">浙江革命烈士纪念馆</a>|</div>
+            <div><a href="https://www.sdmartyrs.cn/" target="_blank">山东英烈网</a></div>
+          </div>
         </div>
       </el-footer>
     </el-container>
@@ -63,11 +67,29 @@ watch(
 
 
 <style scoped>
+.el-menu--horizontal>.el-menu-item.is-active {
+  background-color: white;
+  color: #c82625 !important;
+
+}
+
 .el-menu--horizontal>.el-menu-item {
   margin-left: 0px;
   margin-right: 0px;
   margin-top: 0px;
   padding-top: 0px;
+  font-size: medium;
+  font-weight: 600;
+  height: 60px;
+  width: 253px;
+  border: none;
+  color: white;
+
+  &:hover {
+    background-color: white;
+    color: #c82625 !important;
+    font-size: larger;
+  }
 }
 
 .el-container {
@@ -77,13 +99,12 @@ watch(
 
 .el-menu--horizontal {
   display: flex;
-  /* 启用弹性布局 */
   justify-content: space-around;
-  /* 子项自动平均分布间距 */
+  border-bottom: 1px solid #d30101;
 }
 
-.el-footer {
-  height: 150px;
+.footer-div {
+  height: 100%;
   background-color: #eee;
   font-size: 12px;
   display: flex;
@@ -109,5 +130,9 @@ watch(
   flex-basis: auto;
   overflow: auto;
   padding: var(--el-main-padding);
+}
+
+.footer-link {
+  display: flex;
 }
 </style>

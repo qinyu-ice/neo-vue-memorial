@@ -71,7 +71,7 @@ const router = createRouter({
     },
     {
       path: '/back-end',
-      component: () => import('../views/back-end/Home.vue')
+      component: () => import('../views/BackEndLayout.vue')
     }
   ]
 })

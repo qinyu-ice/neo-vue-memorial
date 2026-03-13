@@ -219,7 +219,6 @@ const getCityHallList = async () => {
 const getAllLeaveMessage = async () => {
     // 获取留言列表
     const res = await allMessageList()
-    console.log(res)
     res.data.forEach((item, index) => {
         item.time = item.time.substring(0, 10)
     })
@@ -230,7 +229,6 @@ const fetchAddress = async () => {
     // 根据IP地址查询经纬度
     const result = await getMapByip(ip.value)
     addressA.value = result.data
-    console.log(addressA.value)
 }
 
 const tokenValue = () => {
@@ -262,28 +260,26 @@ const goToHotNews = () => {
 
 </script>
 <template>
-    <div>
-        <div class="banner">
-            <img src="/src/assets/newHomeOne3.486ce412.png" class="img">
-            <div v-for="(title, titleIndex) in titles" :key="titleIndex" class="content">
-                <transition name="scale">
-                    <div v-show="imgIndex === titleIndex">
-                        <span>{{ title }}</span>
-                    </div>
-                </transition>
-            </div>
-            <div class="dot-content">
-                <div v-for="(item, index) in imgArr.length" :key="index"
-                    :class="index === imgIndex ? 'active' : 'dot-box'" @click="selectImg(index)">
+    <div class="banner">
+        <img src="/src/assets/newHomeOne3.486ce412.png" class="img">
+        <div v-for="(title, titleIndex) in titles" :key="titleIndex" class="content">
+            <transition name="scale">
+                <div v-show="imgIndex === titleIndex">
+                    <span>{{ title }}</span>
                 </div>
-            </div>
-            <el-icon size="20" class="left-btn" @click="next(-1)">
-                <ArrowLeftBold />
-            </el-icon>
-            <el-icon size="20" class="right-btn" @click="next(1)">
-                <ArrowRightBold />
-            </el-icon>
+            </transition>
         </div>
+        <div class="dot-content">
+            <div v-for="(item, index) in imgArr.length" :key="index" :class="index === imgIndex ? 'active' : 'dot-box'"
+                @click="selectImg(index)">
+            </div>
+        </div>
+        <el-icon size="20" class="left-btn" @click="next(-1)">
+            <ArrowLeftBold />
+        </el-icon>
+        <el-icon size="20" class="right-btn" @click="next(1)">
+            <ArrowRightBold />
+        </el-icon>
     </div>
     <div class="page-container">
         <el-card class="page-container1">
@@ -291,11 +287,11 @@ const goToHotNews = () => {
                 <div class="header">
                     <span style="color: red;font-weight: bolder;">烈士英名录</span>
                     <div class="extra">
-                        <el-button @click="heroPage" type="primary">查看更多>></el-button>
+                        <el-button @click="heroPage" type="danger">查看更多>></el-button>
                     </div>
                 </div>
             </template>
-            <div style="height: 65vh;background-image: url('https://www.scmartyrs.cn/static/img/bg03.0c252411.png');">
+            <div class="city">
                 <div style="padding-left:90vh;height: 100%;padding-top:20px;">
                     <div style="display: flex;justify-content: space-around;flex-wrap: wrap;">
                         <el-col :span="8" v-for="city in cities" :key="city.id" style="margin-top: 20px;">
@@ -317,7 +313,7 @@ const goToHotNews = () => {
                 <div class="header">
                     <span style="color: red;font-weight: bolder;">热点资讯</span>
                     <div class="extra">
-                        <el-button type="primary" @click="goToHotNews">查看更多>></el-button>
+                        <el-button type="danger" @click="goToHotNews">查看更多>></el-button>
                     </div>
                 </div>
             </template>
@@ -342,8 +338,8 @@ const goToHotNews = () => {
             </div>
         </el-card>
     </div>
-    <div class="page-container" style="margin-top: 10px; height: 400px;">
-        <el-card style="width: 127vh;">
+    <div class="page-container" style="margin-top: 20px; height: 400px;">
+        <el-card style="width: 75%;">
             <template #header>
                 <div class="header">
                     <span style="color: red; font-weight: bolder;">烈士纪念留言展示</span>
@@ -351,14 +347,14 @@ const goToHotNews = () => {
             </template>
             <el-scrollbar height="400px">
                 <el-table :data="leaveMessages" style="width: 100%;">
-                    <el-table-column label="留言人" width="100" prop="username" />
-                    <el-table-column label="烈士姓名" width="100" prop="martyrName" />
-                    <el-table-column label="留言内容" width="400" prop="message" show-overflow-tooltip />
+                    <el-table-column label="留言人" width="200" prop="username" />
+                    <el-table-column label="烈士姓名" width="200" prop="martyrName" />
+                    <el-table-column label="留言内容" width="500" prop="message" show-overflow-tooltip />
                     <el-table-column label="留言时间" prop="time" />
                 </el-table>
             </el-scrollbar>
         </el-card>
-        <el-card style="width: 52vh; margin-left: 1vh;">
+        <el-card style="width: 25%; margin-left: 20px;">
             <template #header>
                 <div class="header">
                     <span style="color: red; font-weight: bolder;">公共服务</span>
@@ -381,7 +377,7 @@ const goToHotNews = () => {
                 <div class="header">
                     <span style="color: red;font-weight: bolder;">烈士纪念设施</span>
                     <div class="extra">
-                        <el-button @click="facilityPage" type="primary">查看更多>></el-button>
+                        <el-button @click="facilityPage" type="danger">查看更多>></el-button>
                     </div>
                 </div>
             </template>
@@ -406,7 +402,7 @@ const goToHotNews = () => {
                 <div class="header">
                     <span style="color: red;font-weight: bolder;">烈士纪念设施保护中心</span>
                     <div class="extra">
-                        <el-button type="primary">查看更多>></el-button>
+                        <el-button type="danger">查看更多>></el-button>
                     </div>
                 </div>
             </template>
@@ -482,14 +478,20 @@ const goToHotNews = () => {
 .page-container1 {
     min-height: 100%;
     box-sizing: border-box;
-    width: 180vh;
-    margin-top: 10px;
+    width: 100%;
+    margin-top: 20px;
 
     .header {
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
+}
+
+.city {
+    height: 65vh;
+    background-image: url('@/assets/city_bg.png');
+    background-size: 100% 100%;
 }
 
 .banner {
@@ -508,17 +510,18 @@ const goToHotNews = () => {
             position: absolute;
             cursor: pointer;
             top: 50%;
-            left: 95px;
+            left: 10px;
             width: auto;
-
+            color: white;
         }
 
         .right-btn {
             position: absolute;
             cursor: pointer;
             top: 50%;
-            right: 95px;
+            right: 10px;
             width: auto;
+            color: white;
         }
     }
 
@@ -527,8 +530,8 @@ const goToHotNews = () => {
 
         &:first-child {
             display: block;
-            height: 30vh;
-            width: 180vh;
+            height: auto;
+            width: 100%;
             opacity: 1;
             transition: opacity 0.5s ease;
         }

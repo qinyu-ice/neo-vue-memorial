@@ -14,13 +14,11 @@ const hotNewsDetailData = ref({
     time: '2026-03-05'
 })
 const init = async () => {
-    console.log(route.query)
     if (route.query) {
         id.value = route.query.id
     } else {
-        console.log('没有id')
+        console.error('没有id')
     }
-    console.log(id)
 }
 
 init()

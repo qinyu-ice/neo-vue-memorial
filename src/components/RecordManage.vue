@@ -83,7 +83,7 @@ const removeRecord = async () => {
         await getAllRecordList(pageNum.value, pageSize.value)
     } catch (error) {
         ElMessage.error('删除失败')
-        console.log('error：', error)
+        console.error('error：', error)
     }
 }
 

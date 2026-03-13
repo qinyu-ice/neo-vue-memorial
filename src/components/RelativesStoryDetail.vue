@@ -1,7 +1,6 @@
 <script setup>
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { getRealtivesStoryById } from '@/api/relativesSearch';
-import { onBeforeMount, onMounted } from 'vue';
 import { ref } from 'vue'
 const relativesStoryDetail = ref({
     id: '',
@@ -11,7 +10,6 @@ const relativesStoryDetail = ref({
     time: ''
 })
 
-const router = useRouter()
 const route = useRoute()
 
 const getRealtivesStoryDetail = async () => {

@@ -14,16 +14,13 @@ import { getCityHallInfoById } from '@/api/cityHall'
 const route = useRoute()
 const id = ref(0)
 const init = async () => {
-    console.log(route.query)
     if (route.query) {
         id.value = route.query.id
         let result = await getCityHallInfoById(id.value)
         cityHallModel.value = result.data
-        console.log(result)
     } else {
-        console.log('没有id')
+        console.error('没有id')
     }
-    console.log(id)
 }
 
 init()
@@ -32,8 +29,8 @@ const centerDialogVisible = ref(false)
 
 <template>
     <div style="margin: 20px;">
-        <span>
-            当前位置：达州烈士纪念设施 >{{ cityHallModel.name }}
+        <span style="color: red; font-weight: bold;">
+            当前位置：烈士纪念设施 >> {{ cityHallModel.name }}
         </span>
     </div>
     <el-card style="margin: 20px;">
@@ -126,7 +123,7 @@ const centerDialogVisible = ref(false)
             </span>
             <template #footer>
                 <div class="dialog-footer">
-                    <el-button type="primary" @click="centerDialogVisible = false">
+                    <el-button type="danger" @click="centerDialogVisible = false">
                         确认
                     </el-button>
                 </div>
@@ -140,7 +137,7 @@ const centerDialogVisible = ref(false)
 <style scoped>
 .guide[data-v-5d524d16] {
     border-bottom: 1px solid #ffffff;
-    color: #000000;
+    color: white;
     font-size: 18px;
     font-weight: 600;
     height: 30px;
@@ -157,6 +154,7 @@ const centerDialogVisible = ref(false)
     width: 300px;
     background-image: url('../assets/declaration.png');
     margin: 10px;
+    color: white;
 }
 
 .two-line-ellipsis {

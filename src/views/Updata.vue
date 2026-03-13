@@ -46,7 +46,6 @@ const updataFn = async () => {
 }
 
 const completeInfo = () => {
-  console.log(userInfoStore.info)
   if (userInfoStore.info.realName == null || userInfoStore.info.realName == "" || userInfoStore.info.phone == null || userInfoStore.info.phone == "") {
     router.push('/memorial/completeInfo')
   } else {
@@ -129,19 +128,19 @@ const loginOut = () => {
         <el-input v-model="form.username" placeholder="" disabled></el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input type="password" v-model="form.password" placeholder="请输入原密码"></el-input>
+        <el-input type="password" v-model="form.password" placeholder="请输入原密码" clearable></el-input>
       </el-form-item>
       <el-form-item prop="repassword">
-        <el-input type="password" v-model="form.repassword" placeholder="请输入新密码"></el-input>
+        <el-input type="password" v-model="form.repassword" placeholder="请输入新密码" clearable></el-input>
       </el-form-item>
       <el-form-item class="my-el-form-item">
-        <el-button type="primary" class="btn-login" @click="updataFn">修改</el-button>
+        <el-button type="danger" style="width: 100%;" @click="updataFn">修改</el-button>
       </el-form-item>
       <el-form-item class="my-el-form-item">
-        <el-button type="primary" class="btn-login" @click="completeInfo">补全个人信息</el-button>
+        <el-button type="danger" style="width: 100%;" @click="completeInfo">补全个人信息</el-button>
       </el-form-item>
       <el-form-item class="my-el-form-item">
-        <el-button type="primary" style="width: 100%;" @click="loginOut">退出</el-button>
+        <el-button type="danger" style="width: 100%;" @click="loginOut">退出</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -163,24 +162,24 @@ body {
 .background {
   width: 100%;
   height: 100vh;
-  background-size: auto;
+  background-size: cover;
   background-image: url('../assets/login_bg.png');
   overflow: hidden; // 防止页面滚动条闪动
 }
 
-.background::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin-top: 65vh;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
-  /* 黑色半透明 */
-  z-index: 1;
-  /* 确保伪元素在背景图之上 */
-}
+// .background::before {
+//   content: "";
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   margin-top: 65vh;
+//   width: 100%;
+//   height: 100%;
+//   background-color: rgba(0, 0, 0, 0.3);
+//   /* 黑色半透明 */
+//   z-index: 1;
+//   /* 确保伪元素在背景图之上 */
+// }
 
 .rain {
   position: relative;
@@ -191,25 +190,24 @@ body {
   position: relative;
   width: 20px;
   height: 20px;
-  background-color: #eee;
+  background-color: #ff0000;
   margin: 0 4px;
   border-radius: 50%;
-  box-shadow: 0 0 10px 5px rgba(238, 238, 238, 0.5),
+  box-shadow: 0 0 10px 5px rgba(255, 50, 50, 0.5),
     /* 微调颜色和透明度 */
-    0 0 30px 15px rgba(238, 238, 238, 0.3),
-    /* 模糊半径和扩散范围 */
-    0 0 50px 30px rgba(221, 221, 221, 0.2);
+    0 0 30px 15px rgba(200, 50, 50, 0.3),
+    0 0 50px 30px rgba(200, 50, 55, 0.1);
   animation: animate 15s linear infinite;
   animation-duration: calc(200s / var(--i));
 }
 
 .rain span:nth-child(even) {
-  background: #ff8800;
-  /* 橙色调 */
-  box-shadow: 0 0 10px 5px rgba(255, 150, 50, 0.5),
+  background: #ff0000;
+  /* 红色调 */
+  box-shadow: 0 0 10px 5px rgba(255, 50, 50, 0.5),
     /* 颜色和透明度 */
-    0 0 30px 15px rgba(200, 100, 50, 0.3),
-    0 0 50px 30px rgba(200, 50, 50, 0.1);
+    0 0 30px 15px rgba(200, 50, 50, 0.3),
+    0 0 50px 30px rgba(200, 50, 55, 0.1);
 }
 
 
@@ -219,7 +217,7 @@ body {
   }
 
   100% {
-    transform: translateY(-10vh) scale(1);
+    transform: translateY(0vh) scale(1);
   }
 }
 
@@ -244,19 +242,44 @@ body {
     font-size: 24px;
     font-weight: bold;
     text-align: center;
-    color: #00aaff;
+    color: white;
   }
 
-  .el-form-item {
-    margin-bottom: 20px;
+  :deep(.el-input__icon) {
+    color: red;
   }
 
-  .btn-login {
-    width: 100%;
+  :deep(.el-button) {
+    --el-button-bg-color: rgb(255, 100, 100);
+    --el-button-focus-color: red;
   }
 
-  .el-link {
-    margin-top: 25px;
+  :deep(.el-input) {
+    --el-input-bg-color: rgb(255, 240, 240);
+    --el-input-text-color: red;
+    --el-input-border-color: rgb(255, 200, 200);
+    --el-input-hover-border-color: rgb(255, 150, 150);
+    --el-input-focus-border-color: red;
+    --el-disabled-text-color: red;
+    --el-disabled-bg-color: rgb(255, 240, 240);
+  }
+
+  :deep(.el-input) ::-webkit-input-placeholder {
+    color: rgb(255, 140, 140) !important;
+  }
+
+  :deep(.el-input) :-moz-placeholder {
+    color: rgb(255, 140, 140) !important;
+    opacity: 1 !important;
+  }
+
+  :deep(.el-input) ::-moz-placeholder {
+    color: rgb(255, 140, 140) !important;
+    opacity: 1 !important;
+  }
+
+  :deep(.el-input) :-ms-input-placeholder {
+    color: rgb(255, 140, 140) !important;
   }
 }
 </style>

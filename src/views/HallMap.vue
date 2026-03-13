@@ -13,7 +13,6 @@ const getAllData = async () => {
     try {
         const res = await cityHallList()
         mapData.value = res.data
-        console.log('地图数据：', mapData.value)
         // 数据获取后渲染标记（确保地图已初始化）
         if (map.value) {
             renderMarkers(map.value)
@@ -161,7 +160,7 @@ const initMap = () => {
         }
 
     }).catch(e => {
-        console.log('高德地图加载失败：', e)
+        console.error('高德地图加载失败：', e)
     })
 }
 
@@ -181,7 +180,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .map {
     width: 100%;
-    height: 600px;
+    height: 800px;
     position: relative;
     overflow: hidden;
 }

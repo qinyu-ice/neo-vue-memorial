@@ -86,7 +86,6 @@ const route = useRoute()
 const loadMartyrDetail = async () => {
     try {
         const id = route.query.id;
-        console.log(id);
         const res = await martyrsDetail(id);
         if (res && res.data) {
             martyrDetail.value = res.data;

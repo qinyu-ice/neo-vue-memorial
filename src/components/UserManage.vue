@@ -160,7 +160,7 @@ const addUser = async () => {
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')
-        console.log('表单校验失败：', error)
+        console.error('表单校验失败：', error)
     }
 }
 
@@ -178,7 +178,7 @@ const editUser = async () => {
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')
-        console.log('表单校验失败：', error)
+        console.error('表单校验失败：', error)
     }
 }
 
@@ -190,7 +190,7 @@ const deleteUser = async () => {
         showDeleteDialog.value = false
     } catch (error) {
         ElMessage.error('删除用户失败')
-        console.log('error：', error)
+        console.error('error：', error)
     }
 }
 
@@ -207,7 +207,7 @@ const resetPassword = async () => {
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')
-        console.log('表单校验失败：', error)
+        console.error('表单校验失败：', error)
     }
 }
 

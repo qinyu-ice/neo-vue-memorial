@@ -11,7 +11,7 @@ import UserManage from '@/components/UserManage.vue'
 const activeName = ref('news')
 
 const handleClick = (tab, event) => {
-    console.log(tab, event);
+
 }
 </script>
 <template>

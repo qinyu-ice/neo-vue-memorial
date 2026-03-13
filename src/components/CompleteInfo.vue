@@ -49,7 +49,6 @@ const submit = async () => {
 }
 
 const goBack = () => {
-    console.log(userInfoStore.info)
     router.push('/memorial/updataUser')
 }
 </script>

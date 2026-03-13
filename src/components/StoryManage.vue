@@ -113,7 +113,7 @@ const addStory = async () => {
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')
-        console.log('表单校验失败：', error)
+        console.error('表单校验失败：', error)
     }
 }
 
@@ -136,7 +136,7 @@ const editStory = async () => {
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')
-        console.log('表单校验失败：', error)
+        console.error('表单校验失败：', error)
     }
 }
 
@@ -155,7 +155,7 @@ const removeStory = async () => {
         await getAllStoryList(pageNum.value, pageSize.value)
     } catch (error) {
         ElMessage.error('删除失败')
-        console.log('error：', error)
+        console.error('error：', error)
     }
 }
 

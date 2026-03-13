@@ -19,7 +19,6 @@ const cityHalls = ref([
 const getCityHallPage = async (page, pageSize) => {
     //获取分类列表
     const res = await cityHallPage(page, pageSize, '')
-    console.log(res)
     cityHalls.value = res.data.data
     total.value = res.data.total
 }
@@ -36,32 +35,71 @@ const tokenValue = () => {
 
 tokenValue()
 </script>
-
 <template>
-    <el-card class="page-container1" style="margin: 20px;">
-        <template #header>
-            <div class="header">
-                <span style="color: red;font-weight: bolder;font-size: x-large;">达州市烈士纪念设施</span>
-            </div>
-        </template>
+    <div style="width: 100%;">
+        <div style="margin: 20px; color: red;">
+            <span style="color: red; font-weight: bolder; font-size: x-large;">当前位置：烈士纪念设施</span>
+        </div>
         <div style="display: flex;width: 100%;justify-content: space-around;flex-wrap: wrap;">
             <div v-for="cityHall in cityHalls" :key="cityHall.id"
                 style="margin-top: 20px;display: block;width: 250px;height: 200px;background-color: rgb(249, 249, 249);">
                 <span style="width: 100%;display: flex;justify-content: center;">
                     <img :src="cityHall.img" alt="图片走丢了" style="width:200px;height: 160px;">
                 </span>
-                <span style="width: 100%;display: flex;justify-content: center;font-size: small;">{{ cityHall.name
-                }}</span>
+                <span style="width: 100%;display: flex;justify-content: center;font-size: small; color: red;">{{
+                    cityHall.name
+                    }}</span>
                 <span style="width: 100%;display: flex;justify-content: center;">
                     <router-link :to="{ path: '/memorial/hallDetail', query: { id: cityHall.id } }"
-                        style="text-decoration: none;font-size: small;color: #a11a1a;">进入纪念设施>></router-link>
+                        style="text-decoration: none;font-size: small;color: #c60101;">进入纪念设施>></router-link>
                 </span>
             </div>
         </div>
-        <el-pagination v-model:current-page="pageNum" v-model:page-size="pageSize"
+        <el-pagination class="cityhall-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
             layout="jumper, total, prev, pager, next" background :total="total" @current-change="onCurrentChange"
             style="margin-top: 50px; justify-content:center" />
-    </el-card>
+    </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+:deep(.cityhall-pagination) {
+    color: red;
+    --el-pagination-hover-color: red;
+    --el-pagination-text-color: red;
+    --el-pagination-button-bg-color: rgb(255, 230, 230);
+    --el-pagination-button-color: red;
+    --el-pagination-button-disabled-color: red;
+    --el-pagination-button-disabled-bg-color: red;
+
+    .el-input {
+        --el-input-text-color: red;
+
+        .el-input__wrapper {
+            background-color: transparent;
+            box-shadow: 0 0 0 1px red;
+        }
+    }
+}
+
+:deep(.el-pagination.is-background .el-pager li.is-active) {
+    background-color: red;
+}
+
+:deep(.el-pagination__jump) {
+    color: red;
+}
+
+:deep(.el-pagination__total) {
+    color: red;
+}
+
+:deep(.el-pagination.is-background .btn-prev:disabled) {
+    color: red;
+    background-color: rgb(255, 245, 245);
+}
+
+:deep(.el-pagination.is-background .btn-next:disabled) {
+    color: red;
+    background-color: rgb(255, 245, 245);
+}
+</style>

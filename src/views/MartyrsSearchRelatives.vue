@@ -52,7 +52,7 @@ getRealtivesStoryList()
     <div style="width: 100%;">
         <div style="margin: 20px;">
             <div @click="pushSearch">
-                <span>
+                <span style="color: red; font-weight: bolder; font-size: x-large;">
                     当前位置：烈士寻亲
                 </span>
             </div>
@@ -80,9 +80,9 @@ getRealtivesStoryList()
                         </li>
                     </ul>
                 </div>
-                <el-pagination v-model:current-page="pageNum" :page-size="6" layout="jumper,total,prev,pager,next"
-                    background :total=searchRelativesInfoData.length style="margin-top: 20px; justify-content:center"
-                    @update:current-page=""></el-pagination>
+                <el-pagination class="pagination" v-model:current-page="pageNum" :page-size="6"
+                    layout="jumper,total,prev,pager,next" background :total=searchRelativesInfoData.length
+                    style="margin-top: 20px; justify-content:center" @update:current-page=""></el-pagination>
             </el-card>
             <el-card class="card-item" style="margin-left:29px;">
                 <div class="thick-underline">
@@ -103,7 +103,7 @@ getRealtivesStoryList()
                         </li>
                     </ul>
                 </div>
-                <el-pagination v-model:current-page="pageNum1" :page-size="pageSize1" :total="total"
+                <el-pagination class="pagination" v-model:current-page="pageNum1" :page-size="pageSize1" :total="total"
                     layout="jumper,total,prev,pager,next" background style="margin-top: 20px; justify-content:center;"
                     @update:current-page="getRealtivesStoryList">
                 </el-pagination>
@@ -241,5 +241,46 @@ getRealtivesStoryList()
 
 .title-link:hover {
     color: red !important;
+}
+
+:deep(.pagination) {
+    color: red;
+    --el-pagination-hover-color: red;
+    --el-pagination-text-color: red;
+    --el-pagination-button-bg-color: rgb(255, 230, 230);
+    --el-pagination-button-color: red;
+    --el-pagination-button-disabled-color: red;
+    --el-pagination-button-disabled-bg-color: red;
+
+    .el-input {
+        --el-input-text-color: red;
+
+        .el-input__wrapper {
+            background-color: transparent;
+            box-shadow: 0 0 0 1px red;
+        }
+    }
+}
+
+:deep(.el-pagination.is-background .el-pager li.is-active) {
+    background-color: red;
+}
+
+:deep(.el-pagination__jump) {
+    color: red;
+}
+
+:deep(.el-pagination__total) {
+    color: red;
+}
+
+:deep(.el-pagination.is-background .btn-prev:disabled) {
+    color: red;
+    background-color: rgb(255, 245, 245);
+}
+
+:deep(.el-pagination.is-background .btn-next:disabled) {
+    color: red;
+    background-color: rgb(255, 245, 245);
 }
 </style>
