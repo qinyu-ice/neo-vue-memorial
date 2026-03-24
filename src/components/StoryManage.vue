@@ -70,9 +70,6 @@ const getAllStoryList = async (page, pageSize, title = '') => {
         tableLoading.value = false
     }
     tableData.value = res.data.data
-    if (tableData.value == null) {
-        ElMessage.error('暂无寻亲故事数据')
-    }
     total.value = res.data.total
 }
 getAllStoryList(1, 5)

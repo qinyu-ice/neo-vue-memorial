@@ -90,9 +90,6 @@ const getAllUserList = async (page, pageSize, username = '') => {
         tableLoading.value = false
     }
     tableData.value = res.data.data
-    if (tableData.value == null) {
-        ElMessage.error('暂无寻亲故事数据')
-    }
     total.value = res.data.total
 }
 getAllUserList(1, 5)

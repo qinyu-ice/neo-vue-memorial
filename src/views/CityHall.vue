@@ -37,7 +37,7 @@ tokenValue()
 </script>
 <template>
     <div style="width: 100%;">
-        <div style="margin: 20px; color: red;">
+        <div style="margin: 20px;">
             <span style="color: red; font-weight: bolder; font-size: x-large;">当前位置：烈士纪念设施</span>
         </div>
         <div style="display: flex;width: 100%;justify-content: space-around;flex-wrap: wrap;">
@@ -57,7 +57,7 @@ tokenValue()
         </div>
         <el-pagination class="cityhall-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
             layout="jumper, total, prev, pager, next" background :total="total" @current-change="onCurrentChange"
-            style="margin-top: 50px; justify-content:center" />
+            style="margin-top: 50px; margin-bottom: 20px; justify-content:center" />
     </div>
 </template>
 

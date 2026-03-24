@@ -1,21 +1,23 @@
 <script setup>
 import { ref } from 'vue'
 import router from '@/router'
-import { useTokenStore } from '@/stores/token'
+import { realtivesStoryList } from '@/api/relativesSearch'
+import { allInfoList } from '@/api/info'
+
 //分页条数据模型
 const pageNum = ref(1)//当前页
 const pageNum1 = ref(1)//当前页
 const total = ref(35)//总条数
-const pageSize = ref(4)//每页条数
+const total1 = ref(35)//总条数
+const pageSize = ref(6)//每页条数
 const pageSize1 = ref(6)//每页条数
 
-const tokenStore = useTokenStore()
-
 // 模拟数据
-const searchRelativesInfoData = Array(6).fill({
-    title: '为xxx寻找亲人',
-    time: '2025-04-05',
-})
+const searchRelativesInfoData = ref([{
+    id: '',
+    title: '',
+    time: ''
+}])
 
 const searchRelativesStoreData = ref([{
     id: '',
@@ -27,23 +29,24 @@ const pushSearch = () => {
     router.push('/memorial/martyrsSearchRelatives')
 }
 
-const tokenValue = () => {
-    tokenStore.tokenIsExist()
+const getRealtivesInfoList = async () => {
+    await allInfoList(pageNum.value, pageSize.value, '')
+        .then(
+            res => {
+                searchRelativesInfoData.value = res.data.data
+                total.value = res.data.total
+            }
+        )
 }
 
-import { realtivesStoryList } from '@/api/relativesSearch'
-
 const getRealtivesStoryList = async () => {
-    await realtivesStoryList(
-        pageNum1.value,
-        pageSize1.value,
-    ).then(res => {
+    await realtivesStoryList(pageNum1.value, pageSize1.value).then(res => {
         searchRelativesStoreData.value = res.data.data
-        total.value = res.data.total
+        total1.value = res.data.total
     })
 }
 
-tokenValue()
+getRealtivesInfoList()
 getRealtivesStoryList()
 
 </script>
@@ -80,9 +83,9 @@ getRealtivesStoryList()
                         </li>
                     </ul>
                 </div>
-                <el-pagination class="pagination" v-model:current-page="pageNum" :page-size="6"
-                    layout="jumper,total,prev,pager,next" background :total=searchRelativesInfoData.length
-                    style="margin-top: 20px; justify-content:center" @update:current-page=""></el-pagination>
+                <el-pagination class="pagination" v-model:current-page="pageNum" :page-size="pageSize" :total=total
+                    layout="jumper,total,prev,pager,next" background style="margin-top: 20px; justify-content:center"
+                    @update:current-page="getRealtivesInfoList"></el-pagination>
             </el-card>
             <el-card class="card-item" style="margin-left:29px;">
                 <div class="thick-underline">
@@ -103,7 +106,7 @@ getRealtivesStoryList()
                         </li>
                     </ul>
                 </div>
-                <el-pagination class="pagination" v-model:current-page="pageNum1" :page-size="pageSize1" :total="total"
+                <el-pagination class="pagination" v-model:current-page="pageNum1" :page-size="pageSize1" :total="total1"
                     layout="jumper,total,prev,pager,next" background style="margin-top: 20px; justify-content:center;"
                     @update:current-page="getRealtivesStoryList">
                 </el-pagination>

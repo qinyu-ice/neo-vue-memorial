@@ -42,13 +42,13 @@ export const martyrAdd = (addData) => {
 }
 
 export const uploadMartyrPhoto = (file) => {
-    return request.post('/martyr/upload', file)
+    return request.post('martyr/upload', file)
 }
 
 export const deleteMartyr = (id) => {
-    return request.delete(`/martyr/delete/${id}`)
+    return request.delete(`martyr/delete/${id}`)
 }
 
 export const updateMartyr = (editData) => {
-    return request.post('/martyr/update', editData)
+    return request.post('martyr/update', editData)
 }

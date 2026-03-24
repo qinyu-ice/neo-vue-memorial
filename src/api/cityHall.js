@@ -1,7 +1,7 @@
 import request from "@/utils/request";
 
 export const cityHallList = () => {
-    return request.get('/place')
+    return request.get('place')
 }
 
 export const cityHallPage = (page, pageSize, name) => {
@@ -25,9 +25,9 @@ export const addCityHall = (addData) => {
 }
 
 export const updateCityHall = (editData) => {
-    return request.post('/place/update', editData)
+    return request.post('place/update', editData)
 }
 
 export const deleteCityHall = (id) => {
-    return request.delete(`/place/delete/${id}`)
+    return request.delete(`place/delete/${id}`)
 }

@@ -79,6 +79,20 @@ export default defineConfig({
         changeOrigin: true,
         // /api去掉，变成空串，因为它只是一个标识而已，并不是路径
         rewrite: (path) => path.replace(/^\/api\/req\/story/, '/api/story')
+      },
+      '/api/req/news': {
+        target: 'http://localhost:8701',
+        ws: false,
+        secure: false,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/req\/news/, '/api/news')
+      },
+      '/api/req/info': {
+        target: 'http://localhost:8801',
+        ws: false,
+        secure: false,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/req\/info/, '/api/info')
       }
     }
   }

@@ -63,6 +63,8 @@ const initEditData = () => ({
 const editData = ref(initEditData()) // 初始化编辑数据
 const name = ref('')
 const currentSearchKeyword = ref('')
+const showPreview = ref(false)
+const previewImg = ref('')
 const deleteData = ref()
 const addFormRef = ref()
 const editFormRef = ref()
@@ -79,7 +81,6 @@ const formatGender = (row, column) => {
     switch (row.gender) {
         case 1: return '男';
         case 2: return '女';
-        default: return '未知';
     }
 }
 
@@ -112,7 +113,7 @@ const formRules = reactive({
         { required: true, message: '请输入牺牲战役', trigger: 'blur' }
     ],
     deathAddress: [
-        { required: true, message: '请输入牺牲地址', trigger: 'blur' }
+        { required: true, message: '请输入牺牲地点', trigger: 'blur' }
     ],
     buryPoint: [
         { required: true, message: '请输入安葬地点', trigger: 'blur' }
@@ -130,9 +131,6 @@ const getAllHeroPage = async (page, pageSize, name = '') => {
         tableLoading.value = false
     }
     tableData.value = res.data.data
-    if (tableData.value == null) {
-        ElMessage.error('暂无烈士数据')
-    }
     total.value = res.data.total
 }
 getAllHeroPage(1, 5)
@@ -165,18 +163,15 @@ const addMartyr = async () => {
     try {
         const url = new URL(uploadUrl.value)
         addData.value.photo = url.pathname
-        if (addData.value.gender != 0) {
-            const result = await martyrAdd(addData.value)
-            showAddDialog.value = false
-            ElMessage.success(result.msg)
-            pageNum.value = 1
-            pageSize.value = 5
-            await getAllHeroPage(pageNum.value, pageSize.value)
-            addFormRef.value?.resetFields()
-            uploadUrl.value = ''
-        } else {
-            ElMessage.error('性别不能为空')
-        }
+        const result = await martyrAdd(addData.value)
+        showAddDialog.value = false
+        ElMessage.success(result.msg)
+        pageNum.value = 1
+        pageSize.value = 5
+        await getAllHeroPage(pageNum.value, pageSize.value)
+        addFormRef.value?.resetFields()
+        uploadUrl.value = ''
+        ElMessage.error('性别不能为空')
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')
@@ -259,6 +254,19 @@ const removeMartyr = async () => {
     }
 }
 
+const openPreview = (url) => {
+    previewImg.value = url
+    showPreview.value = true
+    // 禁止页面滚动
+    document.body.style.overflow = 'hidden'
+}
+
+// 关闭预览
+const closePreview = () => {
+    showPreview.value = false
+    document.body.style.overflow = ''
+}
+
 const cancel = () => {
     showAddDialog.value = false
     showEditDialog.value = false
@@ -297,7 +305,7 @@ const handleClose = (done) => {
                 <el-table-column prop="id" label="序号" width="80" />
                 <el-table-column prop="photo" label="烈士碑像" width="100">
                     <template #default="scope">
-                        <img :src="scope.row.photo" alt="展示图片"
+                        <img :src="scope.row.photo" alt="展示图片" @click="openPreview(scope.row.photo)"
                             style="width: 70px; height: 70px; object-fit: cover; border-radius: 4px;">
                     </template>
                 </el-table-column>
@@ -311,7 +319,7 @@ const handleClose = (done) => {
                 <el-table-column prop="achievement" label="立功情况" width="90" />
                 <el-table-column prop="deathDate" label="牺牲日期" width="100" />
                 <el-table-column prop="deathCampaign" label="牺牲战役" width="90" show-overflow-tooltip />
-                <el-table-column prop="deathAddress" label="牺牲地址" width="90" show-overflow-tooltip />
+                <el-table-column prop="deathAddress" label="牺牲地点" width="90" show-overflow-tooltip />
                 <el-table-column prop="buryPoint" label="安葬地点" width="90" show-overflow-tooltip />
                 <el-table-column prop="deeds" label="烈士事迹" width="90" show-overflow-tooltip />
                 <el-table-column class="operation" label="操作" width="130">
@@ -321,6 +329,10 @@ const handleClose = (done) => {
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- 图片放大预览 -->
+            <div v-if="showPreview" class="preview-mask" @click="closePreview" @keyup.esc="closePreview" tabindex="0">
+                <img :src="previewImg" class="preview-img" />
+            </div>
             <el-pagination class="martyr-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
                 layout="jumper, total, prev, pager, next" background :total="total" @current-change="onCurrentChange"
                 style="margin-top: 50px; justify-content:center; margin-bottom: 50px;" />
@@ -374,7 +386,7 @@ const handleClose = (done) => {
                     <el-form-item label="牺牲战役" prop="deathCampaign">
                         <el-input v-model="addData.deathCampaign" />
                     </el-form-item>
-                    <el-form-item label="牺牲地址" prop="deathAddress">
+                    <el-form-item label="牺牲地点" prop="deathAddress">
                         <el-input v-model="addData.deathAddress" />
                     </el-form-item>
                     <el-form-item label="安葬地点" prop="buryPoint">
@@ -438,7 +450,7 @@ const handleClose = (done) => {
                     <el-form-item label="牺牲战役" prop="deathCampaign">
                         <el-input v-model="editData.deathCampaign" />
                     </el-form-item>
-                    <el-form-item label="牺牲地址" prop="deathAddress">
+                    <el-form-item label="牺牲地点" prop="deathAddress">
                         <el-input v-model="editData.deathAddress" />
                     </el-form-item>
                     <el-form-item label="安葬地点" prop="buryPoint">
@@ -483,6 +495,53 @@ const handleClose = (done) => {
     display: flex;
     justify-content: space-between;
     height: 50px;
+}
+
+.preview-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    cursor: zoom-out;
+    animation: fadeIn 0.3s ease;
+}
+
+/* 放大后的图片 */
+.preview-img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    border-radius: 8px;
+    animation: zoomIn 0.3s ease;
+}
+
+/* 动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 :deep(.martyr-input) {

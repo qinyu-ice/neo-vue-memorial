@@ -26,7 +26,7 @@ const handleClick = (tab, event) => {
                     <el-tab-pane label="寻亲信息管理" name="info"></el-tab-pane>
                     <el-tab-pane label="寻亲故事管理" name="story"></el-tab-pane>
                     <el-tab-pane label="留言管理" name="record"></el-tab-pane>
-                    <el-tab-pane label="用户管理" name="user"></el-tab-pane>
+                    <el-tab-pane label="账号管理" name="user"></el-tab-pane>
                 </el-tabs>
             </div>
             <div class="manage" v-if="activeName === 'news'">

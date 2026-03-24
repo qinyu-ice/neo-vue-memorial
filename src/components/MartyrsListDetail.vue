@@ -122,13 +122,19 @@ const options = [
     }
 ]
 
+const goToMartyr = () => {
+    router.push('/memorial/martyrsMuni')
+}
+
 loadMartyrDetail();
 </script>
 
 <template>
     <div style="margin: 20px;">
         <span>
-            当前位置：达州烈士纪念设施 >{{ martyrDetail.name }}
+            当前位置：
+            <span class="text-info" @click="goToMartyr">烈士英名录</span>
+            > {{ martyrDetail.name }}
         </span>
     </div>
     <div style="display: flex;justify-content: center;width: 100%;">
@@ -380,6 +386,14 @@ loadMartyrDetail();
 </template>
 
 <style scoped>
+.text-info {
+    &:hover {
+        color: red;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+}
+
 .el-textarea {
     display: inline-block;
     font-size: 14px;

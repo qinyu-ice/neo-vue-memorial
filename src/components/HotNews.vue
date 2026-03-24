@@ -1,47 +1,33 @@
 <script setup>
 import { ref } from 'vue';
+import { allNewsList } from '@/api/news';
 
-const hotNewsData = ref([
-    {
-        id: 1,
-        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
-        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        time: '2026-03-05'
-    },
-    {
-        id: 2,
-        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
-        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        time: '2026-03-05'
-    },
-    {
-        id: 3,
-        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
-        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        time: '2026-03-05'
-    },
-    {
-        id: 4,
-        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
-        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        time: '2026-03-05'
-    },
-    {
-        id: 5,
-        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
-        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        time: '2026-03-05'
-    }
-])
+//分页条数据模型
+const pageNum = ref(1)//当前页
+const total = ref()//总条数
+const pageSize = ref(5)//每页条数
+
+const hotNewsData = ref([{
+    time: ''
+}])
+
+const getAllNewsList = async (page, pageSize) => {
+    //获取分类列表
+    const res = await allNewsList(page, pageSize, '')
+    hotNewsData.value = res.data.data
+    total.value = res.data.total
+}
+getAllNewsList(1, 5)
+//当前页码发生变化，调用此函数
+const onCurrentChange = (num) => {
+    pageNum.value = num
+    getAllNewsList(pageNum.value, pageSize.value)
+}
+
 </script>
 <template>
     <div style="margin: 20px;">
-        <span>
+        <span style="color: red; font-weight: bolder; font-size: x-large;">
             当前位置：热点资讯
         </span>
     </div>
@@ -60,7 +46,7 @@ const hotNewsData = ref([
                     <p>{{ item.subtitle }}</p>
                 </div>
                 <div class="hot-news-time">
-                    <p>发布时间：{{ item.time }}</p>
+                    <p>发布时间：{{ item.time.substring(0, 10) }}</p>
                 </div>
             </div>
             <div>
@@ -68,6 +54,9 @@ const hotNewsData = ref([
                 ---------------------------------------------------------------------------------------------------
             </div>
         </div>
+        <el-pagination class="news-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
+            layout="jumper, total, prev, pager, next" background :total="total" @current-change="onCurrentChange"
+            style="margin-top: 20px; justify-content:center; margin-bottom: 20px;" />
     </el-card>
 </template>
 <style lang="scss" scoped>
@@ -122,5 +111,46 @@ const hotNewsData = ref([
 
 .hot-news-time {
     width: 12%;
+}
+
+:deep(.news-pagination) {
+    color: red;
+    --el-pagination-hover-color: red;
+    --el-pagination-text-color: red;
+    --el-pagination-button-bg-color: rgb(255, 230, 230);
+    --el-pagination-button-color: red;
+    --el-pagination-button-disabled-color: red;
+    --el-pagination-button-disabled-bg-color: red;
+
+    .el-input {
+        --el-input-text-color: red;
+
+        .el-input__wrapper {
+            background-color: transparent;
+            box-shadow: 0 0 0 1px red;
+        }
+    }
+}
+
+:deep(.el-pagination.is-background .el-pager li.is-active) {
+    background-color: red;
+}
+
+:deep(.el-pagination__jump) {
+    color: red;
+}
+
+:deep(.el-pagination__total) {
+    color: red;
+}
+
+:deep(.el-pagination.is-background .btn-prev:disabled) {
+    color: red;
+    background-color: rgb(255, 245, 245);
+}
+
+:deep(.el-pagination.is-background .btn-next:disabled) {
+    color: red;
+    background-color: rgb(255, 245, 245);
 }
 </style>

@@ -65,6 +65,8 @@ const editFormRef = ref()
 const deleteData = ref()
 const placeName = ref('')
 const currentSearchKeyword = ref('')
+const showPreview = ref(false)
+const previewImg = ref('')
 
 const formRules = reactive({
     name: [
@@ -103,9 +105,6 @@ const getCityHallPage = async (page, pageSize, name = '') => {
         tableLoading.value = false
     }
     tableData.value = res.data.data
-    if (tableData.value == null) {
-        ElMessage.error('暂无烈士纪念设施数据')
-    }
     total.value = res.data.total
 }
 getCityHallPage(1, 5)
@@ -408,6 +407,19 @@ const getLngAndLat = () => {
     ElMessage.success(`经纬度已填充：经度${lng}，纬度${lat}`);
 };
 
+const openPreview = (url) => {
+    previewImg.value = url
+    showPreview.value = true
+    // 禁止页面滚动
+    document.body.style.overflow = 'hidden'
+}
+
+// 关闭预览
+const closePreview = () => {
+    showPreview.value = false
+    document.body.style.overflow = ''
+}
+
 const cancel = () => {
     showAddDialog.value = false
     showEditDialog.value = false
@@ -452,7 +464,7 @@ const handleCloseMap = (done) => {
                 <el-table-column prop="name" label="名称" width="200" />
                 <el-table-column prop="img" label="图片" width="110">
                     <template #default="scope">
-                        <img :src="scope.row.img" alt="展示图片"
+                        <img :src="scope.row.img" alt="展示图片" @click="openPreview(scope.row.img)"
                             style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;">
                     </template>
                 </el-table-column>
@@ -467,6 +479,10 @@ const handleCloseMap = (done) => {
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- 图片放大预览 -->
+            <div v-if="showPreview" class="preview-mask" @click="closePreview" @keyup.esc="closePreview" tabindex="0">
+                <img :src="previewImg" class="preview-img" />
+            </div>
             <el-pagination class="place-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
                 layout="jumper, total, prev, pager, next" background :total="total" @current-change="onCurrentChange"
                 style="margin-top: 50px; justify-content:center; margin-bottom: 50px;" />
@@ -657,6 +673,53 @@ const handleCloseMap = (done) => {
 
     &:hover {
         --el-table-row-hover-bg-color: rgb(255, 240, 240);
+    }
+}
+
+.preview-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    cursor: zoom-out;
+    animation: fadeIn 0.3s ease;
+}
+
+/* 放大后的图片 */
+.preview-img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    border-radius: 8px;
+    animation: zoomIn 0.3s ease;
+}
+
+/* 动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
     }
 }
 

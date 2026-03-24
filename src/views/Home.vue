@@ -1,31 +1,16 @@
-/**
-* @name { 轮播图（完整源码） }
-* @info { 自定义轮播图以及动画 }
-* @author { 前端uio 2024-5-20 }
-*
-* @click funtion => 处理对应的点击事件
-* @transition 组件 => 实现过渡动画
-* @el-icon 组件 => 切换图片的左右箭头图标
-*/
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
-import { useTokenStore } from '@/stores/token'
 import { useRouter } from 'vue-router'
 import { cityHallList, getMapByip } from '@/api/cityHall';
 import { allMessageList } from '@/api/martyrs'
+import { allNewsList } from '@/api/news';
 
-const img = ref('https://www.scmartyrs.cn/static/img/bg03.0c252411.png')
 const imgIndex = ref(0)
 const imgArr = [
     '/src/assets/newHomeOne3.486ce412.png',
     '/src/assets/newHomeOne.832a93f8.png',
 ]
-const titles = [
-    //    '胡桃🍑🍑🍑🍑🍑🍑', '启动⚪⚪⚪⚪⚪⚪', '撒花❀❀❀❀❀❀'
-]
-
 var currentImg = null
 
 onMounted(() => {
@@ -154,58 +139,11 @@ const cityHalls = ref([
 ])
 const leaveMessages = ref([])
 
-const hotNewsData = ref([
-    {
-        id: 1,
-        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
-        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        time: '2026-03-05'
-    },
-    {
-        id: 2,
-        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
-        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        time: '2026-03-05'
-    },
-    {
-        id: 3,
-        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
-        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        time: '2026-03-05'
-    },
-    {
-        id: 4,
-        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
-        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        time: '2026-03-05'
-    },
-    {
-        id: 5,
-        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
-        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        time: '2026-03-05'
-    },
-    {
-        id: 6,
-        img: 'https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png',
-        title: '【成都市】三力同心 铸魂育人：成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        subtitle: '成都市烈士纪念设施保护中心圆满完成2026年度寒假红色研学活动',
-        time: '2026-03-05'
-    }
-])
-
-//分页条数据模型
-const pageNum = ref(1)//当前页
-const total = ref()//总条数
-const pageSize = ref(5)//每页条数
+const hotNewsData = ref([{
+    time: ''
+}])
 
 const router = useRouter()
-const tokenStore = useTokenStore()
 // 四川文理学院（莲湖校区）IP
 const ip = ref("14.19.23.128")
 const addressA = ref("107.484767,31.211277")
@@ -225,18 +163,21 @@ const getAllLeaveMessage = async () => {
     leaveMessages.value = res.data
 }
 
+const getAllNewsList = async (page, pageSize) => {
+    //获取分类列表
+    const res = await allNewsList(page, pageSize, '')
+    hotNewsData.value = res.data.data
+    total.value = res.data.total
+}
+
 const fetchAddress = async () => {
     // 根据IP地址查询经纬度
     const result = await getMapByip(ip.value)
     addressA.value = result.data
 }
 
-const tokenValue = () => {
-    tokenStore.tokenIsExist()
-}
-
 onMounted(() => {
-    tokenValue()
+    getAllNewsList(1, 6)
     getCityHallList();
     getAllLeaveMessage();
     fetchAddress();
@@ -317,9 +258,9 @@ const goToHotNews = () => {
                     </div>
                 </div>
             </template>
-            <div style="display:flex;justify-content: space-around;">
+            <div style="display:flex; justify-content: space-between;">
                 <img src="http://www.dzhjlsly.com/tupmulu/image/20241009/20241009113245_65596.jpg" class="img2">
-                <div style="width: 50%;">
+                <div style="width: 58%;">
                     <el-row v-for="(item, index) in hotNewsData" :key="index" class="row-bg" justify="space-around"
                         style="border-bottom: 1px solid #ccc; margin-bottom: 25px;">
                         <div class="dynamic-tag">
@@ -331,7 +272,7 @@ const goToHotNews = () => {
                                     item.title }}</router-link>
                         </div>
                         <div class="time-tag">
-                            <el-tag type="danger">{{ item.time }}</el-tag>
+                            <el-tag type="danger">{{ item.time.substring(0, 10) }}</el-tag>
                         </div>
                     </el-row>
                 </div>
@@ -347,9 +288,10 @@ const goToHotNews = () => {
             </template>
             <el-scrollbar height="400px">
                 <el-table :data="leaveMessages" style="width: 100%;">
-                    <el-table-column label="留言人" width="200" prop="username" />
-                    <el-table-column label="烈士姓名" width="200" prop="martyrName" />
-                    <el-table-column label="留言内容" width="500" prop="message" show-overflow-tooltip />
+                    <el-table-column label="留言人" width="150" prop="username" />
+                    <el-table-column label="烈士姓名" width="150" prop="martyrName" />
+                    <el-table-column label="献花数量" width="150" prop="flower" />
+                    <el-table-column label="留言内容" width="400" prop="message" show-overflow-tooltip />
                     <el-table-column label="留言时间" prop="time" />
                 </el-table>
             </el-scrollbar>
@@ -401,9 +343,6 @@ const goToHotNews = () => {
             <template #header>
                 <div class="header">
                     <span style="color: red;font-weight: bolder;">烈士纪念设施保护中心</span>
-                    <div class="extra">
-                        <el-button type="danger">查看更多>></el-button>
-                    </div>
                 </div>
             </template>
             <el-table :data="protect" style="width: 100%">
@@ -428,12 +367,11 @@ const goToHotNews = () => {
 }
 
 .dynamic-tag {
-    width: 10%;
-    margin-left: 10px;
+    width: 5%;
 }
 
 .title {
-    width: 60%;
+    width: 76%;
 
     // 标题样式（包含hover效果）
     .news-title {
@@ -458,7 +396,7 @@ const goToHotNews = () => {
 }
 
 .time-tag {
-    width: 10%;
+    width: 5%;
     margin-right: 40px;
 }
 

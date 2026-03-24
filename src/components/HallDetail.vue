@@ -9,9 +9,10 @@ const cityHallModel = ref({
     hint: ''
 })
 
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { getCityHallInfoById } from '@/api/cityHall'
 const route = useRoute()
+const router = useRouter()
 const id = ref(0)
 const init = async () => {
     if (route.query) {
@@ -23,14 +24,20 @@ const init = async () => {
     }
 }
 
+const goToPlace = () => {
+    router.push('/memorial/cityHall')
+}
+
 init()
 const centerDialogVisible = ref(false)
 </script>
 
 <template>
     <div style="margin: 20px;">
-        <span style="color: red; font-weight: bold;">
-            当前位置：烈士纪念设施 >> {{ cityHallModel.name }}
+        <span>
+            当前位置：
+            <span class="text-info" @click="goToPlace">烈士纪念设施</span>
+            > {{ cityHallModel.name }}
         </span>
     </div>
     <el-card style="margin: 20px;">
@@ -135,6 +142,14 @@ const centerDialogVisible = ref(false)
 </template>
 
 <style scoped>
+.text-info {
+    &:hover {
+        color: red;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+}
+
 .guide[data-v-5d524d16] {
     border-bottom: 1px solid #ffffff;
     color: white;

@@ -41,7 +41,7 @@ watch(
           <el-menu-item index="martyrsMuni">烈士英名录</el-menu-item>
           <el-menu-item index="martyrsSearchRelatives">烈士寻亲</el-menu-item>
           <el-menu-item index="hallMap">地图全览</el-menu-item>
-          <el-menu-item index="updataUser">用户</el-menu-item>
+          <el-menu-item index="updataUser">用户中心</el-menu-item>
         </el-menu>
       </el-header>
       <el-main>
@@ -81,7 +81,7 @@ watch(
   font-size: medium;
   font-weight: 600;
   height: 60px;
-  width: 253px;
+  width: 150px;
   border: none;
   color: white;
 
