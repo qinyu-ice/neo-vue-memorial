@@ -119,6 +119,18 @@ const options = [
     {
         value: '忠骨入土英名在，幸福铭记先辈恩！',
         label: '忠骨入土英名在，幸福铭记先辈恩！'
+    },
+    {
+        value: '先烈舍身卫家国，浩气长存天地间，传承红色薪火路，振兴中华勇向前！',
+        label: '先烈舍身卫家国，浩气长存天地间，传承红色薪火路，振兴中华勇向前！'
+    },
+    {
+        value: '清明祭语寄长空，万众含悲敬烈忠。白衣执甲临危勇，赤胆为民耀世荣。驱散阴霾天地阔，换来家国山河明。舍身抗疫昭青史，千古流传颂伟英！',
+        label: '清明祭语寄长空，万众含悲敬烈忠。白衣执甲临危勇，赤胆为民耀世荣。驱散阴霾天地阔，换来家国山河明。舍身抗疫昭青史，千古流传颂伟英！'
+    },
+    {
+        value: '追思先烈功绩，弘扬爱国精神，致敬无畏英雄，砥砺奋勇前行！',
+        label: '追思先烈功绩，弘扬爱国精神，致敬无畏英雄，砥砺奋勇前行！'
     }
 ]
 
@@ -138,127 +150,119 @@ loadMartyrDetail();
         </span>
     </div>
     <div style="display: flex;justify-content: center;width: 100%;">
-        <el-card
-            style="margin: 40px;width: 100%;background:url('https://www.scmartyrs.cn/static/img/bg.8f034237.png');">
+        <el-card style="width: 100%;background:url('https://www.scmartyrs.cn/static/img/bg.8f034237.png');">
             <div style="display: flex;justify-content: space-around;margin-bottom: 40px;">
-                <div>
-                    <div style="display: flex;width: 70%;justify-content: left;flex-wrap: wrap;">
-                        <div
-                            style="margin-bottom: 10px;width: 100%;display: flex;justify-content: left;font-size: small;color: #a11a1a;font-weight: bold;">
-                            ||基本信息
+                <div style="margin-top: 50px;">
+                    <div style="display: flex;width: 100%;justify-content: left;flex-wrap: wrap;">
+                        <div class="subtitle">
+                            基 本 信 息
                         </div>
-                        <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 10px;">
-                            <span style="color: #ffffff;font-weight: bold;font-size: small;margin-right: 10px;">
+                        <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 20px;">
+                            <span class="field">
                                 性别:
                             </span>
-                            <span style="color: #ffffff;font-size: small;">
+                            <span style="color: #ffffff;font-size: medium;">
                                 {{ martyrDetail.gender }}
                             </span>
                         </div>
-                        <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 10px;">
-                            <span style="color: #ffffff;font-weight: bold;font-size: small;margin-right: 10px;">
+                        <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 20px;">
+                            <span class="field">
                                 籍贯:
                             </span>
-                            <span style="color: #ffffff;font-size: small;">
+                            <span style="color: #ffffff;font-size: medium;">
                                 {{ martyrDetail.hometown }}
                             </span>
                         </div>
-                        <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 10px;">
-                            <span style="color: #ffffff;font-weight: bold;font-size: small;margin-right: 10px;">
+                        <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 20px;">
+                            <span class="field">
                                 政治面貌:
                             </span>
-                            <span style="color: #ffffff;font-size: small;">
+                            <span style="color: #ffffff;font-size: medium;">
                                 {{ martyrDetail.politicsStatus }}
                             </span>
                         </div>
-                        <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 10px;">
-                            <span style="color: #ffffff;font-weight: bold;font-size: small;margin-right: 10px;">
+                        <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 20px;">
+                            <span class="field">
                                 出生日期:
                             </span>
-                            <span style="color: #ffffff;font-size: small;">
+                            <span style="color: #ffffff;font-size: medium;">
                                 {{ martyrDetail.birthDate }}
                             </span>
                         </div>
                     </div>
-                    <div style="display: flex;width: 70%;justify-content: left;flex-wrap: wrap;margin-top: 20px;">
-
-                        <div
-                            style="margin-bottom: 10px;width: 50%;display: flex;justify-content: left;font-size: small;color: #a11a1a;font-weight: bold;">
-                            ||生前情况
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="display: flex;justify-content: left;flex-wrap: wrap;margin-top: 20px;">
+                            <div class="subtitle">
+                                生 前 情 况
+                            </div>
+                            <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 20px;">
+                                <span class="field">
+                                    生前单位:
+                                </span>
+                                <span style="color: #ffffff;font-size: medium;">
+                                    {{ martyrDetail.dept }}
+                                </span>
+                            </div>
+                            <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 20px;">
+                                <span class="field">
+                                    生前职位:
+                                </span>
+                                <span style="color: #ffffff;font-size: medium;">
+                                    {{ martyrDetail.position }}
+                                </span>
+                            </div>
+                            <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 20px;">
+                                <span class="field">
+                                    立功情况:
+                                </span>
+                                <span style="color: #ffffff;font-size: medium;">
+                                    {{ martyrDetail.achievement }}
+                                </span>
+                            </div>
                         </div>
-                        <div
-                            style="margin-bottom: 10px;width: 50%;display: flex;justify-content: left;font-size: small;color: #a11a1a;font-weight: bold;">
-                            ||牺牲情况
-                        </div>
-                        <div style="width: 50%;display: flex;justify-content: left;margin-bottom: 10px;">
-                            <span style="color: #ffffff;font-weight: bold;font-size: small;margin-right: 10px;">
-                                生前单位:
-                            </span>
-                            <span style="color: #ffffff;font-size: small;">
-                                {{ martyrDetail.dept }}
-                            </span>
-                        </div>
-                        <div style="width: 50%;display: flex;justify-content: left;margin-bottom: 10px;">
-                            <span style="color: #ffffff;font-weight: bold;font-size: small;margin-right: 10px;">
-                                牺牲时间:
-                            </span>
-                            <span style="color: #ffffff;font-size: small;">
-                                {{ martyrDetail.deathDate }}
-                            </span>
-                        </div>
-                        <div style="width: 50%;display: flex;justify-content: left;margin-bottom: 10px;">
-                            <span style="color: #ffffff;font-weight: bold;font-size: small;margin-right: 10px;">
-                                生前职位:
-                            </span>
-                            <span style="color: #ffffff;font-size: small;">
-                                {{ martyrDetail.position }}
-                            </span>
-                        </div>
-                        <div style="width: 50%;display: flex;justify-content: left;margin-bottom: 10px;">
-                            <span style="color: #ffffff;font-weight: bold;font-size: small;margin-right: 10px;">
-                                牺牲战役:
-                            </span>
-                            <span style="color: #ffffff;font-size: small;">
-                                {{ martyrDetail.deathCampaign }}
-                            </span>
-                        </div>
-                        <div style="width: 50%;display: flex;justify-content: left;margin-bottom: 10px;">
-                            <span style="color: #ffffff;font-weight: bold;font-size: small;margin-right: 10px;">
-                                立功情况:
-                            </span>
-                            <span style="color: #ffffff;font-size: small;">
-                                {{ martyrDetail.achievement }}
-                            </span>
-                        </div>
-                        <div style="width: 50%;display: flex;justify-content: left;margin-bottom: 10px;">
-                            <span style="color: #ffffff;font-weight: bold;font-size: small;margin-right: 10px;">
-                                牺牲地点:
-                            </span>
-                            <span style="color: #ffffff;font-size: small;">
-                                {{ martyrDetail.deathAddress }}
-                            </span>
-                        </div>
-                        <div style="width: 50%;display: flex;justify-content: left;margin-bottom: 10px;">
-                            <span style="color: #ffffff;font-weight: bold;font-size: small;margin-right: 10px;">
-
-                            </span>
-                            <span style="color: #ffffff;font-size: small;">
-
-                            </span>
-                        </div>
-                        <div style="width: 50%;display: flex;justify-content: left;margin-bottom: 10px;">
-                            <span style="color: #ffffff;font-weight: bold;font-size: small;margin-right: 10px;">
-                                安葬地:
-                            </span>
-                            <span style="color: #ffffff;font-size: small;">
-                                {{ martyrDetail.buryPoint }}
-                            </span>
+                        <div style="display: flex;flex-wrap: wrap;margin-top: 20px;">
+                            <div class="subtitle">
+                                牺 牲 情 况
+                            </div>
+                            <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 20px;">
+                                <span class="field">
+                                    牺牲时间:
+                                </span>
+                                <span style="color: #ffffff;font-size: medium;">
+                                    {{ martyrDetail.deathDate }}
+                                </span>
+                            </div>
+                            <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 20px;">
+                                <span class="field">
+                                    牺牲战役:
+                                </span>
+                                <span style="color: #ffffff;font-size: medium;">
+                                    {{ martyrDetail.deathCampaign }}
+                                </span>
+                            </div>
+                            <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 20px;">
+                                <span class="field">
+                                    牺牲地点:
+                                </span>
+                                <span style="color: #ffffff;font-size: medium;">
+                                    {{ martyrDetail.deathAddress }}
+                                </span>
+                            </div>
+                            <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 20px;">
+                                <span class="field">
+                                    安葬地:
+                                </span>
+                                <span style="color: #ffffff;font-size: medium;">
+                                    {{ martyrDetail.buryPoint }}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div style="width: 30%;">
-                    <div style="width: 100%;display: flex;justify-content: center;margin-bottom: 10px;">
-                        <img style="width: 60%;height: 250px; cursor: pointer;" :src="martyrDetail.photo" alt="烈士照片"
+                    <div
+                        style="width: 100%;display: flex;justify-content: center;margin-top: 50px; margin-bottom: 20px;">
+                        <img style="width: 80%;height: 80%; cursor: pointer;" :src="martyrDetail.photo" alt="烈士照片"
                             @click="showBigImage = true; bigImageUrl = martyrDetail.photo">
                     </div>
                     <!-- 图片放大弹窗（遮罩层） -->
@@ -266,29 +270,33 @@ loadMartyrDetail();
                         <img class="big-image" :src="bigImageUrl" alt="放大的烈士照片" @click.stop>
                     </div>
                     <span
-                        style="color: #ffffff;font-weight: bold;font-size: x-large;margin-right: 10px;display: flex;justify-content: center;">
+                        style="color: #ffffff;font-weight: bold;font-size: xx-large;margin-right: 10px;display: flex;justify-content: center;">
                         {{ martyrDetail.name }}
                     </span>
-                    <span style="margin-top: 40px;margin-right: 10px;display: flex;justify-content: center;">
-                        <el-button type="danger" Plain @click="visibleDrawer = true">祭奠先烈</el-button>
+                    <span style="margin-top: 50px; display: flex; justify-content: center;">
+                        <el-button class="memorial-button" type="danger" Plain @click="visibleDrawer = true">
+                            <template #icon>
+                                <img src="/src/assets/candle.png" class="candle-icon" />
+                            </template>
+                            祭奠先烈
+                        </el-button>
                     </span>
                 </div>
             </div>
-            <div
-                style="margin-bottom: 10px;width: 100%;display: flex;justify-content: left;font-size: small;color: #a11a1a;font-weight: bold;">
-                ||烈士事迹
+            <div style="display: flex;width: 75%;justify-content: left;flex-wrap: wrap;margin-top: 20px;">
+                <div class="subtitle">
+                    烈 士 事 迹
+                </div>
+                <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 20px;">
+                    <span
+                        style="color: #ffffff;font-weight: bold;font-size: medium;margin-right: 10px;text-indent: 2em;">
+                        {{ martyrDetail.deeds }}
+                    </span>
+                </div>
             </div>
-            <div style="width: 70%;display: flex;justify-content: left;margin-bottom: 10px;">
-                <span style="color: #ffffff;font-weight: bold;font-size: small;margin-right: 10px;text-indent: 2em;">
-                    {{ martyrDetail.deeds }}
-                </span>
-            </div>
-            <div
-                style="margin-bottom: 10px;width: 100%;display: flex;justify-content: left;font-size: small;color: #a11a1a;">
-                温馨提示:
-            </div>
-            <div style="width: 70%;display: flex;justify-content: left;margin-bottom: 10px;">
-                <span style="color: #ffffff;font-size: small;margin-right: 10px;text-indent: 2em;">
+            <div style="margin-top: 50px;">
+                <span style="margin-bottom: 20px; font-size: large; color: #c82625; font-weight: bold; ">温馨提示：</span>
+                <span style="color: #ffffff">
                     烈士信息在整理完善过程中，若发现信息缺失或有误，欢迎指正！
                 </span>
             </div>
@@ -305,22 +313,22 @@ loadMartyrDetail();
                     <div
                         style="width: 90%;border:5px solid #f5d94c;height: 40vh;display: flex;justify-content: space-around;">
                         <div style="width: 40%;display: flex;justify-content: center;">
-                            <img style="margin-top: 20px; width: 150px;height: 200px;" :src="martyrDetail.photo" alt="">
+                            <img style="margin-top: 40px; width: 150px;height: 200px;" :src="martyrDetail.photo" alt="">
                         </div>
                         <div style="width: 60%;">
                             <div
-                                style="margin-top: 10px;width: 100%;display: flex;font-size: large;color: #f5d94c;font-weight: bold;">
+                                style="margin-top: 40px;width: 90%;display: flex;font-size: large;color: #f5d94c;font-weight: bold;">
                                 {{ martyrDetail.name }}烈士
                             </div>
-                            <div style="margin-top: 10px;width: 100%;display: flex;font-size: small;color: #ffffff;">
+                            <div style="margin-top: 10px;width: 90%;display: flex;font-size: medium;color: #ffffff;">
                                 {{ martyrDetail.deeds }}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div style="width: 100%;display: flex;justify-content: center;margin-top: 25px;">
-                    <div style="width: 100%;height: 70vh;display: flex;justify-content: space-around;">
-                        <div style="width: 50%;display: flex;justify-content: center;margin-top: 20px;">
+                <div style="width: 100%; display: flex; justify-content: center; margin-top: 25px;">
+                    <div style="width: 100%; height: 70vh; display: flex; justify-content: space-around;">
+                        <div style="width: 50%; display: flex; justify-content: center; margin-top: 20px;">
                             <div>
                                 <div data-v-112d36e2="" class="bouquetMain">
                                     <transition name="img1">
@@ -338,7 +346,6 @@ loadMartyrDetail();
                                             src="https://www.scmartyrs.cn/static/img/bouquet.49c9b37b.png" alt=""
                                             style="width: 90px;height: 160px;position: relative;left:-40px;">
                                     </transition>
-
                                 </div>
                                 <div style="margin-top: 30px;display: flex;justify-content: center;">
                                     <button data-v-112d36e2="" class="bouquetButImg">
@@ -347,27 +354,25 @@ loadMartyrDetail();
                                     </button>
                                 </div>
                                 <div style="margin-top: 10px;display: flex;justify-content: center;">
-                                    <el-button @click="showFlower" type="warning" text
-                                        style="font-weight: bold;font-size: medium;">
+                                    <el-button @click="showFlower" type="danger" text
+                                        style="font-weight: bold; font-size: medium; color: #c82625;">
                                         献花
                                     </el-button>
                                 </div>
-
                             </div>
                         </div>
                         <div style="width: 50%;display: flex;justify-content: center;margin-top: 50px;">
                             <div>
-                                <div>
-                                    <el-select v-model="textarea" placeholder="Select" size="large"
-                                        style="width: 300px">
-                                        <el-option v-for="item in options" :key="item.value" :label="item.label"
-                                            :value="item.value" />
-                                    </el-select>
-                                    <el-input v-model="textarea" style="width: 300px;" :rows="8" type="textarea"
-                                        placeholder="请输入寄语" />
-                                </div>
-                                <div style="display: flex;justify-content: center;margin-top: 30px;">
-                                    <el-button type="warning" text style="font-weight: bold;font-size: medium;"
+                                <el-select v-model="textarea" placeholder="请选择留言模板"
+                                    style="width: 300px; margin-left: 5px;">
+                                    <el-option v-for="item in options" :key="item.value" :label="item.label"
+                                        :value="item.value" />
+                                </el-select>
+                                <el-input v-model="textarea" style="width: 300px;" :rows="8" type="textarea"
+                                    placeholder="请输入留言" />
+                                <div style="display: flex; justify-content: center; margin-top: 20px;">
+                                    <el-button type="danger" text
+                                        style="font-weight: bold; font-size: medium; color: #c82625;"
                                         @click="martyrLeaveMessageAdd">
                                         发布留言
                                     </el-button>
@@ -460,5 +465,39 @@ loadMartyrDetail();
     width: 100px;
     display: flex;
     justify-content: center;
+}
+
+.subtitle {
+    margin-bottom: 20px;
+    padding-left: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    font-size: large;
+    color: #c82625;
+    font-weight: bold;
+    border-left: 5px solid #c82625;
+}
+
+.field {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: medium;
+    margin-right: 10px;
+    margin-left: 15px;
+}
+
+:deep(.memorial-button) {
+    --el-button-bg-color: #c82625;
+    --el-button-border-color: #c82625;
+    font-size: large;
+    width: 150px;
+    height: 50px;
+}
+
+.candle-icon {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
 }
 </style>
