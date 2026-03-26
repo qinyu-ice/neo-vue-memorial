@@ -49,10 +49,6 @@ const onCurrentChange = (num) => {
                     <p>发布时间：{{ item.time.substring(0, 10) }}</p>
                 </div>
             </div>
-            <div>
-                --------------------------------------------------------------------------------------------------------------------------------------------------------------
-                ---------------------------------------------------------------------------------------------------
-            </div>
         </div>
         <el-pagination class="news-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
             layout="jumper, total, prev, pager, next" background :total="total" @current-change="onCurrentChange"
@@ -63,7 +59,10 @@ const onCurrentChange = (num) => {
 .hot-news-contain {
     width: 100%;
     display: flex;
-    justify-content: space-around
+    justify-content: space-around;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #000;
 }
 
 .hot-news-img {

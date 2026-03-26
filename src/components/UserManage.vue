@@ -150,7 +150,9 @@ const addUser = async () => {
         }
         await addUserService(addData)
         ElMessage.success('新增用户成功')
-        await getAllUserList()
+        pageNum.value = 1
+        pageSize.value = 5
+        await getAllUserList(pageNum.value, pageSize.value)
         showAddDialog.value = false
         // 重置表单
         addFormRef.value.resetFields()
@@ -167,7 +169,9 @@ const editUser = async () => {
         // 新增接口调用逻辑
         await userInfoUpdateService(userEditData.value)
         ElMessage.success('更新用户成功')
-        await getAllUserList()
+        pageNum.value = 1
+        pageSize.value = 5
+        await getAllUserList(pageNum.value, pageSize.value)
         showEditDialog.value = false
         // 重置表单
         editFormRef.value.resetFields()
@@ -183,7 +187,9 @@ const deleteUser = async () => {
     try {
         await deleteUserService(currentData.value.id)
         ElMessage.success('删除用户成功')
-        await getAllUserList()
+        pageNum.value = 1
+        pageSize.value = 5
+        await getAllUserList(pageNum.value, pageSize.value)
         showDeleteDialog.value = false
     } catch (error) {
         ElMessage.error('删除用户失败')

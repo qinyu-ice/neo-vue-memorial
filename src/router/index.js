@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useTokenStore } from '@/stores/token'
+import useUserInfoStore from '@/stores/userInfo'
+import { ElMessage } from 'element-plus'
 import Layout from '../views/Layout.vue'
 import Login from '../views/Login.vue'
 import Home from '../views/Home.vue'
@@ -74,6 +77,55 @@ const router = createRouter({
       component: () => import('../views/BackEndLayout.vue')
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const tokenStore = useTokenStore()
+  const userInfoStore = useUserInfoStore()
+
+  const hasToken = !!tokenStore.token
+
+  // 1、没有 token → 直接拦截
+  if (!hasToken) {
+    if (to.path === '/back-end') {
+      ElMessage.error('请先登录管理员账号')
+      return next('/login')
+    }
+    if (to.path !== '/login') {
+      ElMessage.error('请先登录用户账号')
+      return next('/login')
+    }
+    return next()
+  }
+
+  // 2、有 token → 已经登录，处理权限和限制
+  if (to.path === '/login' && hasToken) {
+    if (userInfoStore.info.permission === 2) {
+      ElMessage.error('如需返回登录页面，请先退出用户账号')
+      return next('/memorial/home')
+    } else {
+      ElMessage.error('如需返回登录页面，请先退出管理员账号')
+      return next('/back-end')
+    }
+  }
+
+  // 3、有 token → 管理员已登录，限制访问网页
+  if (to.path.startsWith('/memorial') && hasToken) {
+    if (userInfoStore.info.permission === 1) {
+      ElMessage.error('如需访问网站，请登录用户账号')
+      return next('/back-end')
+    }
+  }
+
+  // 4、普通用户 → 访问后台 → 拦截
+  if (to.path.startsWith('/back-end') && hasToken) {
+    if (userInfoStore.info.permission === 2) {
+      ElMessage.error('当前用户账号无权限，请登录管理员账号')
+      return next('/memorial/home')
+    }
+  }
+
+  next()
 })
 
 export default router

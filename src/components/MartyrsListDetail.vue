@@ -288,8 +288,7 @@ loadMartyrDetail();
                     烈 士 事 迹
                 </div>
                 <div style="width: 100%;display: flex;justify-content: left;margin-bottom: 20px;">
-                    <span
-                        style="color: #ffffff;font-weight: bold;font-size: medium;margin-right: 10px;text-indent: 2em;">
+                    <span style="color: #ffffff;font-weight: bold;font-size: medium;margin-left: 15px;">
                         {{ martyrDetail.deeds }}
                     </span>
                 </div>

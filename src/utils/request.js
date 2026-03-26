@@ -3,6 +3,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useTokenStore } from '@/stores/token'
+import useUserInfoStore from '@/stores/userInfo'
 //由于浏览器的同源策略，在浏览器端无法直接访问不同源的本地服务器，需要通过代理解决
 // const baseUrl = 'http://127.0.0.1:8080/admin'
 const baseUrl = '/api/req' //没有指定源 会在axios所在源（页面源）进行拼接
@@ -38,8 +39,12 @@ instance.interceptors.response.use(response => {
         //对响应数据做些什么
         return response.data
     }
-    ElMessage.error(response.data.msg ? response.data.msg : '未知错误')
+    // ElMessage.error(response.data.msg ? response.data.msg : '未知错误')
     if (response.data.msg.includes('token')) {
+        const tokenStore = useTokenStore()
+        const userInfoStore = useUserInfoStore()
+        tokenStore.removeToken()
+        userInfoStore.removeUserInfo()
         router.push('/login')
     }
     return Promise.reject(response.data)

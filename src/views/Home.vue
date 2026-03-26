@@ -4,17 +4,22 @@ import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import { cityHallList, getMapByip } from '@/api/cityHall';
 import { allMessageList } from '@/api/martyrs'
-import { allNewsList } from '@/api/news';
+import { allNewsList, getImgList } from '@/api/news';
 
+const total = ref()
+const newsImgArr = ref([])
+const newsImgIndex = ref(0)
 const imgIndex = ref(0)
 const imgArr = [
     '/src/assets/newHomeOne3.486ce412.png',
     '/src/assets/newHomeOne.832a93f8.png',
 ]
 var currentImg = null
+var currentNewsImg = null
 
 onMounted(() => {
     currentImg = document.querySelector('.img')
+    currentNewsImg = document.querySelector('.img2')
 })
 const selectImg = (e) => {
     currentImg = document.querySelector('.img')
@@ -23,6 +28,15 @@ const selectImg = (e) => {
         currentImg.src = imgArr[e]
         imgIndex.value = e
         currentImg.style.opacity = '1';
+    }, 500)
+}
+const selectNewsImg = (e) => {
+    currentNewsImg = document.querySelector('.img2')
+    currentNewsImg.style.opacity = '0'
+    setTimeout(() => {
+        currentNewsImg.src = newsImgArr.value[e]
+        newsImgIndex.value = e
+        currentNewsImg.style.opacity = '1';
     }, 500)
 }
 const next = (e) => {
@@ -34,6 +48,16 @@ const next = (e) => {
         imgIndex.value = imgArr.length - 1
     }
     selectImg(imgIndex.value)
+}
+const newsNext = (e) => {
+    e > 0 ? newsImgIndex.value += 1 : newsImgIndex.value -= 1
+    if (newsImgIndex.value >= newsImgArr.value.length) {
+        newsImgIndex.value = 0
+    }
+    if (newsImgIndex.value < 0) {
+        newsImgIndex.value = newsImgArr.value.length - 1
+    }
+    selectNewsImg(newsImgIndex.value)
 }
 
 const protect = ref([
@@ -176,7 +200,13 @@ const fetchAddress = async () => {
     addressA.value = result.data
 }
 
+const getImg = async () => {
+    const res = await getImgList()
+    newsImgArr.value = res.data
+}
+
 onMounted(() => {
+    getImg()
     getAllNewsList(1, 6)
     getCityHallList();
     getAllLeaveMessage();
@@ -198,18 +228,10 @@ const pushDaZhouCityHallInfo = () => {
 const goToHotNews = () => {
     router.push('/memorial/hotNews')
 }
-
 </script>
 <template>
     <div class="banner">
         <img src="/src/assets/newHomeOne3.486ce412.png" class="img">
-        <div v-for="(title, titleIndex) in titles" :key="titleIndex" class="content">
-            <transition name="scale">
-                <div v-show="imgIndex === titleIndex">
-                    <span>{{ title }}</span>
-                </div>
-            </transition>
-        </div>
         <div class="dot-content">
             <div v-for="(item, index) in imgArr.length" :key="index" :class="index === imgIndex ? 'active' : 'dot-box'"
                 @click="selectImg(index)">
@@ -226,10 +248,8 @@ const goToHotNews = () => {
         <el-card class="page-container1">
             <template #header>
                 <div class="header">
-                    <span style="color: red;font-weight: bolder;">烈士英名录</span>
-                    <div class="extra">
-                        <el-button @click="heroPage" type="danger">查看更多>></el-button>
-                    </div>
+                    <span style="color: #c72624; font-weight: bolder; font-size: large;">烈士英名录</span>
+                    <span class="span-link" @click="heroPage">查看更多 >></span>
                 </div>
             </template>
             <div class="city">
@@ -252,17 +272,29 @@ const goToHotNews = () => {
         <el-card class="page-container1">
             <template #header>
                 <div class="header">
-                    <span style="color: red;font-weight: bolder;">热点资讯</span>
-                    <div class="extra">
-                        <el-button type="danger" @click="goToHotNews">查看更多>></el-button>
-                    </div>
+                    <span style="color: #c72624; font-weight: bolder; font-size: large;">热点资讯</span>
+                    <span class="span-link" @click="goToHotNews">查看更多 >></span>
                 </div>
             </template>
             <div style="display:flex; justify-content: space-between;">
-                <img src="http://www.dzhjlsly.com/tupmulu/image/20241009/20241009113245_65596.jpg" class="img2">
-                <div style="width: 58%;">
+                <div class="news-banner">
+                    <img src="https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png"
+                        class="img2">
+                    <div class="news-dot-content">
+                        <div v-for="(item, index) in newsImgArr.length" :key="index"
+                            :class="index === newsImgIndex ? 'active' : 'dot-box'" @click="selectNewsImg(index)">
+                        </div>
+                    </div>
+                    <el-icon size="20" class="news-left-btn" @click="newsNext(-1)">
+                        <ArrowLeftBold />
+                    </el-icon>
+                    <el-icon size="20" class="news-right-btn" @click="newsNext(1)">
+                        <ArrowRightBold />
+                    </el-icon>
+                </div>
+                <div style="width: 58%; margin-top: 10px;">
                     <el-row v-for="(item, index) in hotNewsData" :key="index" class="row-bg" justify="space-around"
-                        style="border-bottom: 1px solid #ccc; margin-bottom: 25px;">
+                        style="border-bottom: 1px dashed #ccc; margin-bottom: 25px; padding-bottom: 20px;">
                         <div class="dynamic-tag">
                             <el-tag type="danger">动态</el-tag>
                         </div>
@@ -283,7 +315,7 @@ const goToHotNews = () => {
         <el-card style="width: 75%;">
             <template #header>
                 <div class="header">
-                    <span style="color: red; font-weight: bolder;">烈士纪念留言展示</span>
+                    <span style="color: #c72624; font-weight: bolder; font-size: large;">烈士纪念留言展示</span>
                 </div>
             </template>
             <el-scrollbar height="400px">
@@ -299,7 +331,7 @@ const goToHotNews = () => {
         <el-card style="width: 25%; margin-left: 20px;">
             <template #header>
                 <div class="header">
-                    <span style="color: red; font-weight: bolder;">公共服务</span>
+                    <span style="color: #c72624; font-weight: bolder; font-size: large;">公共服务</span>
                 </div>
             </template>
             <p>地址：四川省达州市通川区陵园路158号</p>
@@ -317,10 +349,8 @@ const goToHotNews = () => {
         <el-card class="page-container1">
             <template #header>
                 <div class="header">
-                    <span style="color: red;font-weight: bolder;">烈士纪念设施</span>
-                    <div class="extra">
-                        <el-button @click="facilityPage" type="danger">查看更多>></el-button>
-                    </div>
+                    <span style="color: #c72624; font-weight: bolder; font-size: large;">烈士纪念设施</span>
+                    <span class="span-link" @click="facilityPage">查看更多 >></span>
                 </div>
             </template>
             <el-row>
@@ -342,7 +372,7 @@ const goToHotNews = () => {
         <el-card class="page-container1">
             <template #header>
                 <div class="header">
-                    <span style="color: red;font-weight: bolder;">烈士纪念设施保护中心</span>
+                    <span style="color: #c72624; font-weight: bolder; font-size: large;">烈士纪念设施保护中心</span>
                 </div>
             </template>
             <el-table :data="protect" style="width: 100%">
@@ -352,18 +382,11 @@ const goToHotNews = () => {
             </el-table>
         </el-card>
     </div>
-
 </template>
-
 <style scoped lang="less">
 .img3 {
     width: 10%;
     height: 15vh;
-}
-
-.img2 {
-    width: 40%;
-    height: 50vh;
 }
 
 .dynamic-tag {
@@ -372,6 +395,7 @@ const goToHotNews = () => {
 
 .title {
     width: 76%;
+    margin-top: 2px;
 
     // 标题样式（包含hover效果）
     .news-title {
@@ -379,7 +403,6 @@ const goToHotNews = () => {
         text-decoration: none;
         color: #333;
         line-height: 1.4;
-        margin-bottom: 10px;
         display: -webkit-box;
         -webkit-line-clamp: 1;
         line-clamp: 1;
@@ -423,6 +446,18 @@ const goToHotNews = () => {
         display: flex;
         align-items: center;
         justify-content: space-between;
+    }
+}
+
+.span-link {
+    color: #c72624;
+    font-size: large;
+    font-weight: bold;
+
+    &:hover {
+        color: red;
+        cursor: pointer;
+        transition: all 0.2s ease;
     }
 }
 
@@ -525,48 +560,46 @@ const goToHotNews = () => {
             background-color: rgb(0, 0, 0);
         }
     }
-
 }
 
-.banner1 {
+.news-banner {
     position: relative;
     display: flex;
     justify-content: left;
-    width: 100%;
+    width: 40%;
 
-    .left-btn,
-    .right-btn {
+    .news-left-btn,
+    .news-right-btn {
         width: 0;
+        color: #fff;
     }
 
     &:hover {
-        .left-btn {
+        .news-left-btn {
             position: absolute;
             cursor: pointer;
             top: 50%;
-            left: 95px;
+            left: 20px;
             width: auto;
 
         }
 
-        .right-btn {
+        .news-right-btn {
             position: absolute;
             cursor: pointer;
             top: 50%;
-            right: 95px;
+            right: 20px;
             width: auto;
         }
     }
 
-    .img {
+    .img2 {
         display: none;
+        width: 100%;
+        height: 60vh;
 
         &:first-child {
-            padding: 10px;
-            margin-bottom: 10px;
             display: block;
-            height: 70vh;
-            width: 80vh;
             opacity: 1;
             transition: opacity 0.5s ease;
         }
@@ -596,32 +629,5 @@ const goToHotNews = () => {
         font-size: 40px;
         color: #fff;
     }
-
-    .dot-content {
-        display: flex;
-        position: absolute;
-        bottom: 10px;
-        justify-content: space-around;
-        align-items: center;
-        width: 100px;
-        height: 10px;
-
-        .dot-box {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #fff;
-            cursor: pointer;
-        }
-
-        .active {
-            cursor: pointer;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: rgb(0, 0, 0);
-        }
-    }
-
 }
 </style>

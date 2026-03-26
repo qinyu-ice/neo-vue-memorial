@@ -7,7 +7,8 @@ const useUserInfoStore = defineStore("userInfo", () => {
     realName: '',
     username: '',
     email: '',
-    phone: ''
+    phone: '',
+    permission: ''
   });
 
   const username = ref()
@@ -17,7 +18,7 @@ const useUserInfoStore = defineStore("userInfo", () => {
   };
   // 定义移除状态的方法
   const removeUserInfo = () => {
-    userInfo.value = {};
+    info.value = {};
   };
   // 返回状态和修改状态的方法
   return {

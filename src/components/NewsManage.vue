@@ -1,7 +1,7 @@
 <script setup>
 import { ElMessage } from 'element-plus';
 import { Edit, Delete, Search, UploadFilled } from '@element-plus/icons-vue';
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { allNewsList, addNewsData, updateNews, deleteNews, uploadImg } from '@/api/news';
 
 //分页条数据模型
@@ -40,6 +40,22 @@ const showSearchBox = ref(false)
 const showAddDialog = ref(false)
 const showEditDialog = ref(false)
 const showDeleteDialog = ref(false)
+
+// 定义表单校验规则
+const formRules = reactive({
+    title: [
+        { required: true, message: '请输入标题', trigger: 'blur' },
+    ],
+    subtitle: [
+        { required: true, message: '请输入副标题', trigger: 'blur' },
+    ],
+    source: [
+        { required: true, message: '请输入来源', trigger: 'blur' },
+    ],
+    content: [
+        { required: true, message: '请输入内容', trigger: 'blur' },
+    ]
+})
 
 const getNewsList = async (page, pageSize, title = '') => {
     const searchTitle = title || currentSearchKeyword.value
@@ -88,6 +104,7 @@ const addNews = async () => {
         pageSize.value = 5
         await getNewsList(pageNum.value, pageSize.value)
         addFormRef.value?.resetFields()
+        uploadUrl.value = ''
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')
@@ -142,6 +159,7 @@ const editNews = async () => {
         pageSize.value = 5
         await getNewsList(pageNum.value, pageSize.value)
         editFormRef.value?.resetFields()
+        uploadUrl.value = ''
         editData.value = initEditData()
     } catch (error) {
         // 校验失败
@@ -162,7 +180,7 @@ const removeNews = async () => {
         ElMessage.success(result.msg)
         pageNum.value = 1
         pageSize.value = 5
-        await getAllInfoList(pageNum.value, pageSize.value)
+        await getNewsList(pageNum.value, pageSize.value)
     } catch (error) {
         ElMessage.error('删除失败')
         console.error('error：', error)
@@ -204,19 +222,19 @@ const handleClose = (done) => {
 }
 </script>
 <template>
-    <div class="info-manage">
+    <div class="news-manage">
         <div v-loading="tableLoading" class="table">
             <div class="table-top">
                 <el-button type="danger" @click="add">新增</el-button>
                 <div>
-                    <el-input class="info-input" v-if="showSearchBox" v-model="title"
+                    <el-input class="news-input" v-if="showSearchBox" v-model="title"
                         style="width: 150px; margin-right: 10px" placeholder="请输入热点资讯标题" />
                     <el-icon @click="searchNews">
                         <Search style="color: red;" />
                     </el-icon>
                 </div>
             </div>
-            <el-table class="info-table" :data="tableData" border>
+            <el-table class="news-table" :data="tableData" border>
                 <el-table-column prop="id" label="序号" width="80" />
                 <el-table-column prop="title" label="标题" width="200" show-overflow-tooltip />
                 <el-table-column prop="subtitle" label="副标题" width="200" show-overflow-tooltip />
@@ -240,7 +258,7 @@ const handleClose = (done) => {
             <div v-if="showPreview" class="preview-mask" @click="closePreview" @keyup.esc="closePreview" tabindex="0">
                 <img :src="previewImg" class="preview-img" />
             </div>
-            <el-pagination class="info-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
+            <el-pagination class="news-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
                 layout="jumper, total, prev, pager, next" background :total="total" @current-change="onCurrentChange"
                 style="margin-top: 50px; justify-content:center; margin-bottom: 50px;" />
         </div>
@@ -394,7 +412,7 @@ const handleClose = (done) => {
     }
 }
 
-:deep(.info-input) {
+:deep(.news-input) {
     --el-input-bg-color: rgb(255, 240, 240);
     --el-input-text-color: red;
     --el-input-border-color: rgb(255, 200, 200);
@@ -402,25 +420,25 @@ const handleClose = (done) => {
     --el-input-focus-border-color: red;
 }
 
-:deep(.info-input) ::-webkit-input-placeholder {
+:deep(.news-input) ::-webkit-input-placeholder {
     color: rgb(255, 140, 140) !important;
 }
 
-:deep(.info-input) :-moz-placeholder {
-    color: rgb(255, 140, 140) !important;
-    opacity: 1 !important;
-}
-
-:deep(.info-input) ::-moz-placeholder {
+:deep(.news-input) :-moz-placeholder {
     color: rgb(255, 140, 140) !important;
     opacity: 1 !important;
 }
 
-:deep(.info-input) :-ms-input-placeholder {
+:deep(.news-input) ::-moz-placeholder {
+    color: rgb(255, 140, 140) !important;
+    opacity: 1 !important;
+}
+
+:deep(.news-input) :-ms-input-placeholder {
     color: rgb(255, 140, 140) !important;
 }
 
-:deep(.info-table) {
+:deep(.news-table) {
     --el-table-header-text-color: red;
     color: red;
 
@@ -429,7 +447,7 @@ const handleClose = (done) => {
     }
 }
 
-:deep(.info-pagination) {
+:deep(.news-pagination) {
     color: red;
     --el-pagination-hover-color: red;
     --el-pagination-text-color: red;

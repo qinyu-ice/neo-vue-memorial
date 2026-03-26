@@ -91,6 +91,9 @@ const formRules = reactive({
     hometown: [
         { required: true, message: '请输入籍贯', trigger: 'blur' }
     ],
+    gender: [
+        { required: true, message: '请选择性别', trigger: 'blur' }
+    ],
     politicsStatus: [
         { required: true, message: '请输入政治面貌', trigger: 'blur' }
     ],
@@ -171,7 +174,6 @@ const addMartyr = async () => {
         await getAllHeroPage(pageNum.value, pageSize.value)
         addFormRef.value?.resetFields()
         uploadUrl.value = ''
-        ElMessage.error('性别不能为空')
     } catch (error) {
         // 校验失败
         ElMessage.error('表单填写有误，请检查')

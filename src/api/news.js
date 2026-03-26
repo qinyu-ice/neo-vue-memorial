@@ -8,6 +8,10 @@ export const allNewsList = (page, pageSize, title) => {
     return request.get(`news/${page}/${pageSize}?title=${title}`)
 }
 
+export const getImgList = () => {
+    return request.get('news/getImg')
+}
+
 export const addNewsData = (addData) => {
     return request.post('news/add', addData)
 }

@@ -10,7 +10,8 @@ const userInfo = ref({
     id: 0,
     username: '',
     realName: '',
-    phone: ''
+    phone: '',
+    email: ''
 });
 
 const userInfoStore = useUserInfoStore()
@@ -18,6 +19,7 @@ userInfo.value.username = userInfoStore.info.username
 userInfo.value.id = userInfoStore.info.id
 userInfo.value.realName = userInfoStore.info.realName
 userInfo.value.phone = userInfoStore.info.phone
+userInfo.value.email = userInfoStore.info.email
 
 // 表单校验的ref
 const formRef = ref()
@@ -110,9 +112,9 @@ const goBack = () => {
             <span style="--i:61;"></span>
         </div>
         <el-form label-width="0px" class="login-box" :model="userInfo" :rules="rules" ref="formRef">
-            <div class="title-box">补全个人信息</div>
+            <div class="title-box">更新个人信息</div>
             <el-form-item prop="username">
-                <el-input v-model="userInfo.username" placeholder="" disabled></el-input>
+                <el-input v-model="userInfo.username" placeholder="请输入用户名"></el-input>
             </el-form-item>
             <el-form-item prop="realName">
                 <el-input v-model="userInfo.realName" placeholder="请输入真实姓名"></el-input>
@@ -120,11 +122,14 @@ const goBack = () => {
             <el-form-item prop="phone">
                 <el-input v-model="userInfo.phone" placeholder="请输入电话号码"></el-input>
             </el-form-item>
-            <el-form-item class="my-el-form-item">
-                <el-button type="primary" class="btn-login" @click="submit">提交</el-button>
+            <el-form-item prop="email">
+                <el-input v-model="userInfo.email" placeholder="请输入邮箱"></el-input>
             </el-form-item>
             <el-form-item class="my-el-form-item">
-                <el-button type="primary" style="width: 100%;" @click="goBack">返回</el-button>
+                <el-button type="danger" class="btn-login" @click="submit">提交</el-button>
+            </el-form-item>
+            <el-form-item class="my-el-form-item">
+                <el-button type="danger" style="width: 100%;" @click="goBack">返回</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -225,7 +230,7 @@ body {
         font-size: 24px;
         font-weight: bold;
         text-align: center;
-        color: #00aaff;
+        color: white;
     }
 
     .el-form-item {
@@ -238,6 +243,43 @@ body {
 
     .el-link {
         margin-top: 25px;
+    }
+
+    :deep(.el-input__icon) {
+        color: red;
+    }
+
+    :deep(.el-button) {
+        --el-button-bg-color: rgb(255, 100, 100);
+        --el-button-focus-color: red;
+    }
+
+    :deep(.el-input) {
+        --el-input-bg-color: rgb(255, 240, 240);
+        --el-input-text-color: red;
+        --el-input-border-color: rgb(255, 200, 200);
+        --el-input-hover-border-color: rgb(255, 150, 150);
+        --el-input-focus-border-color: red;
+        --el-disabled-text-color: red;
+        --el-disabled-bg-color: rgb(255, 240, 240);
+    }
+
+    :deep(.el-input) ::-webkit-input-placeholder {
+        color: rgb(255, 140, 140) !important;
+    }
+
+    :deep(.el-input) :-moz-placeholder {
+        color: rgb(255, 140, 140) !important;
+        opacity: 1 !important;
+    }
+
+    :deep(.el-input) ::-moz-placeholder {
+        color: rgb(255, 140, 140) !important;
+        opacity: 1 !important;
+    }
+
+    :deep(.el-input) :-ms-input-placeholder {
+        color: rgb(255, 140, 140) !important;
     }
 }
 </style>

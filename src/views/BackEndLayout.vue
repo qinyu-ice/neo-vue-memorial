@@ -1,5 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useTokenStore } from '@/stores/token'
+import useUserInfoStore from '@/stores/userInfo'
 import NewsManage from '@/components/NewsManage.vue'
 import PlaceManage from '@/components/PlaceManage.vue'
 import MartyrManage from '@/components/MartyrManage.vue'
@@ -12,6 +15,16 @@ const activeName = ref('news')
 
 const handleClick = (tab, event) => {
 
+}
+
+const router = useRouter()
+const tokenStore = useTokenStore()
+const userInfoStore = useUserInfoStore()
+
+const exit = () => {
+    router.push('/login')
+    tokenStore.removeToken()
+    userInfoStore.removeUserInfo()
 }
 </script>
 <template>
@@ -27,6 +40,7 @@ const handleClick = (tab, event) => {
                     <el-tab-pane label="寻亲故事管理" name="story"></el-tab-pane>
                     <el-tab-pane label="留言管理" name="record"></el-tab-pane>
                     <el-tab-pane label="账号管理" name="user"></el-tab-pane>
+                    <el-tab-pane label="退出" name="exit"></el-tab-pane>
                 </el-tabs>
             </div>
             <div class="manage" v-if="activeName === 'news'">
@@ -49,6 +63,10 @@ const handleClick = (tab, event) => {
             </div>
             <div class="manage" v-if="activeName === 'user'">
                 <user-manage></user-manage>
+            </div>
+            <div class="exit-manage" v-if="activeName === 'exit'">
+                <span class="span-text">如需查看网页，请点击下方退出按钮，返回登录页面，登录用户账号</span>
+                <el-button class="el-button" type="danger" @click="exit">退出</el-button>
             </div>
         </div>
     </div>
@@ -109,5 +127,27 @@ const handleClick = (tab, event) => {
 .manage {
     display: flex;
     justify-content: center;
+}
+
+.exit-manage {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.span-text {
+    color: red;
+    font-size: x-large;
+    font-weight: bold;
+    margin-top: 100px;
+}
+
+.el-button {
+    margin-top: 50px;
+    width: 100px;
+    height: 50px;
+    font-size: xx-large;
+    font-weight: bold;
 }
 </style>

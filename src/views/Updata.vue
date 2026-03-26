@@ -39,6 +39,8 @@ const updataFn = async () => {
     ElMessage.success('修改成功')
     // 跳转到登录页
     router.push('/login')
+    tokenStore.removeToken()
+    userInfoStore.removeUserInfo()
   } else {
     ElMessage.success('密码或用户名不合法')
     return false
@@ -46,22 +48,13 @@ const updataFn = async () => {
 }
 
 const completeInfo = () => {
-  if (userInfoStore.info.realName == null || userInfoStore.info.realName == "" || userInfoStore.info.phone == null || userInfoStore.info.phone == "") {
-    router.push('/memorial/completeInfo')
-  } else {
-    ElMessage.success('个人信息完整，不需要补全')
-  }
+  router.push('/memorial/completeInfo')
 }
-
-const tokenValue = () => {
-  tokenStore.tokenIsExist()
-}
-
-tokenValue()
 
 const loginOut = () => {
   router.push('/login')
   tokenStore.removeToken()
+  userInfoStore.removeUserInfo()
 }
 </script>
 
@@ -137,7 +130,7 @@ const loginOut = () => {
         <el-button type="danger" style="width: 100%;" @click="updataFn">修改</el-button>
       </el-form-item>
       <el-form-item class="my-el-form-item">
-        <el-button type="danger" style="width: 100%;" @click="completeInfo">补全个人信息</el-button>
+        <el-button type="danger" style="width: 100%;" @click="completeInfo">更新个人信息</el-button>
       </el-form-item>
       <el-form-item class="my-el-form-item">
         <el-button type="danger" style="width: 100%;" @click="loginOut">退出</el-button>

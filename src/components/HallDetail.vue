@@ -45,27 +45,27 @@ const centerDialogVisible = ref(false)
             <div style="width: 65%;">
                 <div style="border-bottom: 1px solid #ccc;width: 100%;">
                     <span
-                        style="width: 100%;color: red;font-weight: bolder;font-size: small;border-bottom:3px solid red;">{{
+                        style="width: 100%; color: red; font-weight: bolder; font-size: medium; border-bottom:3px solid red;">{{
                             cityHallModel.name }}</span>
                 </div>
-                <div style="width: 100%;margin-top: 20px; display: flex;justify-content:space-around;">
-                    <div style="display: flex;justify-content: left;">
+                <div style="width: 100%; margin-top: 20px; display: flex; justify-content:space-around;">
+                    <div style="display: flex; justify-content: left;">
                         <img :src=cityHallModel.img alt="" style="width: 35vh;height: 35vh;">
                     </div>
                     <div>
-                        <div class="two-line-ellipsis" style="width: 90vh;height:11vh;">
+                        <div class="two-line-ellipsis" style="width: 90vh; height:11vh; font-size: medium;">
                             <p>
                                 {{ cityHallModel.introduction }}
                             </p>
                         </div>
                         <p style="width: 100%;">
-                            <span style="display: flex;justify-content: end;">
+                            <span style="display: flex; justify-content: end;">
                                 <el-button @click="centerDialogVisible = true" type="danger" plain
-                                    style="height: 15px;font-size: small;">查看更多>></el-button>
+                                    style="height: 30px; font-size: medium;">查看更多 >></el-button>
                             </span>
                         </p>
-                        <div style="margin-top: 20px;width: 100%;">
-                            <span style="color: red;font-size: small;font-weight: bold;">
+                        <div style="margin-top: 20px; width: 100%;">
+                            <span style="color: red; font-size: medium; font-weight: bold;">
                                 设施荣誉
                             </span>
                         </div>
@@ -115,13 +115,13 @@ const centerDialogVisible = ref(false)
         <div style="width: 50%;margin-top: 50px;">
             <div style="border-bottom: 1px solid #ccc;width: 100%;">
                 <span
-                    style="width: 100%;color: red;font-weight: bolder;font-size: small;border-bottom:3px solid red;">联系方式和地址</span>
+                    style="width: 100%;color: red;font-weight: bolder;font-size: medium;border-bottom:3px solid red;">联系方式和地址</span>
             </div>
             <div style="margin-top: 10px;">
-                <div style="font-size: small;font-weight: bold;">{{ cityHallModel.name }}</div>
-                <div style="font-size: small;margin-top: 3px;">电话：{{ cityHallModel.phone }}</div>
-                <div style="font-size: small;margin-top: 3px;">地址：{{ cityHallModel.address }}</div>
-                <div style="font-size: small;margin-top: 3px;">乘车提示：{{ cityHallModel.hint }}</div>
+                <div style="font-size: medium;font-weight: bold;">{{ cityHallModel.name }}</div>
+                <div style="font-size: medium;margin-top: 3px;">电话：{{ cityHallModel.phone }}</div>
+                <div style="font-size: medium;margin-top: 3px;">地址：{{ cityHallModel.address }}</div>
+                <div style="font-size: medium;margin-top: 3px;">乘车提示：{{ cityHallModel.hint }}</div>
             </div>
         </div>
         <el-dialog v-model="centerDialogVisible" title="详细信息" width="500" center>
