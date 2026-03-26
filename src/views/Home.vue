@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { ArrowLeftBold, ArrowRightBold } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import { cityHallList, getMapByip } from '@/api/cityHall';
@@ -16,10 +16,17 @@ const imgArr = [
 ]
 var currentImg = null
 var currentNewsImg = null
+// 自动轮播定时器
+let autoPlayTimer = null
 
 onMounted(() => {
     currentImg = document.querySelector('.img')
     currentNewsImg = document.querySelector('.img2')
+    startAutoPlay()
+})
+
+onUnmounted(() => {
+    stopAutoPlay()
 })
 const selectImg = (e) => {
     currentImg = document.querySelector('.img')
@@ -58,6 +65,21 @@ const newsNext = (e) => {
         newsImgIndex.value = newsImgArr.value.length - 1
     }
     selectNewsImg(newsImgIndex.value)
+}
+
+// 自动播放
+const startAutoPlay = () => {
+    if (autoPlayTimer) return
+    autoPlayTimer = setInterval(() => {
+        next()
+        newsNext()
+    }, 3000) // 3秒切换一次
+}
+
+// 停止自动播放
+const stopAutoPlay = () => {
+    clearInterval(autoPlayTimer)
+    autoPlayTimer = null
 }
 
 const protect = ref([
@@ -535,31 +557,32 @@ const goToHotNews = () => {
         color: #fff;
     }
 
-    .dot-content {
-        display: flex;
-        position: absolute;
-        bottom: 10px;
-        justify-content: space-around;
-        align-items: center;
-        width: 100px;
-        height: 10px;
+    // 轮播图下方标点
+    // .dot-content {
+    //     display: flex;
+    //     position: absolute;
+    //     bottom: 10px;
+    //     justify-content: space-around;
+    //     align-items: center;
+    //     width: 100px;
+    //     height: 10px;
 
-        .dot-box {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #fff;
-            cursor: pointer;
-        }
+    //     .dot-box {
+    //         width: 8px;
+    //         height: 8px;
+    //         border-radius: 50%;
+    //         background-color: #fff;
+    //         cursor: pointer;
+    //     }
 
-        .active {
-            cursor: pointer;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: rgb(0, 0, 0);
-        }
-    }
+    //     .active {
+    //         cursor: pointer;
+    //         width: 8px;
+    //         height: 8px;
+    //         border-radius: 50%;
+    //         background-color: rgb(0, 0, 0);
+    //     }
+    // }
 }
 
 .news-banner {
@@ -567,6 +590,7 @@ const goToHotNews = () => {
     display: flex;
     justify-content: left;
     width: 40%;
+    overflow: hidden;
 
     .news-left-btn,
     .news-right-btn {
