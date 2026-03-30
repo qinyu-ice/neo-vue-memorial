@@ -178,7 +178,7 @@ const cities = ref([
 ])
 const cityHalls = ref([
     {
-        "fid": "0",
+        "id": "0",
         "name": "达州市",
         "img": "#",
     },
@@ -381,8 +381,11 @@ const goToHotNews = () => {
                     <el-carousel trigger="click" height="150px" width="100%">
                         <el-carousel-item v-for="item in 6" :key="item">
                             <div style="display: flex;justify-content: space-around;">
-                                <img v-for="cityHall in cityHalls.slice((item - 1) * 7, item * 7)" :key="cityHall.pid"
-                                    :src="cityHall.img" style="margin-top: 20px;" class="img3">
+                                <router-link v-for="cityHall in cityHalls.slice((item - 1) * 7, item * 7)"
+                                    :key="cityHall.id"
+                                    :to="{ path: '/memorial/hallDetail', query: { id: cityHall.id } }">
+                                    <img :src="cityHall.img" style="margin-top: 20px;" class="img3">
+                                </router-link>
                             </div>
                         </el-carousel-item>
                     </el-carousel>
@@ -407,7 +410,7 @@ const goToHotNews = () => {
 </template>
 <style scoped lang="less">
 .img3 {
-    width: 10%;
+    width: 20vh;
     height: 15vh;
 }
 
@@ -525,7 +528,7 @@ const goToHotNews = () => {
 
         &:first-child {
             display: block;
-            height: auto;
+            height: 300px;
             width: 100%;
             opacity: 1;
             transition: opacity 0.5s ease;
