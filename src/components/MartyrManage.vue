@@ -304,7 +304,11 @@ const handleClose = (done) => {
                 </div>
             </div>
             <el-table class="martyr-table" :data="tableData" border>
-                <el-table-column prop="id" label="序号" width="80" />
+                <el-table-column label="序号" width="80" align="center">
+                    <template #default="scoped">
+                        {{ (pageNum - 1) * pageSize + scoped.$index + 1 }}
+                    </template>
+                </el-table-column>
                 <el-table-column prop="photo" label="烈士碑像" width="100">
                     <template #default="scope">
                         <img :src="scope.row.photo" alt="展示图片" @click="openPreview(scope.row.photo)"

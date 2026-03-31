@@ -112,7 +112,11 @@ const handleClose = (done) => {
                 </div>
             </div>
             <el-table class="record-table" :data="tableData" border>
-                <el-table-column prop="id" label="序号" width="80" />
+                <el-table-column label="序号" width="80" align="center">
+                    <template #default="scoped">
+                        {{ (pageNum - 1) * pageSize + scoped.$index + 1 }}
+                    </template>
+                </el-table-column>
                 <el-table-column prop="username" label="用户名" width="120" />
                 <el-table-column prop="martyrName" label="烈士姓名" width="120" />
                 <el-table-column prop="flower" label="献花数量" width="120" />

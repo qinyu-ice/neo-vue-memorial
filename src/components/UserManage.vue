@@ -251,9 +251,9 @@ const handleClose = (done) => {
                 </div>
             </div>
             <el-table class="user-table" :data="tableData" border>
-                <el-table-column prop="id" label="序号" width="80">
-                    <template #default="scope">
-                        {{ scope.$index + 1 }}
+                <el-table-column prop="id" label="序号" width="80" align="center">
+                    <template #default="scoped">
+                        {{ (pageNum - 1) * pageSize + scoped.$index + 1 }}
                     </template>
                 </el-table-column>
                 <el-table-column prop="realName" label="姓名" width="100" />

@@ -460,7 +460,11 @@ const handleCloseMap = (done) => {
                 </div>
             </div>
             <el-table class="place-table" :data="tableData" border>
-                <el-table-column prop="id" label="序号" width="80" />
+                <el-table-column label="序号" width="80" align="center">
+                    <template #default="scoped">
+                        {{ (pageNum - 1) * pageSize + scoped.$index + 1 }}
+                    </template>
+                </el-table-column>
                 <el-table-column prop="name" label="名称" width="200" />
                 <el-table-column prop="img" label="图片" width="110">
                     <template #default="scope">

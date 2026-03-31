@@ -57,7 +57,7 @@ const next = (e) => {
     selectImg(imgIndex.value)
 }
 const newsNext = (e) => {
-    e > 0 ? newsImgIndex.value += 1 : newsImgIndex.value -= 1
+    e > 0 ? newsImgIndex.value -= 1 : newsImgIndex.value += 1
     if (newsImgIndex.value >= newsImgArr.value.length) {
         newsImgIndex.value = 0
     }
@@ -259,12 +259,12 @@ const goToHotNews = () => {
                 @click="selectImg(index)">
             </div>
         </div>
-        <el-icon size="20" class="left-btn" @click="next(-1)">
+        <!-- <el-icon size="20" class="left-btn" @click="next(-1)">
             <ArrowLeftBold />
         </el-icon>
         <el-icon size="20" class="right-btn" @click="next(1)">
             <ArrowRightBold />
-        </el-icon>
+        </el-icon> -->
     </div>
     <div class="page-container">
         <el-card class="page-container1">
@@ -300,19 +300,18 @@ const goToHotNews = () => {
             </template>
             <div style="display:flex; justify-content: space-between;">
                 <div class="news-banner">
-                    <img src="https://www.sctyjrsw.com/image/tyjr-martymemo/202603/2b0d238786274dd89034bb6dc60785a0.png"
-                        class="img2">
+                    <img :src="newsImgArr[0]" class="img2">
                     <div class="news-dot-content">
                         <div v-for="(item, index) in newsImgArr.length" :key="index"
                             :class="index === newsImgIndex ? 'active' : 'dot-box'" @click="selectNewsImg(index)">
                         </div>
                     </div>
-                    <el-icon size="20" class="news-left-btn" @click="newsNext(-1)">
+                    <!-- <el-icon size="20" class="news-left-btn" @click="newsNext(-1)">
                         <ArrowLeftBold />
                     </el-icon>
                     <el-icon size="20" class="news-right-btn" @click="newsNext(1)">
                         <ArrowRightBold />
-                    </el-icon>
+                    </el-icon> -->
                 </div>
                 <div style="width: 58%; margin-top: 10px;">
                     <el-row v-for="(item, index) in hotNewsData" :key="index" class="row-bg" justify="space-around"

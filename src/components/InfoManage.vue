@@ -174,7 +174,11 @@ const handleClose = (done) => {
                 </div>
             </div>
             <el-table class="info-table" :data="tableData" border>
-                <el-table-column prop="id" label="序号" width="80" />
+                <el-table-column label="序号" width="80" align="center">
+                    <template #default="scoped">
+                        {{ (pageNum - 1) * pageSize + scoped.$index + 1 }}
+                    </template>
+                </el-table-column>
                 <el-table-column prop="title" label="标题" width="150" show-overflow-tooltip />
                 <el-table-column prop="source" label="来源" width="100" show-overflow-tooltip />
                 <el-table-column prop="name" label="姓名" width="100" show-overflow-tooltip />
