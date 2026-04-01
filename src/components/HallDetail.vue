@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 const cityHallModel = ref({
     name: '',
     img: '',
@@ -8,6 +8,8 @@ const cityHallModel = ref({
     address: '',
     hint: ''
 })
+
+const currentHonor = ref([])
 
 import { useRoute, useRouter } from 'vue-router'
 import { getCityHallInfoById } from '@/api/cityHall'
@@ -27,6 +29,19 @@ const init = async () => {
 const goToPlace = () => {
     router.push('/memorial/cityHall')
 }
+
+watch(
+    () => cityHallModel.value.honor,
+    (newVal) => {
+        if (!newVal) {
+            currentHonor.value = []
+            return
+        }
+        // 按分号分割，自动去空字符串
+        currentHonor.value = newVal.split(';').filter(item => item.trim() !== '')
+    },
+    { immediate: true } // 立即执行一次
+)
 
 init()
 const centerDialogVisible = ref(false)
@@ -69,10 +84,9 @@ const centerDialogVisible = ref(false)
                                 设施荣誉
                             </span>
                         </div>
-                        <div data-v-5d524d16="" id="baseBox" class="baseBox">
-                            <span data-v-5d524d16="" class="base">国家级烈士纪念设施</span>
-                            <span data-v-5d524d16="" class="base">省级爱国主义教育基地</span>
-                            <span data-v-5d524d16="" class="base">省级国防教育基地</span>
+                        <div data-v-5d524d16="" id="baseBox" class="baseBox" v-if="cityHallModel.honor != null">
+                            <span data-v-5d524d16="" v-for="(item, index) in currentHonor" :key="index"
+                                class="base">{{ item }}</span>
                         </div>
                     </div>
                 </div>
