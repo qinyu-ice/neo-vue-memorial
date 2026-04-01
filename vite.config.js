@@ -93,6 +93,13 @@ export default defineConfig({
         secure: false,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/req\/info/, '/api/info')
+      },
+      '/api/req/martyrStory': {
+        target: 'http://localhost:8901',
+        ws: false,
+        secure: false,
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/req\/martyrStory/, '/api/martyrStory')
       }
     }
   }
