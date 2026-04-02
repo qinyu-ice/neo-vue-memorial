@@ -1,8 +1,8 @@
 <script setup>
-import { useRouter } from 'vue-router'
-import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
-import { useTokenStore } from '@/stores/token'
+import {useRouter} from 'vue-router'
+import {ref} from 'vue'
+import {ElMessage} from 'element-plus'
+import {useTokenStore} from '@/stores/token'
 import useUserInfoStore from '@/stores/userInfo'
 
 const tokenStore = useTokenStore()
@@ -18,18 +18,19 @@ const loginRef = ref()
 
 const rules = {
   password: [
-    { required: true, message: '请输入原密码', trigger: 'blur' },
-    { pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur' }
+    {required: true, message: '请输入原密码', trigger: 'blur'},
+    {pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur'}
   ],
   repassword: [
-    { required: true, message: '请输入新密码', trigger: 'blur' },
-    { pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur' }
+    {required: true, message: '请输入新密码', trigger: 'blur'},
+    {pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur'}
   ]
 }
 
 const router = useRouter()
 
-import { userUpdataService } from '@/api/user'
+import {userUpdataService} from '@/api/user'
+
 const updataFn = async () => {
   // 先校验输入格式是否合法
   const valid = await loginRef.value.validate()
@@ -187,9 +188,8 @@ body {
   margin: 0 4px;
   border-radius: 50%;
   box-shadow: 0 0 10px 5px rgba(255, 50, 50, 0.5),
-    /* 微调颜色和透明度 */
-    0 0 30px 15px rgba(200, 50, 50, 0.3),
-    0 0 50px 30px rgba(200, 50, 55, 0.1);
+    /* 微调颜色和透明度 */ 0 0 30px 15px rgba(200, 50, 50, 0.3),
+  0 0 50px 30px rgba(200, 50, 55, 0.1);
   animation: animate 15s linear infinite;
   animation-duration: calc(200s / var(--i));
 }
@@ -198,9 +198,8 @@ body {
   background: #ff0000;
   /* 红色调 */
   box-shadow: 0 0 10px 5px rgba(255, 50, 50, 0.5),
-    /* 颜色和透明度 */
-    0 0 30px 15px rgba(200, 50, 50, 0.3),
-    0 0 50px 30px rgba(200, 50, 55, 0.1);
+    /* 颜色和透明度 */ 0 0 30px 15px rgba(200, 50, 50, 0.3),
+  0 0 50px 30px rgba(200, 50, 55, 0.1);
 }
 
 

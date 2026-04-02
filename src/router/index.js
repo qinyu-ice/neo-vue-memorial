@@ -16,7 +16,6 @@ const router = createRouter({
     {
       path: '/',
       redirect: '/login', // 根路径重定向到登录页（核心修改）
-      component: Layout, // 主布局组件
       children: [ // 嵌套子路由（保持原有配置）
         {
           path: '/memorial/home',

@@ -1,8 +1,8 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { martyrAdvancedSearch } from '@/api/martyrs';
-import { heroPage } from '@/api/martyrs'
+import {ref} from 'vue'
+import {useRouter} from 'vue-router'
+import {martyrAdvancedSearch} from '@/api/martyrs';
+import {heroPage} from '@/api/martyrs'
 
 //分页条数据模型
 const pageNum = ref(1)//当前页
@@ -10,13 +10,13 @@ const total = ref(70)//总条数
 const pageSize = ref(40)//每页条数
 const name = ref('')
 const heroList = ref([{
-    "id": 0,
-    "name": '',
+  "id": 0,
+  "name": '',
 }
 ])
 const heroList2 = ref([{
-    "id": 0,
-    "name": '',
+  "id": 0,
+  "name": '',
 }
 ])
 // 响应式变量存储详情数据
@@ -26,243 +26,251 @@ const campaign = ref('')
 const deeds = ref('')
 
 const getHeroList = async () => {
-    //获取英雄列表
-    const result = await heroPage({
-        page: pageNum.value,
-        pageSize: pageSize.value,
-        name: name.value
-    })
-    heroList.value = result.data.data
-    total.value = result.data.total
+  //获取英雄列表
+  const result = await heroPage({
+    page: pageNum.value,
+    pageSize: pageSize.value,
+    name: name.value
+  })
+  heroList.value = result.data.data
+  total.value = result.data.total
 }
 getHeroList()
 
 const searchHeroList = async () => {
-    if (!search.value) {
-        //获取英雄列表
-        await heroPage({
-            page: pageNum.value,
-            pageSize: pageSize.value,
-            name: name.value
-        }).then(res => {
-            heroList.value = res.data.data
-            total.value = res.data.total
-        })
-    } else {
-        getMartyrsByAdvancedSearch()
-    }
+  if (!search.value) {
+    //获取英雄列表
+    await heroPage({
+      page: pageNum.value,
+      pageSize: pageSize.value,
+      name: name.value
+    }).then(res => {
+      heroList.value = res.data.data
+      total.value = res.data.total
+    })
+  } else {
+    getMartyrsByAdvancedSearch()
+  }
 }
 
 //当前页码发生变化，调用此函数
 const onCurrentChange = (num) => {
-    pageNum.value = num
-    if (search.value) {
-        getMartyrsByAdvancedSearch()
-    } else {
-        searchHeroList()
-    }
+  pageNum.value = num
+  if (search.value) {
+    getMartyrsByAdvancedSearch()
+  } else {
+    searchHeroList()
+  }
 }
 
 const getMartyrsByAdvancedSearch = async () => {
-    const result = await martyrAdvancedSearch({
-        page: pageNum.value,
-        pageSize: pageSize.value,
-        dept: dept.value,
-        position: position.value,
-        deathCampaign: campaign.value,
-        deeds: name.value
-    })
-    heroList2.value = result.data.data
-    total.value = result.data.total
+  const result = await martyrAdvancedSearch({
+    page: pageNum.value,
+    pageSize: pageSize.value,
+    dept: dept.value,
+    position: position.value,
+    deathCampaign: campaign.value,
+    deeds: name.value
+  })
+  heroList2.value = result.data.data
+  total.value = result.data.total
 }
 
 const getMartyrsScore = (score) => {
-    score = score * 100
-    return `${score}`.substring(0, 5)
+  score = score * 100
+  return `${score}`.substring(0, 5)
 }
 
 const router = useRouter()
 const detail_btn = (id) => {
-    router.push({
-        path: '/memorial/martyrDetail',
-        query: { id: id }
-    })
+  router.push({
+    path: '/memorial/martyrDetail',
+    query: {id: id}
+  })
 }
 
 const search = ref(false)
 const buttonValue = ref('智能搜索')
 
 const showAdvancedSearch = () => {
-    search.value = !search.value
-    if (search.value) {
-        buttonValue.value = '精确搜索'
-        getMartyrsByAdvancedSearch()
-    } else {
-        buttonValue.value = '智能搜索'
-        searchHeroList()
-    }
+  search.value = !search.value
+  if (search.value) {
+    buttonValue.value = '精确搜索'
+    getMartyrsByAdvancedSearch()
+  } else {
+    buttonValue.value = '智能搜索'
+    searchHeroList()
+  }
 }
 
 // 用于在单选框值改变时调用
 const onRadioChange = () => {
-    getMartyrsByAdvancedSearch()
+  getMartyrsByAdvancedSearch()
 }
 </script>
 
 <template>
-    <div style="width: 100%;">
-        <div style="margin: 20px; color: red;">
-            <span style="color: red; font-weight: bolder; font-size: x-large;">当前位置：烈士英名录</span>
-            <span style="margin-left: 5px; font-size: smaller; color: red;">（排名不分先后）</span>
-        </div>
-        <div class="horizontal" style="display: flex; justify-content: center;">
-            <el-input v-model="name" style="width: 200px; height: 36px; margin-top: 8px;" class="input"
-                placeholder="请输入想查询的烈士名" clearable />
-            <el-button @click="searchHeroList" size="default" class="btn" type="danger" plain
-                style="margin: 10px;">查询烈士</el-button>
-            <el-button @click="showAdvancedSearch" size="default" class="btn" type="danger" plain
-                style="margin: 10px;">{{ buttonValue }}</el-button>
-        </div>
-
-        <div v-show="search" class="advancedSearch" style="margin-left: 20px;">
-            <el-radio-group v-model="dept" @change="onRadioChange">
-                <el-radio-button value="" size="medium">全部</el-radio-button>
-                <el-radio-button value="红三十三军" size="medium">红三十三军</el-radio-button>
-                <el-radio-button value="红四军" size="medium">红四军</el-radio-button>
-                <el-radio-button value="红九军" size="medium">红九军</el-radio-button>
-                <el-radio-button value="川东游击队" size="medium">川东游击队</el-radio-button>
-                <el-radio-button value="志愿军" size="medium">志愿军</el-radio-button>
-                <el-radio-button value="解放军" size="medium">解放军</el-radio-button>
-            </el-radio-group>
-            <el-radio-group v-model="position" @change="onRadioChange">
-                <el-radio-button value="" size="medium">全部</el-radio-button>
-                <el-radio-button value="战士" size="medium">战士</el-radio-button>
-                <el-radio-button value="班长" size="medium">班长</el-radio-button>
-                <el-radio-button value="队员" size="medium">队员</el-radio-button>
-                <el-radio-button value="游击队队员" size="medium">游击队队员</el-radio-button>
-                <el-radio-button value="副班长" size="medium">副班长</el-radio-button>
-                <el-radio-button value="武工队员" size="medium">武工队员</el-radio-button>
-            </el-radio-group>
-            <el-radio-group v-model="campaign" @change="onRadioChange">
-                <el-radio-button value="" size="medium">全部</el-radio-button>
-                <el-radio-button value="宣汉县作战" size="medium">宣汉县作战</el-radio-button>
-                <el-radio-button value="抗美援朝" size="medium">抗美援朝</el-radio-button>
-                <el-radio-button value="随红军出征后失踪" size="medium">随红军出征后失踪</el-radio-button>
-                <el-radio-button value="宣汉县曾家山作战" size="medium">宣汉县曾家山作战</el-radio-button>
-                <el-radio-button value="解放一江山岛战斗" size="medium">解放一江山岛战斗</el-radio-button>
-                <el-radio-button value="宣汉县双河作战" size="medium">宣汉县双河作战</el-radio-button>
-            </el-radio-group>
-        </div>
-        <div style="display: flex; justify-content: center; width: 100%; margin-top: 20px;">
-            <el-card style="margin-top: 10px; width: 100%;">
-                <div style="display: flex; width: 100%; justify-content: left; flex-wrap: wrap; height: 200px;">
-                    <div v-if="search" v-for="hero in heroList2" @click="detail_btn(hero.id)"
-                        style="display: block; width: 145px; height:40px;">
-                        <el-button text type="primary" plain
-                            style="width: 100%; color: red; display: flex; justify-content: center; font-size: small; font-weight: bold; line-height: 40px;">{{
-                                hero.name }} {{ getMartyrsScore(hero.score) }}%</el-button>
-                    </div>
-                    <div v-else v-for="hero in heroList" @click="detail_btn(hero.id)"
-                        style="display: block;width: 145px;height:40px;">
-                        <el-button text type="primary" plain
-                            style="width: 100%; color: red; display: flex; justify-content: center; font-size: small; font-weight: bold; line-height: 40px;">{{
-                                hero.name }}</el-button>
-                    </div>
-
-                </div>
-                <el-pagination class="martyr-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
-                    layout="jumper, total, prev, pager, next" background :total="total" @size-change="onSizeChange"
-                    @current-change="onCurrentChange" style="margin-top: 10px; justify-content:center" />
-            </el-card>
-        </div>
+  <div style="width: 100%;">
+    <div style="margin: 20px; color: red;">
+      <span style="color: red; font-weight: bolder; font-size: x-large;">当前位置：烈士英名录</span>
+      <span style="margin-left: 5px; font-size: smaller; color: red;">（排名不分先后）</span>
     </div>
+    <div class="horizontal" style="display: flex; justify-content: center;">
+      <el-input v-model="name" style="width: 200px; height: 36px; margin-top: 8px;" class="input"
+                placeholder="请输入想查询的烈士名" clearable/>
+      <el-button @click="searchHeroList" size="default" class="btn" type="danger" plain
+                 style="margin: 10px;">查询烈士
+      </el-button>
+      <el-button @click="showAdvancedSearch" size="default" class="btn" type="danger" plain
+                 style="margin: 10px;">{{ buttonValue }}
+      </el-button>
+    </div>
+
+    <div v-show="search" class="advancedSearch" style="margin-left: 20px;">
+      <el-radio-group v-model="dept" @change="onRadioChange">
+        <el-radio-button value="" size="medium">全部</el-radio-button>
+        <el-radio-button value="红三十三军" size="medium">红三十三军</el-radio-button>
+        <el-radio-button value="红四军" size="medium">红四军</el-radio-button>
+        <el-radio-button value="红九军" size="medium">红九军</el-radio-button>
+        <el-radio-button value="川东游击队" size="medium">川东游击队</el-radio-button>
+        <el-radio-button value="志愿军" size="medium">志愿军</el-radio-button>
+        <el-radio-button value="解放军" size="medium">解放军</el-radio-button>
+      </el-radio-group>
+      <el-radio-group v-model="position" @change="onRadioChange">
+        <el-radio-button value="" size="medium">全部</el-radio-button>
+        <el-radio-button value="战士" size="medium">战士</el-radio-button>
+        <el-radio-button value="班长" size="medium">班长</el-radio-button>
+        <el-radio-button value="队员" size="medium">队员</el-radio-button>
+        <el-radio-button value="游击队队员" size="medium">游击队队员</el-radio-button>
+        <el-radio-button value="副班长" size="medium">副班长</el-radio-button>
+        <el-radio-button value="武工队员" size="medium">武工队员</el-radio-button>
+      </el-radio-group>
+      <el-radio-group v-model="campaign" @change="onRadioChange">
+        <el-radio-button value="" size="medium">全部</el-radio-button>
+        <el-radio-button value="宣汉县作战" size="medium">宣汉县作战</el-radio-button>
+        <el-radio-button value="抗美援朝" size="medium">抗美援朝</el-radio-button>
+        <el-radio-button value="随红军出征后失踪" size="medium">随红军出征后失踪</el-radio-button>
+        <el-radio-button value="宣汉县曾家山作战" size="medium">宣汉县曾家山作战</el-radio-button>
+        <el-radio-button value="解放一江山岛战斗" size="medium">解放一江山岛战斗</el-radio-button>
+        <el-radio-button value="宣汉县双河作战" size="medium">宣汉县双河作战</el-radio-button>
+      </el-radio-group>
+    </div>
+    <div style="display: flex; justify-content: center; width: 100%; margin-top: 20px;">
+      <el-card style="margin-top: 10px; width: 100%;">
+        <div style="display: flex; width: 100%; justify-content: left; flex-wrap: wrap; height: 200px;">
+          <div v-if="search" v-for="hero in heroList2" @click="detail_btn(hero.id)"
+               style="display: block; width: 145px; height:40px;">
+            <el-button text type="primary" plain
+                       style="width: 100%; color: red; display: flex; justify-content: center; font-size: small; font-weight: bold; line-height: 40px;">
+              {{
+                hero.name
+              }} {{ getMartyrsScore(hero.score) }}%
+            </el-button>
+          </div>
+          <div v-else v-for="hero in heroList" @click="detail_btn(hero.id)"
+               style="display: block;width: 145px;height:40px;">
+            <el-button text type="primary" plain
+                       style="width: 100%; color: red; display: flex; justify-content: center; font-size: small; font-weight: bold; line-height: 40px;">
+              {{
+                hero.name
+              }}
+            </el-button>
+          </div>
+
+        </div>
+        <el-pagination class="martyr-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
+                       layout="jumper, total, prev, pager, next" background :total="total" @size-change="onSizeChange"
+                       @current-change="onCurrentChange" style="margin-top: 10px; justify-content:center"/>
+      </el-card>
+    </div>
+  </div>
 
 </template>
 <style scoped>
 .el-radio-group {
-    margin-top: 10px;
-    display: flex;
+  margin-top: 10px;
+  display: flex;
 }
 
 .el-radio-button {
-    margin-left: 20px;
-    --el-radio-button-checked-bg-color: red;
-    --el-radio-button-checked-border-color: red;
-    --el-radio-button-disabled-checked-fill: red;
+  margin-left: 20px;
+  --el-radio-button-checked-bg-color: red;
+  --el-radio-button-checked-border-color: red;
+  --el-radio-button-disabled-checked-fill: red;
 }
 
 :deep(.el-radio-button__inner) {
-    color: red;
-    border-color: rgb(255, 230, 230);
-    background-color: rgb(255, 230, 230);
+  color: red;
+  border-color: rgb(255, 230, 230);
+  background-color: rgb(255, 230, 230);
 }
 
 :deep(.martyr-pagination) {
-    color: red;
-    --el-pagination-hover-color: red;
-    --el-pagination-text-color: red;
-    --el-pagination-button-bg-color: rgb(255, 230, 230);
-    --el-pagination-button-color: red;
-    --el-pagination-button-disabled-color: red;
-    --el-pagination-button-disabled-bg-color: red;
+  color: red;
+  --el-pagination-hover-color: red;
+  --el-pagination-text-color: red;
+  --el-pagination-button-bg-color: rgb(255, 230, 230);
+  --el-pagination-button-color: red;
+  --el-pagination-button-disabled-color: red;
+  --el-pagination-button-disabled-bg-color: red;
 
-    .el-input {
-        --el-input-text-color: red;
+  .el-input {
+    --el-input-text-color: red;
 
-        .el-input__wrapper {
-            background-color: transparent;
-            box-shadow: 0 0 0 1px red;
-        }
+    .el-input__wrapper {
+      background-color: transparent;
+      box-shadow: 0 0 0 1px red;
     }
+  }
 }
 
 :deep(.el-pagination.is-background .el-pager li.is-active) {
-    background-color: red;
+  background-color: red;
 }
 
 :deep(.el-pagination__jump) {
-    color: red;
+  color: red;
 }
 
 :deep(.el-pagination__total) {
-    color: red;
+  color: red;
 }
 
 :deep(.el-pagination.is-background .btn-prev:disabled) {
-    color: red;
-    background-color: rgb(255, 245, 245);
+  color: red;
+  background-color: rgb(255, 245, 245);
 }
 
 :deep(.el-pagination.is-background .btn-next:disabled) {
-    color: red;
-    background-color: rgb(255, 245, 245);
+  color: red;
+  background-color: rgb(255, 245, 245);
 }
 
 :deep(.el-input) {
-    --el-input-bg-color: rgb(255, 240, 240);
-    --el-input-text-color: red;
-    --el-input-border-color: rgb(255, 200, 200);
-    --el-input-hover-border-color: rgb(255, 150, 150);
-    --el-input-focus-border-color: red;
-    --el-disabled-text-color: red;
-    --el-disabled-bg-color: rgb(255, 240, 240);
+  --el-input-bg-color: rgb(255, 240, 240);
+  --el-input-text-color: red;
+  --el-input-border-color: rgb(255, 200, 200);
+  --el-input-hover-border-color: rgb(255, 150, 150);
+  --el-input-focus-border-color: red;
+  --el-disabled-text-color: red;
+  --el-disabled-bg-color: rgb(255, 240, 240);
 }
 
 :deep(.el-input) ::-webkit-input-placeholder {
-    color: rgb(255, 140, 140) !important;
+  color: rgb(255, 140, 140) !important;
 }
 
 :deep(.el-input) :-moz-placeholder {
-    color: rgb(255, 140, 140) !important;
-    opacity: 1 !important;
+  color: rgb(255, 140, 140) !important;
+  opacity: 1 !important;
 }
 
 :deep(.el-input) ::-moz-placeholder {
-    color: rgb(255, 140, 140) !important;
-    opacity: 1 !important;
+  color: rgb(255, 140, 140) !important;
+  opacity: 1 !important;
 }
 
 :deep(.el-input) :-ms-input-placeholder {
-    color: rgb(255, 140, 140) !important;
+  color: rgb(255, 140, 140) !important;
 }
 </style>

@@ -9,7 +9,7 @@ export const userLoginService = (registerData) => {
     // for(let key in loginData){
     //     params.append(key,loginData[key])
     // }
-    return request.post('user/login', { username: registerData.username, password: registerData.password })
+    return request.post('user/login', {username: registerData.username, password: registerData.password})
 }
 
 export const userUpdataService = (registerData) => {
@@ -18,7 +18,11 @@ export const userUpdataService = (registerData) => {
     // for(let key in registerData){
     //     params.append(key,registerData[key])
     // }
-    return request.put('user/reset', { username: registerData.username, password: registerData.password, password2: registerData.repassword })
+    return request.put('user/reset', {
+        username: registerData.username,
+        password: registerData.password,
+        password2: registerData.repassword
+    })
 }
 
 export const userUpdataAdminService = (data) => {
@@ -27,7 +31,11 @@ export const userUpdataAdminService = (data) => {
     // for(let key in registerData){
     //     params.append(key,registerData[key])
     // }
-    return request.put('user/resetAdmin', { username: data.username, newPassword: data.newPassword, newEmailPassword: data.newEmailPassword })
+    return request.put('user/resetAdmin', {
+        username: data.username,
+        newPassword: data.newPassword,
+        newEmailPassword: data.newEmailPassword
+    })
 }
 
 export const userRegisterService = (registerData) => {
@@ -36,7 +44,12 @@ export const userRegisterService = (registerData) => {
     // for(let key in registerData){
     //     params.append(key,registerData[key])
     // }
-    return request.post('user/register', { username: registerData.username, password: registerData.password, password2: registerData.rePassword, email: registerData.email })
+    return request.post('user/register', {
+        username: registerData.username,
+        password: registerData.password,
+        password2: registerData.rePassword,
+        email: registerData.email
+    })
 }
 
 export const userAllService = (page, pageSize, username) => {

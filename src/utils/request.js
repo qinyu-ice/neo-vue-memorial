@@ -1,8 +1,8 @@
 //定制请求的实例
 //导入axios npm install axios
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
-import { useTokenStore } from '@/stores/token'
+import {ElMessage} from 'element-plus'
+import {useTokenStore} from '@/stores/token'
 import useUserInfoStore from '@/stores/userInfo'
 //由于浏览器的同源策略，在浏览器端无法直接访问不同源的本地服务器，需要通过代理解决
 // const baseUrl = 'http://127.0.0.1:8080/admin'
@@ -12,6 +12,7 @@ const instance = axios.create({
     timeout: 20000
 })
 import router from '@/router'
+
 const success = ['SUCCESS', 'REGISTER_SUCCESS', 'LOGIN_SUCCESS', 'GET_ALL_CITIES_SUCCESS',
     'GET_ALL_MARTYRS_ITEM_SUCCESS', 'GET_MARTYRS_ITEM_SUCCESS', 'GET_ALL_MARTYRS_ITEM_BY_CID_SUCCESS']
 //添加请求拦截器

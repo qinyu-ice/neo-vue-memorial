@@ -1,47 +1,47 @@
 //定义store
 import router from '@/router'
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import {defineStore} from 'pinia'
+import {ref} from 'vue'
 // 第一个参数:名字,唯一性
 // 第二个参数:函数,函数内部可以定义状态的所有内容
 
 // 返回值:函数
 
 export const useTokenStore = defineStore('token', () => {
-    //定义状态的内容
-    //1.响应式变量
-    const token = ref('')
-    const userInfo = ref({})
+        //定义状态的内容
+        //1.响应式变量
+        const token = ref('')
+        const userInfo = ref({})
 
-    //2.定义一个函数修改token的值
-    const setToken = (newToken) => {
-        token.value = newToken
-    }
-
-    //3.函数,移除token
-    const removeToken = () => {
-        token.value = ''
-    }
-
-    const setUserInfo = (newUserInfo) => {
-        userInfo.value = newUserInfo
-    }
-
-    const tokenIsExist = () => {
-        if (token.value == "") {
-            router.push('/login')
+        //2.定义一个函数修改token的值
+        const setToken = (newToken) => {
+            token.value = newToken
         }
-    }
 
-    return {
-        token,
-        setToken,
-        removeToken,
-        setUserInfo,
-        tokenIsExist,
-        userInfo
-    }
-},
+        //3.函数,移除token
+        const removeToken = () => {
+            token.value = ''
+        }
+
+        const setUserInfo = (newUserInfo) => {
+            userInfo.value = newUserInfo
+        }
+
+        const tokenIsExist = () => {
+            if (token.value == "") {
+                router.push('/login')
+            }
+        }
+
+        return {
+            token,
+            setToken,
+            removeToken,
+            setUserInfo,
+            tokenIsExist,
+            userInfo
+        }
+    },
     {
         persist: true
     })

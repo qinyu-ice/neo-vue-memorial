@@ -1,8 +1,14 @@
 <script setup>
-import { ref, reactive } from 'vue'
-import { userAllService, userAddService, userDeleteService, userInfoUpdateService, userUpdataAdminService } from '@/api/user'
-import { ElMessage } from 'element-plus'
-import { Edit, Delete, Lock, Search } from '@element-plus/icons-vue'
+import {ref, reactive} from 'vue'
+import {
+  userAllService,
+  userAddService,
+  userDeleteService,
+  userInfoUpdateService,
+  userUpdataAdminService
+} from '@/api/user'
+import {ElMessage} from 'element-plus'
+import {Edit, Delete, Lock, Search} from '@element-plus/icons-vue'
 
 //分页条数据模型
 const pageNum = ref(1)//当前页
@@ -10,13 +16,13 @@ const total = ref()//总条数
 const pageSize = ref(5)//每页条数
 
 const tableData = ref([
-    {
-        realName: '',
-        username: '',
-        email: '',
-        phone: '',
-        isDelete: ''
-    }
+  {
+    realName: '',
+    username: '',
+    email: '',
+    phone: '',
+    isDelete: ''
+  }
 ])
 const userAddData = reactive({})
 const initEditData = () => ({})
@@ -37,443 +43,445 @@ const editFormRef = ref(null)
 const resetPasswordFormRef = ref(null)
 // 定义表单校验规则
 const formRules = reactive({
-    // 真实姓名：必填，长度至少2-10个字符
-    realName: [
-        { required: true, message: '请输入真实姓名', trigger: 'blur' },
-        { min: 2, max: 10, message: '真实姓名长度在2到10个字符之间', trigger: 'blur' }
-    ],
-    // 用户名：必填，字母/数字/下划线，长度4-20
-    username: [
-        { required: true, message: '请输入用户名', trigger: 'blur' },
-        { pattern: /^[a-zA-Z0-9_]{4,20}$/, message: '用户名只能包含字母、数字和下划线，长度4-20', trigger: 'blur' }
-    ],
-    // 邮箱：必填，符合邮箱格式
-    email: [
-        { required: true, message: '请输入邮箱', trigger: 'blur' },
-        { type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' }
-    ],
-    // 手机号：必填，11位数字，符合手机号格式
-    phone: [
-        { required: true, message: '请输入手机号', trigger: 'blur' },
-        { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的11位手机号', trigger: 'blur' }
-    ]
+  // 真实姓名：必填，长度至少2-10个字符
+  realName: [
+    {required: true, message: '请输入真实姓名', trigger: 'blur'},
+    {min: 2, max: 10, message: '真实姓名长度在2到10个字符之间', trigger: 'blur'}
+  ],
+  // 用户名：必填，字母/数字/下划线，长度4-20
+  username: [
+    {required: true, message: '请输入用户名', trigger: 'blur'},
+    {pattern: /^[a-zA-Z0-9_]{4,20}$/, message: '用户名只能包含字母、数字和下划线，长度4-20', trigger: 'blur'}
+  ],
+  // 邮箱：必填，符合邮箱格式
+  email: [
+    {required: true, message: '请输入邮箱', trigger: 'blur'},
+    {type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur'}
+  ],
+  // 手机号：必填，11位数字，符合手机号格式
+  phone: [
+    {required: true, message: '请输入手机号', trigger: 'blur'},
+    {pattern: /^1[3-9]\d{9}$/, message: '请输入正确的11位手机号', trigger: 'blur'}
+  ]
 })
 
 const checkAtLeastOnePassword = (rule, value, callback) => {
-    // 同时校验 newPassword 和 newEmailPassword
-    const { newPassword, newEmailPassword } = userResetPasswordData
-    if (!newPassword && !newEmailPassword) {
-        callback(new Error('新密码和新邮箱密码至少填写一个'))
-    } else {
-        callback() // 校验通过
-    }
+  // 同时校验 newPassword 和 newEmailPassword
+  const {newPassword, newEmailPassword} = userResetPasswordData
+  if (!newPassword && !newEmailPassword) {
+    callback(new Error('新密码和新邮箱密码至少填写一个'))
+  } else {
+    callback() // 校验通过
+  }
 }
 
 const passwordRules = reactive({
-    newPassword: [
-        { required: false, message: '请输入新密码', trigger: 'blur' },
-        { pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur' },
-        { validator: checkAtLeastOnePassword, trigger: 'submit' }
-    ],
-    newEmailPassword: [
-        { required: false, message: '请输入新邮箱密码', trigger: 'blur' },
-        { pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur' },
-        { validator: checkAtLeastOnePassword, trigger: 'submit' }
-    ]
+  newPassword: [
+    {required: false, message: '请输入新密码', trigger: 'blur'},
+    {pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur'},
+    {validator: checkAtLeastOnePassword, trigger: 'submit'}
+  ],
+  newEmailPassword: [
+    {required: false, message: '请输入新邮箱密码', trigger: 'blur'},
+    {pattern: /^\S{5,15}$/, message: '密码必须是6-15的非空字符', trigger: 'blur'},
+    {validator: checkAtLeastOnePassword, trigger: 'submit'}
+  ]
 })
 
 const getAllUserList = async (page, pageSize, username = '') => {
-    const searchUsername = username || currentSearchKeyword.value
-    //获取分类列表
-    const res = await userAllService(page, pageSize, searchUsername)
-    if (res.code === 200 && res.data.data != null) {
-        tableLoading.value = false
-    }
-    tableData.value = res.data.data
-    total.value = res.data.total
+  const searchUsername = username || currentSearchKeyword.value
+  //获取分类列表
+  const res = await userAllService(page, pageSize, searchUsername)
+  if (res.code === 200 && res.data.data != null) {
+    tableLoading.value = false
+  }
+  tableData.value = res.data.data
+  total.value = res.data.total
 }
 getAllUserList(1, 5)
 //当前页码发生变化，调用此函数
 const onCurrentChange = (num) => {
-    pageNum.value = num
-    getAllUserList(pageNum.value, pageSize.value)
+  pageNum.value = num
+  getAllUserList(pageNum.value, pageSize.value)
 }
 
 const searchUser = async () => {
-    showSearchBox.value = true
-    // 将搜索关键词持久化
-    currentSearchKeyword.value = username.value
-    await getAllUserList(1, 5, currentSearchKeyword.value)
+  showSearchBox.value = true
+  // 将搜索关键词持久化
+  currentSearchKeyword.value = username.value
+  await getAllUserList(1, 5, currentSearchKeyword.value)
 
-    if (currentSearchKeyword.value) {
-        showSearchBox.value = false
-        ElMessage.success(`搜索到${total.value}条符合条件`)
-    }
-    // 只清空输入框，保留持久化的关键词
-    username.value = ''
-    pageNum.value = 1
+  if (currentSearchKeyword.value) {
+    showSearchBox.value = false
+    ElMessage.success(`搜索到${total.value}条符合条件`)
+  }
+  // 只清空输入框，保留持久化的关键词
+  username.value = ''
+  pageNum.value = 1
 }
 
 const addUserService = async (data) => {
-    const result = await userAddService(data)
+  const result = await userAddService(data)
 }
 
 const deleteUserService = async (id) => {
-    const result = await userDeleteService(id)
+  const result = await userDeleteService(id)
 }
 
 const add = () => {
-    showAddDialog.value = true
+  showAddDialog.value = true
 }
 const edit = (row) => {
-    showEditDialog.value = true
-    userEditData.value = { ...row }
+  showEditDialog.value = true
+  userEditData.value = {...row}
 }
 const remove = (row) => {
-    showDeleteDialog.value = true
-    currentData.value = { ...row }
+  showDeleteDialog.value = true
+  currentData.value = {...row}
 }
 const reset = (row) => {
-    showResetPasswordDialog.value = true
-    userResetPasswordData.username = row.username
+  showResetPasswordDialog.value = true
+  userResetPasswordData.username = row.username
 }
 
 const addUser = async () => {
-    try {
-        await addFormRef.value.validate()
-        // 新增接口调用逻辑
-        const addData = {
-            realName: userAddData.realName,
-            username: userAddData.username,
-            email: userAddData.email,
-            phone: userAddData.phone
-        }
-        await addUserService(addData)
-        ElMessage.success('新增用户成功')
-        pageNum.value = 1
-        pageSize.value = 5
-        await getAllUserList(pageNum.value, pageSize.value)
-        showAddDialog.value = false
-        // 重置表单
-        addFormRef.value.resetFields()
-    } catch (error) {
-        // 校验失败
-        ElMessage.error('表单填写有误，请检查')
-        console.error('表单校验失败：', error)
+  try {
+    await addFormRef.value.validate()
+    // 新增接口调用逻辑
+    const addData = {
+      realName: userAddData.realName,
+      username: userAddData.username,
+      email: userAddData.email,
+      phone: userAddData.phone
     }
+    await addUserService(addData)
+    ElMessage.success('新增用户成功')
+    pageNum.value = 1
+    pageSize.value = 5
+    await getAllUserList(pageNum.value, pageSize.value)
+    showAddDialog.value = false
+    // 重置表单
+    addFormRef.value.resetFields()
+  } catch (error) {
+    // 校验失败
+    ElMessage.error('表单填写有误，请检查')
+    console.error('表单校验失败：', error)
+  }
 }
 
 const editUser = async () => {
-    try {
-        await editFormRef.value.validate()
-        // 新增接口调用逻辑
-        await userInfoUpdateService(userEditData.value)
-        ElMessage.success('更新用户成功')
-        pageNum.value = 1
-        pageSize.value = 5
-        await getAllUserList(pageNum.value, pageSize.value)
-        showEditDialog.value = false
-        // 重置表单
-        editFormRef.value.resetFields()
-        userEditData.value = initEditData()
-    } catch (error) {
-        // 校验失败
-        ElMessage.error('表单填写有误，请检查')
-        console.error('表单校验失败：', error)
-    }
+  try {
+    await editFormRef.value.validate()
+    // 新增接口调用逻辑
+    await userInfoUpdateService(userEditData.value)
+    ElMessage.success('更新用户成功')
+    pageNum.value = 1
+    pageSize.value = 5
+    await getAllUserList(pageNum.value, pageSize.value)
+    showEditDialog.value = false
+    // 重置表单
+    editFormRef.value.resetFields()
+    userEditData.value = initEditData()
+  } catch (error) {
+    // 校验失败
+    ElMessage.error('表单填写有误，请检查')
+    console.error('表单校验失败：', error)
+  }
 }
 
 const deleteUser = async () => {
-    try {
-        await deleteUserService(currentData.value.id)
-        ElMessage.success('删除用户成功')
-        pageNum.value = 1
-        pageSize.value = 5
-        await getAllUserList(pageNum.value, pageSize.value)
-        showDeleteDialog.value = false
-    } catch (error) {
-        ElMessage.error('删除用户失败')
-        console.error('error：', error)
-    }
+  try {
+    await deleteUserService(currentData.value.id)
+    ElMessage.success('删除用户成功')
+    pageNum.value = 1
+    pageSize.value = 5
+    await getAllUserList(pageNum.value, pageSize.value)
+    showDeleteDialog.value = false
+  } catch (error) {
+    ElMessage.error('删除用户失败')
+    console.error('error：', error)
+  }
 }
 
 const resetPassword = async () => {
-    try {
-        await resetPasswordFormRef.value.validate()
-        // 新增接口调用逻辑
-        await userUpdataAdminService(userResetPasswordData)
-        ElMessage.success('重置密码成功')
-        showResetPasswordDialog.value = false
-        // 重置表单
-        resetPasswordFormRef.value.resetFields()
-        userResetPasswordData.username = ''
-    } catch (error) {
-        // 校验失败
-        ElMessage.error('表单填写有误，请检查')
-        console.error('表单校验失败：', error)
-    }
+  try {
+    await resetPasswordFormRef.value.validate()
+    // 新增接口调用逻辑
+    await userUpdataAdminService(userResetPasswordData)
+    ElMessage.success('重置密码成功')
+    showResetPasswordDialog.value = false
+    // 重置表单
+    resetPasswordFormRef.value.resetFields()
+    userResetPasswordData.username = ''
+  } catch (error) {
+    // 校验失败
+    ElMessage.error('表单填写有误，请检查')
+    console.error('表单校验失败：', error)
+  }
 }
 
 const cancel = () => {
-    showDeleteDialog.value = false
-    showAddDialog.value = false
-    showEditDialog.value = false
-    showResetPasswordDialog.value = false
-    handleClose()
+  showDeleteDialog.value = false
+  showAddDialog.value = false
+  showEditDialog.value = false
+  showResetPasswordDialog.value = false
+  handleClose()
 }
 
 const handleClose = (done) => {
-    // ElMessageBox.confirm('确认关闭？')
-    // .then(() => {
-    // 关闭前重置表单
-    addFormRef.value?.resetFields()
-    editFormRef.value?.resetFields()
-    resetPasswordFormRef.value?.resetFields()
-    userEditData.value = initEditData()
-    userResetPasswordData.username = ''
-    done && done()
-    // })
-    // .catch(() => {
-    // })
+  // ElMessageBox.confirm('确认关闭？')
+  // .then(() => {
+  // 关闭前重置表单
+  addFormRef.value?.resetFields()
+  editFormRef.value?.resetFields()
+  resetPasswordFormRef.value?.resetFields()
+  userEditData.value = initEditData()
+  userResetPasswordData.username = ''
+  done && done()
+  // })
+  // .catch(() => {
+  // })
 }
 </script>
 <template>
-    <div class="user-manage">
-        <div v-loading="tableLoading" class="table">
-            <div class="table-top">
-                <el-button type="danger" @click="add">新增</el-button>
-                <div>
-                    <el-input class="user-input" v-if="showSearchBox" v-model="username"
-                        style="width: 150px; margin-right: 10px" placeholder="请输入用户名" />
-                    <el-icon @click="searchUser">
-                        <Search style="color: red;" />
-                    </el-icon>
-                </div>
-            </div>
-            <el-table class="user-table" :data="tableData" border>
-                <el-table-column prop="id" label="序号" width="80" align="center">
-                    <template #default="scoped">
-                        {{ (pageNum - 1) * pageSize + scoped.$index + 1 }}
-                    </template>
-                </el-table-column>
-                <el-table-column prop="realName" label="姓名" width="100" />
-                <el-table-column prop="username" label="用户名" width="100" />
-                <el-table-column prop="email" label="邮箱" width="180" />
-                <el-table-column prop="phone" label="电话" width="180" />
-                <el-table-column prop="isDelete" label="是否删除" width="100">
-                    <template #default="scope">
-                        {{ scope.row.isDelete === 0 ? '否' : '是' }}
-                    </template>
-                </el-table-column>
-                <el-table-column class="operation" label="操作" width="210">
-                    <template #default="scope">
-                        <el-link type="danger" :icon="Edit" @click="edit(scope.row)" class="operation-link">修改</el-link>
-                        <el-link type="danger" :icon="Delete" @click="remove(scope.row)"
-                            class="operation-link">删除</el-link>
-                        <el-link type="danger" :icon="Lock" @click="reset(scope.row)">重置密码</el-link>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-pagination class="user-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
-                layout="jumper, total, prev, pager, next" background :total="total" @current-change="onCurrentChange"
-                style="margin-top: 50px; justify-content:center; margin-bottom: 50px;" />
-        </div>
-        <!-- 删除弹窗 -->
+  <div class="user-manage">
+    <div v-loading="tableLoading" class="table">
+      <div class="table-top">
+        <el-button type="danger" @click="add">新增</el-button>
         <div>
-            <el-dialog v-model="showDeleteDialog" title="删除" width="500">
-                <span>是否删除用户名为{{ currentData.username }}的账号？</span>
-                <template #footer>
-                    <div class="dialog-footer">
-                        <el-button @click="cancel">取消</el-button>
-                        <el-button type="primary" @click="deleteUser">
-                            确认
-                        </el-button>
-                    </div>
-                </template>
-            </el-dialog>
+          <el-input class="user-input" v-if="showSearchBox" v-model="username"
+                    style="width: 150px; margin-right: 10px" placeholder="请输入用户名"/>
+          <el-icon @click="searchUser">
+            <Search style="color: red;"/>
+          </el-icon>
         </div>
-        <!-- 新增用户弹窗 -->
-        <div>
-            <el-dialog v-model="showAddDialog" title="新增" width="500" :before-close="handleClose">
-                <el-form :model="userAddData" :rules="formRules" ref="addFormRef" label-width="auto"
-                    style="max-width: 600px">
-                    <el-form-item label="真实姓名" prop="realName">
-                        <el-input v-model="userAddData.realName" />
-                    </el-form-item>
-                    <el-form-item label="用户名" prop="username">
-                        <el-input v-model="userAddData.username" />
-                    </el-form-item>
-                    <el-form-item label="邮箱" prop="email">
-                        <el-input v-model="userAddData.email" />
-                    </el-form-item>
-                    <el-form-item label="电话" prop="phone">
-                        <el-input v-model="userAddData.phone" />
-                    </el-form-item>
-                </el-form>
-                <template #footer>
-                    <div class="dialog-footer">
-                        <el-button @click="cancel">取消</el-button>
-                        <el-button type="primary" @click="addUser">
-                            确认
-                        </el-button>
-                    </div>
-                </template>
-            </el-dialog>
-        </div>
-        <!-- 编辑用户弹窗 -->
-        <div>
-            <el-dialog v-model="showEditDialog" title="编辑" width="500" :before-close="handleClose">
-                <el-form :model="userEditData.value" :rules="formRules" ref="editFormRef" label-width="auto"
-                    style="max-width: 600px">
-                    <el-form-item label="真实姓名" prop="realName">
-                        <el-input v-model="userEditData.value.realName" />
-                    </el-form-item>
-                    <el-form-item label="用户名" prop="username">
-                        <el-input v-model="userEditData.value.username" />
-                    </el-form-item>
-                    <el-form-item label="邮箱" prop="email">
-                        <el-input v-model="userEditData.value.email" />
-                    </el-form-item>
-                    <el-form-item label="电话" prop="phone">
-                        <el-input v-model="userEditData.value.phone" />
-                    </el-form-item>
-                </el-form>
-                <template #footer>
-                    <div class="dialog-footer">
-                        <el-button @click="cancel">取消</el-button>
-                        <el-button type="primary" @click="editUser">
-                            确认
-                        </el-button>
-                    </div>
-                </template>
-            </el-dialog>
-        </div>
-        <!-- 重置密码弹窗 -->
-        <div>
-            <el-dialog v-model="showResetPasswordDialog" title="重置密码" width="500" :before-close="handleClose">
-                <el-form class="reset-password-form" :model="userResetPasswordData" :rules="passwordRules"
-                    ref="resetPasswordFormRef" label-width="auto" style="max-width: 600px">
-                    <el-form-item prop="username">
-                        <el-input v-model="userResetPasswordData.username" disabled />
-                    </el-form-item>
-                    <el-form-item prop="newPassword">
-                        <el-input v-model="userResetPasswordData.newPassword" placeholder="请输入新密码" type="password"
-                            show-password />
-                    </el-form-item>
-                    <el-form-item prop="newEmailPassword">
-                        <el-input v-model="userResetPasswordData.newEmailPassword" placeholder="请输入新邮箱密码"
-                            type="password" show-password />
-                    </el-form-item>
-                </el-form>
-                <template #footer>
-                    <div class="dialog-footer">
-                        <el-button @click="cancel">取消</el-button>
-                        <el-button type="primary" @click="resetPassword">
-                            确认
-                        </el-button>
-                    </div>
-                </template>
-            </el-dialog>
-        </div>
+      </div>
+      <el-table class="user-table" :data="tableData" border>
+        <el-table-column prop="id" label="序号" width="80" align="center">
+          <template #default="scoped">
+            {{ (pageNum - 1) * pageSize + scoped.$index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="realName" label="姓名" width="100"/>
+        <el-table-column prop="username" label="用户名" width="100"/>
+        <el-table-column prop="email" label="邮箱" width="180"/>
+        <el-table-column prop="phone" label="电话" width="180"/>
+        <el-table-column prop="isDelete" label="是否删除" width="100">
+          <template #default="scope">
+            {{ scope.row.isDelete === 0 ? '否' : '是' }}
+          </template>
+        </el-table-column>
+        <el-table-column class="operation" label="操作" width="210">
+          <template #default="scope">
+            <el-link type="danger" :icon="Edit" @click="edit(scope.row)" class="operation-link">修改</el-link>
+            <el-link type="danger" :icon="Delete" @click="remove(scope.row)"
+                     class="operation-link">删除
+            </el-link>
+            <el-link type="danger" :icon="Lock" @click="reset(scope.row)">重置密码</el-link>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination class="user-pagination" v-model:current-page="pageNum" v-model:page-size="pageSize"
+                     layout="jumper, total, prev, pager, next" background :total="total"
+                     @current-change="onCurrentChange"
+                     style="margin-top: 50px; justify-content:center; margin-bottom: 50px;"/>
     </div>
+    <!-- 删除弹窗 -->
+    <div>
+      <el-dialog v-model="showDeleteDialog" title="删除" width="500">
+        <span>是否删除用户名为{{ currentData.username }}的账号？</span>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click="cancel">取消</el-button>
+            <el-button type="primary" @click="deleteUser">
+              确认
+            </el-button>
+          </div>
+        </template>
+      </el-dialog>
+    </div>
+    <!-- 新增用户弹窗 -->
+    <div>
+      <el-dialog v-model="showAddDialog" title="新增" width="500" :before-close="handleClose">
+        <el-form :model="userAddData" :rules="formRules" ref="addFormRef" label-width="auto"
+                 style="max-width: 600px">
+          <el-form-item label="真实姓名" prop="realName">
+            <el-input v-model="userAddData.realName"/>
+          </el-form-item>
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="userAddData.username"/>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="userAddData.email"/>
+          </el-form-item>
+          <el-form-item label="电话" prop="phone">
+            <el-input v-model="userAddData.phone"/>
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click="cancel">取消</el-button>
+            <el-button type="primary" @click="addUser">
+              确认
+            </el-button>
+          </div>
+        </template>
+      </el-dialog>
+    </div>
+    <!-- 编辑用户弹窗 -->
+    <div>
+      <el-dialog v-model="showEditDialog" title="编辑" width="500" :before-close="handleClose">
+        <el-form :model="userEditData.value" :rules="formRules" ref="editFormRef" label-width="auto"
+                 style="max-width: 600px">
+          <el-form-item label="真实姓名" prop="realName">
+            <el-input v-model="userEditData.value.realName"/>
+          </el-form-item>
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="userEditData.value.username"/>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="userEditData.value.email"/>
+          </el-form-item>
+          <el-form-item label="电话" prop="phone">
+            <el-input v-model="userEditData.value.phone"/>
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click="cancel">取消</el-button>
+            <el-button type="primary" @click="editUser">
+              确认
+            </el-button>
+          </div>
+        </template>
+      </el-dialog>
+    </div>
+    <!-- 重置密码弹窗 -->
+    <div>
+      <el-dialog v-model="showResetPasswordDialog" title="重置密码" width="500" :before-close="handleClose">
+        <el-form class="reset-password-form" :model="userResetPasswordData" :rules="passwordRules"
+                 ref="resetPasswordFormRef" label-width="auto" style="max-width: 600px">
+          <el-form-item prop="username">
+            <el-input v-model="userResetPasswordData.username" disabled/>
+          </el-form-item>
+          <el-form-item prop="newPassword">
+            <el-input v-model="userResetPasswordData.newPassword" placeholder="请输入新密码" type="password"
+                      show-password/>
+          </el-form-item>
+          <el-form-item prop="newEmailPassword">
+            <el-input v-model="userResetPasswordData.newEmailPassword" placeholder="请输入新邮箱密码"
+                      type="password" show-password/>
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <div class="dialog-footer">
+            <el-button @click="cancel">取消</el-button>
+            <el-button type="primary" @click="resetPassword">
+              确认
+            </el-button>
+          </div>
+        </template>
+      </el-dialog>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
 .table {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 
-.table>.el-button {
-    margin-bottom: 10px;
+.table > .el-button {
+  margin-bottom: 10px;
 }
 
 .table-top {
-    display: flex;
-    justify-content: space-between;
-    height: 50px;
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
 }
 
 :deep(.user-input) {
-    --el-input-bg-color: rgb(255, 240, 240);
-    --el-input-text-color: red;
-    --el-input-border-color: rgb(255, 200, 200);
-    --el-input-hover-border-color: rgb(255, 150, 150);
-    --el-input-focus-border-color: red;
+  --el-input-bg-color: rgb(255, 240, 240);
+  --el-input-text-color: red;
+  --el-input-border-color: rgb(255, 200, 200);
+  --el-input-hover-border-color: rgb(255, 150, 150);
+  --el-input-focus-border-color: red;
 }
 
 :deep(.user-input) ::-webkit-input-placeholder {
-    color: rgb(255, 140, 140) !important;
+  color: rgb(255, 140, 140) !important;
 }
 
 :deep(.user-input) :-moz-placeholder {
-    color: rgb(255, 140, 140) !important;
-    opacity: 1 !important;
+  color: rgb(255, 140, 140) !important;
+  opacity: 1 !important;
 }
 
 :deep(.user-input) ::-moz-placeholder {
-    color: rgb(255, 140, 140) !important;
-    opacity: 1 !important;
+  color: rgb(255, 140, 140) !important;
+  opacity: 1 !important;
 }
 
 :deep(.user-input) :-ms-input-placeholder {
-    color: rgb(255, 140, 140) !important;
+  color: rgb(255, 140, 140) !important;
 }
 
 :deep(.user-table) {
-    --el-table-header-text-color: red;
-    color: red;
+  --el-table-header-text-color: red;
+  color: red;
 
-    &:hover {
-        --el-table-row-hover-bg-color: rgb(255, 240, 240);
-    }
+  &:hover {
+    --el-table-row-hover-bg-color: rgb(255, 240, 240);
+  }
 }
 
 :deep(.user-pagination) {
-    color: red;
-    --el-pagination-hover-color: red;
-    --el-pagination-text-color: red;
-    --el-pagination-button-bg-color: rgb(255, 230, 230);
-    --el-pagination-button-color: red;
-    --el-pagination-button-disabled-color: red;
-    --el-pagination-button-disabled-bg-color: red;
+  color: red;
+  --el-pagination-hover-color: red;
+  --el-pagination-text-color: red;
+  --el-pagination-button-bg-color: rgb(255, 230, 230);
+  --el-pagination-button-color: red;
+  --el-pagination-button-disabled-color: red;
+  --el-pagination-button-disabled-bg-color: red;
 
-    .el-input {
-        --el-input-text-color: red;
+  .el-input {
+    --el-input-text-color: red;
 
-        .el-input__wrapper {
-            background-color: transparent;
-            box-shadow: 0 0 0 1px red;
-        }
+    .el-input__wrapper {
+      background-color: transparent;
+      box-shadow: 0 0 0 1px red;
     }
+  }
 }
 
 :deep(.el-pagination.is-background .el-pager li.is-active) {
-    background-color: red;
+  background-color: red;
 }
 
 :deep(.el-pagination__jump) {
-    color: red;
+  color: red;
 }
 
 :deep(.el-pagination__total) {
-    color: red;
+  color: red;
 }
 
 :deep(.el-pagination.is-background .btn-prev:disabled) {
-    color: red;
-    background-color: rgb(255, 245, 245);
+  color: red;
+  background-color: rgb(255, 245, 245);
 }
 
 :deep(.el-pagination.is-background .btn-next:disabled) {
-    color: red;
-    background-color: rgb(255, 245, 245);
+  color: red;
+  background-color: rgb(255, 245, 245);
 }
 
 .operation-link {
-    margin-right: 15px;
+  margin-right: 15px;
 }
 
-.reset-password-form>.el-form-item>.el-input {
-    margin-top: 20px;
+.reset-password-form > .el-form-item > .el-input {
+  margin-top: 20px;
 }
 </style>
