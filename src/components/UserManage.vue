@@ -24,9 +24,19 @@ const tableData = ref([
     isDelete: ''
   }
 ])
-const userAddData = reactive({})
-const initEditData = () => ({})
-const userEditData = reactive(initEditData)
+const userAddData = ref({
+  realName: '',
+  username: '',
+  email: '',
+  phone: '',
+})
+const initEditData = () => ({
+  realName: '',
+  username: '',
+  email: '',
+  phone: '',
+})
+const userEditData = ref(initEditData)
 const userResetPasswordData = reactive({})
 const currentData = ref()
 const tableLoading = ref(true)
@@ -148,13 +158,7 @@ const addUser = async () => {
   try {
     await addFormRef.value.validate()
     // 新增接口调用逻辑
-    const addData = {
-      realName: userAddData.realName,
-      username: userAddData.username,
-      email: userAddData.email,
-      phone: userAddData.phone
-    }
-    await addUserService(addData)
+    await addUserService(userAddData.value)
     ElMessage.success('新增用户成功')
     pageNum.value = 1
     pageSize.value = 5
@@ -331,19 +335,19 @@ const handleClose = (done) => {
     <!-- 编辑用户弹窗 -->
     <div>
       <el-dialog v-model="showEditDialog" title="编辑" width="500" :before-close="handleClose">
-        <el-form :model="userEditData.value" :rules="formRules" ref="editFormRef" label-width="auto"
+        <el-form :model="userEditData" :rules="formRules" ref="editFormRef" label-width="auto"
                  style="max-width: 600px">
           <el-form-item label="真实姓名" prop="realName">
-            <el-input v-model="userEditData.value.realName"/>
+            <el-input v-model="userEditData.realName"/>
           </el-form-item>
           <el-form-item label="用户名" prop="username">
-            <el-input v-model="userEditData.value.username"/>
+            <el-input v-model="userEditData.username"/>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
-            <el-input v-model="userEditData.value.email"/>
+            <el-input v-model="userEditData.email"/>
           </el-form-item>
           <el-form-item label="电话" prop="phone">
-            <el-input v-model="userEditData.value.phone"/>
+            <el-input v-model="userEditData.phone"/>
           </el-form-item>
         </el-form>
         <template #footer>
