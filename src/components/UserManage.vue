@@ -29,6 +29,7 @@ const userAddData = ref({
   username: '',
   email: '',
   phone: '',
+  permission: 0,
 })
 const initEditData = () => ({
   realName: '',
@@ -101,7 +102,7 @@ const passwordRules = reactive({
 const getAllUserList = async (page, pageSize, username = '') => {
   const searchUsername = username || currentSearchKeyword.value
   //获取分类列表
-  const res = await userAllService(page, pageSize, searchUsername)
+  const res = await userAllService(page, pageSize, 2, searchUsername)
   if (res.code === 200 && res.data.data != null) {
     tableLoading.value = false
   }
@@ -157,6 +158,7 @@ const reset = (row) => {
 const addUser = async () => {
   try {
     await addFormRef.value.validate()
+    userAddData.value.permission = 2
     // 新增接口调用逻辑
     await addUserService(userAddData.value)
     ElMessage.success('新增用户成功')

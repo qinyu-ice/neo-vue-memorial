@@ -52,8 +52,8 @@ export const userRegisterService = (registerData) => {
     })
 }
 
-export const userAllService = (page, pageSize, username) => {
-    return request.get(`user/${page}/${pageSize}?username=${username}`)
+export const userAllService = (page, pageSize, permission, username) => {
+    return request.get(`user/${page}/${pageSize}/${permission}?username=${username}`)
 }
 
 export const userAddService = (addData) => {
