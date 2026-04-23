@@ -85,64 +85,86 @@ const tokenStore = useTokenStore()
 const userInfoStore = useUserInfoStore()
 const login = async () => {
   let result = await userLoginService(registerData.value)
-  ElMessage.success(result.msg ? result.msg : '登录成功')
-  // 将token保存到pinia中
-  tokenStore.setToken(result.data.token)
-  tokenStore.setUserInfo(result.data)
-  userInfoStore.setUserInfo(result.data)
-  // 跳转到首页 借助路由完成跳转
-  if (result.data.permission == 1) {
-    router.push('/back-end')
+  if (result.code === 200) {
+    ElMessage.success(result.msg)
+    // 将token保存到pinia中
+    tokenStore.setToken(result.data.token)
+    tokenStore.setUserInfo(result.data)
+    userInfoStore.setUserInfo(result.data)
+    // 跳转到首页 借助路由完成跳转
+    if (result.data.permission == 1) {
+      router.push('/back-end')
+    } else {
+      router.push('/memorial/home')
+    }
   } else {
-    router.push('/memorial/home')
+    ElMessage.error(result.msg)
   }
 }
 
 const emailLoginService = async () => {
   if (emailData.value.code != '') {
     let result = await codeLogin(emailData.value)
-    ElMessage.success('邮箱验证码登录成功')
-    // 将token保存到pinia中
-    tokenStore.setToken(result.data.token)
-    tokenStore.setUserInfo(result.data)
-    userInfoStore.setUserInfo(result.data)
-    // 跳转到首页 借助路由完成跳转
-    if (result.data.permission == 1) {
-      router.push('/back-end')
+    if (result.code === 200) {
+      ElMessage.success('邮箱验证码登录成功')
+      // 将token保存到pinia中
+      tokenStore.setToken(result.data.token)
+      tokenStore.setUserInfo(result.data)
+      userInfoStore.setUserInfo(result.data)
+      // 跳转到首页 借助路由完成跳转
+      if (result.data.permission == 1) {
+        router.push('/back-end')
+      } else {
+        router.push('/memorial/home')
+      }
     } else {
-      router.push('/memorial/home')
+      // ElMessage.error(result.msg)
+    }
+  } else if (!emailLoginMethod.value) {
+    let result = await passwordLogin(emailData.value)
+    if (result.code === 200) {
+      ElMessage.success('邮箱密码登录成功')
+      // 将token保存到pinia中
+      tokenStore.setToken(result.data.token)
+      tokenStore.setUserInfo(result.data)
+      userInfoStore.setUserInfo(result.data)
+      // 跳转到首页 借助路由完成跳转
+      if (result.data.permission == 1) {
+        router.push('/back-end')
+      } else {
+        router.push('/memorial/home')
+      }
+    } else {
+      // ElMessage.error(result.msg)
     }
   } else {
-    let result = await passwordLogin(emailData.value)
-    ElMessage.success('邮箱密码登录成功')
-    // 将token保存到pinia中
-    tokenStore.setToken(result.data.token)
-    tokenStore.setUserInfo(result.data)
-    userInfoStore.setUserInfo(result.data)
-    // 跳转到首页 借助路由完成跳转
-    if (result.data.permission == 1) {
-      router.push('/back-end')
-    } else {
-      router.push('/memorial/home')
-    }
+    await codeLogin(emailData.value)
   }
 }
 
 const register = async () => {
-  await userRegisterService(registerData.value)
-  ElMessage.success('注册成功')
-  // 跳转到首页 借助路由完成跳转
-  isRegister.value = false
-  isLogin.value = true
-  router.push('/login')
+  let result = await userRegisterService(registerData.value)
+  if (result.code === 200) {
+    ElMessage.success(result.msg)
+    // 跳转到首页 借助路由完成跳转
+    isRegister.value = false
+    isLogin.value = true
+    router.push('/login')
+  } else {
+    ElMessage.error(result.msg)
+  }
 }
 
 const emailRegisterService = async () => {
-  await emailRegister(emailData.value)
-  isEmailRegister.value = false
-  isEmailLogin.value = true
-  emailData.value.code = ''
-  ElMessage.success('邮箱注册成功')
+  let result = await emailRegister(emailData.value)
+  if (result.code === 200) {
+    isEmailRegister.value = false
+    isEmailLogin.value = true
+    emailData.value.code = ''
+    ElMessage.success(result.msg)
+  } else {
+    // ElMessage.error(result.msg)
+  }
 }
 
 const codeTime = ref('发送验证码')
@@ -392,7 +414,7 @@ const resetEmailForm = () => {
         </el-form-item>
         <el-link type="info" style="padding-bottom: 15px;" v-if="!emailLoginMethod" :underline="false"
                  @click="emailLoginMethod = true; emailData.emailPassword = ''">
-          验证码登录
+          忘记密码？验证码登录
         </el-link>
         <el-form-item prop="code" v-if="emailLoginMethod">
           <el-input name="code" :prefix-icon="Iphone" type="code" placeholder="请输入验证码"

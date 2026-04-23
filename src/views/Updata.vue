@@ -36,12 +36,16 @@ const updataFn = async () => {
   const valid = await loginRef.value.validate()
   if (valid) {
     // 调用登录接口
-    await userUpdataService(form.value)
-    ElMessage.success('修改成功')
+    const result = await userUpdataService(form.value)
     // 跳转到登录页
-    router.push('/login')
-    tokenStore.removeToken()
-    userInfoStore.removeUserInfo()
+    if (result.code === 200) {
+      ElMessage.success(result.msg)
+      router.push('/login')
+      tokenStore.removeToken()
+      userInfoStore.removeUserInfo()
+    } else {
+      ElMessage.error(result.msg)
+    }
   } else {
     ElMessage.success('密码或用户名不合法')
     return false

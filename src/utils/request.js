@@ -48,7 +48,7 @@ instance.interceptors.response.use(response => {
         userInfoStore.removeUserInfo()
         router.push('/login')
     }
-    return Promise.reject(response.data)
+    return response.data
 }, error => {
     //对响应错误做些什么
     if (error.response.status === 401) {
