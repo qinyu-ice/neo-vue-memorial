@@ -25,6 +25,14 @@ export const userUpdataService = (registerData) => {
     })
 }
 
+export const userUpdataEmailService = (data) => {
+    return request.put('user/resetEmail', {
+        username: data.username,
+        emailPassword: data.emailPassword,
+        emailPassword2: data.reEmailPassword2
+    })
+}
+
 export const userUpdataAdminService = (data) => {
     //借助于UrlSearchParams完成传递(x-www-form-urlencoded)
     // const params = new URLSearchParams()

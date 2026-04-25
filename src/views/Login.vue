@@ -283,7 +283,8 @@ const resetEmailForm = () => {
     </div>
     <el-col :offset="8" class="form">
       <!-- 账号密码注册表单 -->
-      <el-form ref="form" size="large" autocomplete="off" v-if="isRegister" :model="registerData" :rules="rules">
+      <el-form ref="form" size="large" autocomplete="off" v-if="isRegister" :model="registerData" :rules="rules"
+               @keyup.enter="register(registerData)">
         <el-form-item>
           <h1 style="color: white; font-size: xx-large; padding-top: 20px;">英烈数字传承平台</h1>
         </el-form-item>
@@ -324,7 +325,7 @@ const resetEmailForm = () => {
       </el-form>
       <!-- 邮箱注册表单 -->
       <el-form ref="form" size="large" autocomplete="off" v-if="isEmailRegister" :model="emailData"
-               :rules="rules">
+               :rules="rules" @keyup.enter="emailRegisterService">
         <el-form-item>
           <h1 style="color: white; font-size: xx-large; padding-top: 20px;">英烈数字传承平台</h1>
         </el-form-item>
@@ -339,7 +340,7 @@ const resetEmailForm = () => {
                     clearable></el-input>
         </el-form-item>
         <el-form-item prop="code">
-          <el-input :prefix-icon="Iphone" type="password" placeholder="请输入验证码" v-model="emailData.code"
+          <el-input :prefix-icon="Iphone" placeholder="请输入验证码" v-model="emailData.code"
                     clearable></el-input>
         </el-form-item>
         <div class="flex" style="padding-bottom: 15px;">
@@ -365,7 +366,8 @@ const resetEmailForm = () => {
         </el-form-item>
       </el-form>
       <!-- 账号密码登录表单 -->
-      <el-form ref="form" size="large" autocomplete="off" v-if="isLogin" :model="registerData" :rules="rules">
+      <el-form ref="form" size="large" autocomplete="off" v-if="isLogin" :model="registerData" :rules="rules"
+               @keyup.enter="login">
         <el-form-item>
           <h1 style="color: white; font-size: xx-large; padding-top: 20px;">英烈数字传承平台</h1>
         </el-form-item>
@@ -398,7 +400,8 @@ const resetEmailForm = () => {
         </el-form-item>
       </el-form>
       <!-- 邮箱登录表单 -->
-      <el-form ref="form" size="large" autocomplete="off" :model="emailData" v-if="isEmailLogin" :rules="rules">
+      <el-form ref="form" size="large" autocomplete="off" :model="emailData" v-if="isEmailLogin" :rules="rules"
+               @keyup.enter="emailLoginService">
         <el-form-item>
           <h1 style="color: white; font-size: xx-large; padding-top: 20px;">英烈数字传承平台</h1>
         </el-form-item>

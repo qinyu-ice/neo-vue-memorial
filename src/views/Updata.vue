@@ -11,10 +11,18 @@ const form = ref({
   password: '',
   repassword: ''
 });
+const form2 = ref({
+  username: '',
+  emailPassword: '',
+  reEmailPassword: ''
+});
 const userInfoStore = useUserInfoStore()
 form.value.username = userInfoStore.info.username
+form2.value.username = userInfoStore.info.username
 // 表单校验的ref
 const loginRef = ref()
+const loginRef2 = ref()
+const isEmail = ref(false)
 
 const rules = {
   password: [
@@ -27,9 +35,20 @@ const rules = {
   ]
 }
 
+const rules2 = {
+  emailPassword: [
+    {required: true, message: '请输入原邮箱密码', trigger: 'blur'},
+    {pattern: /^\S{5,15}$/, message: '邮箱密码必须是6-15的非空字符', trigger: 'blur'}
+  ],
+  reEmailPassword: [
+    {required: true, message: '请输入新邮箱密码', trigger: 'blur'},
+    {pattern: /^\S{5,15}$/, message: '邮箱密码必须是6-15的非空字符', trigger: 'blur'}
+  ]
+}
+
 const router = useRouter()
 
-import {userUpdataService} from '@/api/user'
+import {userUpdataEmailService, userUpdataService} from '@/api/user'
 
 const updataFn = async () => {
   // 先校验输入格式是否合法
@@ -47,7 +66,28 @@ const updataFn = async () => {
       ElMessage.error(result.msg)
     }
   } else {
-    ElMessage.success('密码或用户名不合法')
+    ElMessage.success('密码不合法')
+    return false
+  }
+}
+
+const updataEmail = async () => {
+  // 先校验输入格式是否合法
+  const valid = await loginRef2.value.validate()
+  if (valid) {
+    // 调用登录接口
+    const result = await userUpdataEmailService(form2.value)
+    // 跳转到登录页
+    if (result.code === 200) {
+      ElMessage.success(result.msg)
+      router.push('/login')
+      tokenStore.removeToken()
+      userInfoStore.removeUserInfo()
+    } else {
+      ElMessage.error(result.msg)
+    }
+  } else {
+    ElMessage.success('邮箱密码不合法')
     return false
   }
 }
@@ -120,27 +160,55 @@ const loginOut = () => {
       <span style="--i:14;"></span>
       <span style="--i:61;"></span>
     </div>
-    <el-form label-width="0px" class="login-box" :model="form" :rules="rules" ref="loginRef">
-      <div class="title-box">修改密码</div>
-      <el-form-item prop="username">
-        <el-input v-model="form.username" placeholder="" disabled></el-input>
-      </el-form-item>
-      <el-form-item prop="password">
-        <el-input type="password" v-model="form.password" placeholder="请输入原密码" clearable></el-input>
-      </el-form-item>
-      <el-form-item prop="repassword">
-        <el-input type="password" v-model="form.repassword" placeholder="请输入新密码" clearable></el-input>
-      </el-form-item>
-      <el-form-item class="my-el-form-item">
-        <el-button type="danger" style="width: 100%;" @click="updataFn">修改</el-button>
-      </el-form-item>
-      <el-form-item class="my-el-form-item">
-        <el-button type="danger" style="width: 100%;" @click="completeInfo">更新个人信息</el-button>
-      </el-form-item>
-      <el-form-item class="my-el-form-item">
-        <el-button type="danger" style="width: 100%;" @click="loginOut">退出</el-button>
-      </el-form-item>
-    </el-form>
+    <!-- 修改密码 -->
+    <div v-if="!isEmail">
+      <el-form label-width="0px" class="login-box" :model="form" :rules="rules" ref="loginRef" @keyup.enter="updataFn">
+        <div class="title-box">修改密码</div>
+        <el-form-item prop="username">
+          <el-input v-model="form.username" placeholder="" disabled></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input type="password" v-model="form.password" placeholder="请输入原密码" clearable></el-input>
+        </el-form-item>
+        <el-form-item prop="repassword">
+          <el-input type="password" v-model="form.repassword" placeholder="请输入新密码" clearable></el-input>
+        </el-form-item>
+        <el-form-item class="my-el-form-item">
+          <el-button type="danger" style="width: 100%;" @click="updataFn">修改</el-button>
+        </el-form-item>
+        <el-form-item class="my-el-form-item">
+          <el-button type="danger" style="width: 100%;" @click="completeInfo">更新个人信息</el-button>
+        </el-form-item>
+        <el-form-item class="my-el-form-item">
+          <el-button type="danger" style="width: 100%;" @click="loginOut">退出</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+    <!-- 修改邮箱密码 -->
+    <div v-if="isEmail">
+      <el-form label-width="0px" class="login-box" :model="form2" :rules="rules2" ref="loginRef2"
+               @keyup.enter="updataEmail">
+        <div class="title-box">修改密码</div>
+        <el-form-item prop="username">
+          <el-input v-model="form2.username" placeholder="" disabled></el-input>
+        </el-form-item>
+        <el-form-item prop="emailPassword">
+          <el-input type="password" v-model="form2.emailPassword" placeholder="请输入原邮箱密码" clearable></el-input>
+        </el-form-item>
+        <el-form-item prop="reEmailPassword">
+          <el-input type="password" v-model="form2.reEmailPassword" placeholder="请输入新邮箱密码" clearable></el-input>
+        </el-form-item>
+        <el-form-item class="my-el-form-item">
+          <el-button type="danger" style="width: 100%;" @click="updataEmail">修改</el-button>
+        </el-form-item>
+        <el-form-item class="my-el-form-item">
+          <el-button type="danger" style="width: 100%;" @click="completeInfo">更新个人信息</el-button>
+        </el-form-item>
+        <el-form-item class="my-el-form-item">
+          <el-button type="danger" style="width: 100%;" @click="loginOut">退出</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
