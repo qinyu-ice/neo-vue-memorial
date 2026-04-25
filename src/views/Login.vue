@@ -161,7 +161,7 @@ const emailRegisterService = async () => {
     isEmailRegister.value = false
     isEmailLogin.value = true
     emailData.value.code = ''
-    ElMessage.success(result.msg)
+    ElMessage.success("邮箱注册成功")
   } else {
     // ElMessage.error(result.msg)
   }
