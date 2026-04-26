@@ -297,11 +297,11 @@ const resetEmailForm = () => {
         </el-form-item>
         <el-form-item prop="password">
           <el-input :prefix-icon="Lock" type="password" placeholder="请输入密码" v-model="registerData.password"
-                    clearable></el-input>
+                    clearable show-password></el-input>
         </el-form-item>
         <el-form-item prop="rePassword">
           <el-input :prefix-icon="Lock" type="password" placeholder="请输入再次密码"
-                    v-model="registerData.rePassword" clearable></el-input>
+                    v-model="registerData.rePassword" clearable show-password></el-input>
         </el-form-item>
         <el-form-item prop="email">
           <el-input :prefix-icon="Message" placeholder="请输入邮箱" v-model="registerData.email"
@@ -337,11 +337,10 @@ const resetEmailForm = () => {
         </el-form-item>
         <el-form-item prop="emailPassword">
           <el-input :prefix-icon="Lock" type="password" placeholder="请输入密码" v-model="emailData.emailPassword"
-                    clearable></el-input>
+                    clearable show-password></el-input>
         </el-form-item>
         <el-form-item prop="code">
-          <el-input :prefix-icon="Iphone" placeholder="请输入验证码" v-model="emailData.code"
-                    clearable></el-input>
+          <el-input :prefix-icon="Iphone" placeholder="请输入验证码" v-model="emailData.code"></el-input>
         </el-form-item>
         <div class="flex" style="padding-bottom: 15px;">
           <el-link type="info" :underline="false"
@@ -380,7 +379,7 @@ const resetEmailForm = () => {
         </el-form-item>
         <el-form-item prop="password">
           <el-input name="password" :prefix-icon="Lock" type="password" placeholder="请输入密码"
-                    v-model="registerData.password" clearable></el-input>
+                    v-model="registerData.password" clearable show-password></el-input>
         </el-form-item>
         <!-- 登录按钮 -->
         <el-form-item>
@@ -389,7 +388,7 @@ const resetEmailForm = () => {
         <el-form-item>
           <div class="flex">
             <el-link type="info" :underline="false"
-                     @click="isRegister = true; isLogin = false; resetForm();">
+                     @click="isRegister = true; isLogin = false; resetForm(); emailData.code = ''">
               注册
             </el-link>
             <el-link type="info" :underline="false"
@@ -413,7 +412,7 @@ const resetEmailForm = () => {
         </el-form-item>
         <el-form-item prop="emailPassword" v-if="!emailLoginMethod">
           <el-input name="emailPassword" :prefix-icon="Lock" type="password" placeholder="请输入密码"
-                    v-model="emailData.emailPassword" clearable></el-input>
+                    v-model="emailData.emailPassword" clearable show-password></el-input>
         </el-form-item>
         <el-link type="info" style="padding-bottom: 15px;" v-if="!emailLoginMethod" :underline="false"
                  @click="emailLoginMethod = true; emailData.emailPassword = ''">
@@ -421,7 +420,7 @@ const resetEmailForm = () => {
         </el-link>
         <el-form-item prop="code" v-if="emailLoginMethod">
           <el-input name="code" :prefix-icon="Iphone" type="code" placeholder="请输入验证码"
-                    v-model="emailData.code" clearable></el-input>
+                    v-model="emailData.code"></el-input>
         </el-form-item>
         <div class="flex" v-if="emailLoginMethod" style="padding-bottom: 15px;">
           <el-link type="info" :underline="false" @click="emailLoginMethod = false; emailData.code = ''">
